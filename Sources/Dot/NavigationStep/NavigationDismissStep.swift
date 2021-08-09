@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A view that controls the navigation presentation dismissal with a unified and powerfull syntax
 ///
-/// `NavigationDismissStep` is a fully fledged replacement for, and buit on top of `presentationMode`. It simplifies and unifies the navigation syntax into a consistent one. It adds extra functionality like `action` completion handlers.
+/// `NavigationDismissStep` is a fully fledged replacement for, and buit on top of `dismiss`. It simplifies and unifies the navigation syntax into a consistent one. It adds extra functionality like `action` completion handlers.
 ///
 /// `NavigationDismissStep` works perfectly alongside `SwiftUI`'s built in navigation system. It's not trying to remove the existing `SwiftUI` navigation system, rather acting as a unified and more powerfull syntax built on top of it.
 ///
@@ -25,10 +25,10 @@ import SwiftUI
 /// 3. when you want to dismiss the currently presented view upon a user initiated tap on a view, but only after a certain action has been finished after the tap
 ///
 ///
-/// IMPORTANT: You must create the `presentationMode` inside the view that you want to dismiss:
+/// IMPORTANT: You must create the `dismiss` inside the view that you want to dismiss:
 ///
 /// ```
-/// @Environment(\.presentationMode) private var presentationMode
+/// @Environment(\.dismiss) private var dismiss
 /// ```
 ///
 /// Let's take a look at some examples:
@@ -36,7 +36,7 @@ import SwiftUI
 /// Inside `DetailView` you can create a `NavigationDismissStep` that will dismiss `DetailView` when the `label` is tapped:
 ///
 /// ```
-/// NavigationDismissStep(style: .button, presentationMode: presentationMode) {
+/// NavigationDismissStep(style: .button, dismiss: dismiss) {
 ///     Text("Dismiss")
 /// }
 /// ```
@@ -50,7 +50,7 @@ import SwiftUI
 /// ```
 ///
 /// ```
-/// NavigationDismissStep(style: .button, presentationMode: presentationMode, isActive: $isDismissActive) {
+/// NavigationDismissStep(style: .button, dismiss: dismiss, isActive: $isDismissActive) {
 ///     Text("Dismiss")
 /// } action: {
 ///     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -67,7 +67,7 @@ import SwiftUI
 /// } label: {
 ///     Text("Dismiss")
 /// }
-/// NavigationDismissStep(presentationMode: presentationMode, isActive: $isDismissActive)
+/// NavigationDismissStep(dismiss: dismiss, isActive: $isDismissActive)
 /// ```
 ///
 /// When you present the current view with a `selection` you may dismiss it by using the `selection`.
@@ -124,7 +124,7 @@ import SwiftUI
 public struct NavigationDismissStep<Label: View>: View {
     
     private var navigationStepStyle: NavigationStepStyle?
-    private let presentationMode: Binding<PresentationMode>?
+    private let dismiss: DismissAction?
     @Binding private var isActive: Bool
     @Binding private var selection: Int?
     private let label: Label
@@ -133,13 +133,13 @@ public struct NavigationDismissStep<Label: View>: View {
     /// `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - presentationMode: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's presentation mode.
     ///   - label: A view builder to produce a label describing the `destination` to present.
     public init(style: NavigationStepStyle,
-                presentationMode: Binding<PresentationMode>,
+                dismiss: DismissAction,
                 @ViewBuilder label: () -> Label) {
         self.navigationStepStyle = style
-        self.presentationMode = presentationMode
+        self.dismiss = dismiss
         self._isActive = .constant(false)
         self._selection = .constant(nil)
         self.label = label()
@@ -148,7 +148,7 @@ public struct NavigationDismissStep<Label: View>: View {
     
     public var body: some View {
         VStack {
-            if let presentationMode = presentationMode {
+            if let dismiss = dismiss {
                 if let action = action {
                     if let navigationStepStyle = navigationStepStyle {
                         switch navigationStepStyle {
@@ -160,7 +160,7 @@ public struct NavigationDismissStep<Label: View>: View {
                             }
                             .onChange(of: isActive) { isActive in
                                 if isActive {
-                                    presentationMode.wrappedValue.dismiss()
+                                    dismiss()
                                 }
                             }
                         case .view:
@@ -169,7 +169,7 @@ public struct NavigationDismissStep<Label: View>: View {
                             }
                             .onChange(of: isActive) { isActive in
                                 if isActive {
-                                    presentationMode.wrappedValue.dismiss()
+                                    dismiss()
                                 }
                             }
                         }
@@ -181,7 +181,7 @@ public struct NavigationDismissStep<Label: View>: View {
                         }
                         .onChange(of: isActive) { isActive in
                             if isActive {
-                                presentationMode.wrappedValue.dismiss()
+                                dismiss()
                             }
                         }
                     }
@@ -190,13 +190,13 @@ public struct NavigationDismissStep<Label: View>: View {
                         switch navigationStepStyle {
                         case .button:
                             Button {
-                                presentationMode.wrappedValue.dismiss()
+                                dismiss()
                             } label: {
                                 label
                             }
                         case .view:
                             label.onTapGesture {
-                                presentationMode.wrappedValue.dismiss()
+                                dismiss()
                             }
                         }
                     } else {
@@ -205,7 +205,7 @@ public struct NavigationDismissStep<Label: View>: View {
                         }
                         .onChange(of: isActive) { isActive in
                             if isActive {
-                                presentationMode.wrappedValue.dismiss()
+                                dismiss()
                             }
                         }
                     }
@@ -282,17 +282,17 @@ extension NavigationDismissStep {
     /// `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - presentationMode: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's presentation mode.
     ///   - isActive: A binding to a Boolean value that indicates whether the current view is dismissed.
     ///   - label: A view builder to produce a label describing the `destination` to present.
     ///   - action: A closure executed when the `label` is tapped.
     public init(style: NavigationStepStyle,
-                presentationMode: Binding<PresentationMode>,
+                dismiss: DismissAction,
                 isActive: Binding<Bool>,
                 @ViewBuilder label: () -> Label,
                 action: (() -> Void)?) {
         self.navigationStepStyle = style
-        self.presentationMode = presentationMode
+        self.dismiss = dismiss
         self._isActive = isActive
         self._selection = .constant(nil)
         self.label = label()
@@ -304,12 +304,12 @@ extension NavigationDismissStep where Label == EmptyView {
     
     /// `EmptyView` with `isActive` `Binding<Bool>` that dismisses the currently presented view when `isActive` is set to `true`.
     /// - Parameters:
-    ///   - presentationMode: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's presentation mode.
     ///   - isActive: A binding to a Boolean value that indicates whether the current view is dismissed.
-    public init(presentationMode: Binding<PresentationMode>,
+    public init(dismiss: DismissAction,
                 isActive: Binding<Bool>) {
         self.navigationStepStyle = nil
-        self.presentationMode = presentationMode
+        self.dismiss = dismiss
         self._isActive = isActive
         self._selection = .constant(nil)
         self.label = { EmptyView() }()
@@ -328,7 +328,7 @@ extension NavigationDismissStep {
                 selection: Binding<Int?>,
                 @ViewBuilder label: () -> Label) {
         self.navigationStepStyle = style
-        self.presentationMode = nil
+        self.dismiss = nil
         self._isActive = .constant(false)
         self._selection = selection
         self.label = label()
@@ -345,7 +345,7 @@ extension NavigationDismissStep where Label == EmptyView {
     public init(selection: Binding<Int?>,
                 isActive: Binding<Bool>) {
         self.navigationStepStyle = nil
-        self.presentationMode = nil
+        self.dismiss = nil
         self._isActive = isActive
         self._selection = selection
         self.label = { EmptyView() }()
@@ -368,7 +368,7 @@ extension NavigationDismissStep {
                 @ViewBuilder label: () -> Label,
                 action: (() -> Void)?) {
         self.navigationStepStyle = style
-        self.presentationMode = nil
+        self.dismiss = nil
         self._isActive = isActive
         self._selection = selection
         self.label = label()
@@ -381,9 +381,9 @@ public extension View {
     // `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - presentationMode: The currently presented view's presentation mode.
-    func dismissNavigationStep(style: NavigationStepStyle, presentationMode: Binding<PresentationMode>) -> some View {
-        NavigationDismissStep(style: style, presentationMode: presentationMode) {
+    ///   - dismiss: The currently presented view's presentation mode.
+    func dismissNavigationStep(style: NavigationStepStyle, dismiss: DismissAction) -> some View {
+        NavigationDismissStep(style: style, dismiss: dismiss) {
             self
         }
     }
@@ -391,11 +391,11 @@ public extension View {
     /// `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - presentationMode: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's presentation mode.
     ///   - isActive: A binding to a Boolean value that indicates whether the current view is dismissed.
     ///   - action: A closure executed when the `label` is tapped.
-    func dismissNavigationStep(style: NavigationStepStyle, presentationMode: Binding<PresentationMode>, isActive: Binding<Bool>, action: (() -> Void)?) -> some View {
-        NavigationDismissStep(style: style, presentationMode: presentationMode, isActive: isActive, label: {
+    func dismissNavigationStep(style: NavigationStepStyle, dismiss: DismissAction, isActive: Binding<Bool>, action: (() -> Void)?) -> some View {
+        NavigationDismissStep(style: style, dismiss: dismiss, isActive: isActive, label: {
             self
         }, action: action)
     }
