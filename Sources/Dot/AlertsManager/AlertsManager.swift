@@ -8,6 +8,9 @@
 import SwiftUI
 
 public class AlertsManager: ObservableObject {
+    
+    public init() {}
+    
     @Published public var isPresented = false
     @Published public var alertItem = AlertItem(title: "", message: "", actions: [])
     
