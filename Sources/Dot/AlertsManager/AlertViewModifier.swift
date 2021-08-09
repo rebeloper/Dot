@@ -30,7 +30,7 @@ public struct AlertViewModifier: ViewModifier {
 }
 
 public extension View {
-    public func uses(_ alertsManager: AlertsManager) -> some View {
+    func uses(_ alertsManager: AlertsManager) -> some View {
         modifier(AlertViewModifier(alertsManager: alertsManager))
     }
 }
