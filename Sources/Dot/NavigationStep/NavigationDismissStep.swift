@@ -25,7 +25,7 @@ import SwiftUI
 /// 3. when you want to dismiss the currently presented view upon a user initiated tap on a view, but only after a certain action has been finished after the tap
 ///
 ///
-/// IMPORTANT: You must create the `dismiss` inside the view that you want to dismiss:
+/// IMPORTANT: You must create the `dismiss` (of type: `DismissAction`) inside the view that you want to dismiss:
 ///
 /// ```
 /// @Environment(\.dismiss) private var dismiss
@@ -133,7 +133,7 @@ public struct NavigationDismissStep<Label: View>: View {
     /// `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - dismiss: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's DismissAction.
     ///   - label: A view builder to produce a label describing the `destination` to present.
     public init(style: NavigationStepStyle,
                 dismiss: DismissAction,
@@ -282,7 +282,7 @@ extension NavigationDismissStep {
     /// `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - dismiss: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's DismissAction.
     ///   - isActive: A binding to a Boolean value that indicates whether the current view is dismissed.
     ///   - label: A view builder to produce a label describing the `destination` to present.
     ///   - action: A closure executed when the `label` is tapped.
@@ -304,7 +304,7 @@ extension NavigationDismissStep where Label == EmptyView {
     
     /// `EmptyView` with `isActive` `Binding<Bool>` that dismisses the currently presented view when `isActive` is set to `true`.
     /// - Parameters:
-    ///   - dismiss: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's DismissAction.
     ///   - isActive: A binding to a Boolean value that indicates whether the current view is dismissed.
     public init(dismiss: DismissAction,
                 isActive: Binding<Bool>) {
@@ -381,7 +381,7 @@ public extension View {
     // `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - dismiss: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's DismissAction.
     func dismissNavigationStep(style: NavigationStepStyle, dismiss: DismissAction) -> some View {
         NavigationDismissStep(style: style, dismiss: dismiss) {
             self
@@ -391,7 +391,7 @@ public extension View {
     /// `View` that when tapped dismisses the currently presented view.
     /// - Parameters:
     ///   - style: The NavigationDismissStep style.
-    ///   - dismiss: The currently presented view's presentation mode.
+    ///   - dismiss: The currently presented view's DismissAction.
     ///   - isActive: A binding to a Boolean value that indicates whether the current view is dismissed.
     ///   - action: A closure executed when the `label` is tapped.
     func dismissNavigationStep(style: NavigationStepStyle, dismiss: DismissAction, isActive: Binding<Bool>, action: (() -> Void)?) -> some View {
