@@ -15,7 +15,7 @@ public struct FlexibleSheet<Content: View>: View {
     @State private var dragOffset: CGFloat = 0
     
     internal var height: FlexibleSheetHeight = .proportional(0.84) // about the same as a ColorPicker
-    internal var contentInsets = EdgeInsets(top: 7, leading: 16, bottom: 12, trailing: 16)
+    internal var contentInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     internal var backgroundColor: UIColor = .tertiarySystemGroupedBackground
     internal var closeButtonColor: UIColor = .gray
     internal var allowsDraggingToDismiss = false
