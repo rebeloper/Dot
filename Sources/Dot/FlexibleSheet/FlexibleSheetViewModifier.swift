@@ -9,18 +9,15 @@ import SwiftUI
 
 struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent: View {
     
-    @Binding var isPresented: Bool
     var content: () -> FlexibleSheet<SheetContent>
     
-    init(isPresented: Binding<Bool>,
-         @ViewBuilder content: @escaping () -> FlexibleSheet<SheetContent>) {
-        self._isPresented = isPresented
+    init(@ViewBuilder content: @escaping () -> FlexibleSheet<SheetContent>) {
         self.content = content
     }
     
     func body(content: Content) -> some View {
         ZStack {
-            content.scaleEffect(isPresented ? 0.9 : 1.0)
+            content
             self.content()
         }
     }
@@ -39,7 +36,7 @@ extension View {
                                        disableTapBackgroundToDismiss: Bool = true,
                                        showsCloseButton: Bool = false,
                                        @ViewBuilder content: @escaping () -> T) -> some View {
-        modifier(FlexibleSheetViewModifier(isPresented: isPresented, content: {
+        modifier(FlexibleSheetViewModifier(content: {
             FlexibleSheet(isPresented: isPresented, title: title, cornerRadius: cornerRadius, additionalOffset: additionalOffset, content: content)
                 .height(height)
                 .contentInsets(contentInsets)
