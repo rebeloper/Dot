@@ -13,7 +13,7 @@ public struct AlertItem {
     public var message: String?
     public var actions: [AlertAction]
     
-    public init(type: AlertType,
+    public init(type: AlertType = .none,
                 title: String? = nil,
                 message: String? = nil,
                 actions: [AlertAction] = []) {

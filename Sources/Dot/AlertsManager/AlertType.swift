@@ -8,5 +8,5 @@
 import Foundation
 
 public enum AlertType {
-    case alert, confirmationDialog
+    case none, alert, confirmationDialog
 }
