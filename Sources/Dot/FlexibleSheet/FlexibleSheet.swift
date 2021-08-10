@@ -53,7 +53,7 @@ public struct FlexibleSheet<Content: View>: View {
                 
                 if isPresented {
                     
-                    Color.black
+                    Color.systemBlack
                         .ignoresSafeArea()
                         .opacity(0.15)
                         .onTapGesture {
