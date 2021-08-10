@@ -30,7 +30,7 @@ extension View {
                                        cornerRadius: CGFloat = 15,
                                        additionalOffset: CGFloat = 44,
                                        contentInsets: EdgeInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
-                                       backgroundColor: UIColor = .tertiarySystemGroupedBackground,
+                                       backgroundColor: UIColor = .systemBackground,
                                        closeButtonColor: UIColor = .lightGray,
                                        disableDragToDismiss: Bool = false,
                                        disableTapBackgroundToDismiss: Bool = true,
