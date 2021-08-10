@@ -13,7 +13,7 @@ public struct AlertViewModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         content
-            .alert(alertsManager.alertItem.title, isPresented: $alertsManager.isPresented) {
+            .alert(alertsManager.alertItem.title, isPresented: $alertsManager.isAlertPresented) {
                 ForEach(alertsManager.alertItem.actions) { action in
                     Button(role: action.role, action: action.action) {
                         Text(action.title)
@@ -26,6 +26,20 @@ public struct AlertViewModifier: ViewModifier {
                     EmptyView()
                 }
             }
+            .confirmationDialog(alertsManager.alertItem.title, isPresented: $alertsManager.isConfirmationDialogPresented, titleVisibility: alertsManager.alertItem.title == "" ? .hidden : .visible) {
+                ForEach(alertsManager.alertItem.actions) { action in
+                    Button(role: action.role, action: action.action) {
+                        Text(action.title)
+                    }
+                }
+            } message: {
+                if alertsManager.alertItem.message != nil {
+                    Text(alertsManager.alertItem.message!)
+                } else {
+                    EmptyView()
+                }
+            }
+
     }
 }
 
