@@ -22,7 +22,6 @@ public struct FlexibleSheet<Content: View>: View {
     internal var allowsTapBackgroundToDismiss = true
     internal var showsCloseButton = true
     
-    private let title: String?
     private let content: () -> Content
     private let cornerRadius: CGFloat
     private let additionalOffset: CGFloat // this is so we can drag the sheet up a bit
@@ -33,12 +32,10 @@ public struct FlexibleSheet<Content: View>: View {
     
     
     public init(isPresented: Binding<Bool>,
-                title: String? = nil,
                 cornerRadius: CGFloat = 15,
                 additionalOffset: CGFloat = 44,
                 @ViewBuilder content: @escaping () -> Content) {
         _isPresented = isPresented
-        self.title = title
         self.cornerRadius = cornerRadius
         self.additionalOffset = additionalOffset
         self.content = content
@@ -90,8 +87,16 @@ public struct FlexibleSheet<Content: View>: View {
                             content()
                                 .padding(actualContentInsets)
                                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                            
-                            titleView
+                            if showsCloseButton {
+                                VStack {
+                                    HStack {
+                                        Spacer()
+                                        closeButton
+                                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                                    }
+                                    Spacer()
+                                }
+                            }
                         }
                         .frame(height: height.value(with: geometry) + cornerRadius + additionalOffset)
                         .offset(y: cornerRadius + additionalOffset + dragOffset)
@@ -112,48 +117,6 @@ public struct FlexibleSheet<Content: View>: View {
 
 // MARK: - Private
 extension FlexibleSheet {
-    
-    private var titleView: IfLet {
-        
-        let titleView = IfLet(title) { title in
-            
-            VStack {
-                HStack {
-                    if showsCloseButton {
-                        closeButton
-                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
-                            .opacity(0)
-                    }
-                    Spacer()
-                    Text(title)
-                        .font(Font.headline.weight(.semibold))
-                        .padding(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
-                        .lineLimit(1)
-                    Spacer()
-                    if showsCloseButton {
-                        closeButton
-                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
-                    }
-                }
-                Spacer()
-            }
-            
-        } else: {
-            
-            VStack {
-                HStack {
-                    Spacer()
-                    if showsCloseButton {
-                        closeButton
-                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
-                    }
-                }
-                Spacer()
-            }
-        }
-        
-        return titleView
-    }
     
     private func dragGesture(_ geometry: GeometryProxy) -> _EndedGesture<_ChangedGesture<DragGesture>> {
         
