@@ -89,6 +89,7 @@ public struct FlexibleSheet<Content: View>: View {
                             
                             content()
                                 .padding(actualContentInsets)
+                                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                             
                             titleView
                         }
