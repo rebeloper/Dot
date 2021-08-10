@@ -55,7 +55,7 @@ public class LocationProvider: NSObject, ObservableObject {
     
 
     /// A function that is executed when the `CLAuthorizationStatus` changes to `Denied`.
-    public var onAuthorizationStatusDenied : ()->Void = {presentLocationSettingsAlert()}
+    public var onAuthorizationStatusDenied: () -> Void
     
     /// The LocationProvider intializer.
     ///
@@ -65,7 +65,10 @@ public class LocationProvider: NSObject, ObservableObject {
                 distanceFilter: CLLocationDistance = 10,
                 allowsBackgroundLocationUpdates: Bool = false,
                 pausesLocationUpdatesAutomatically: Bool = true,
-                showsBackgroundLocationIndicator: Bool = false) {
+                showsBackgroundLocationIndicator: Bool = false,
+                onAuthorizationStatusDenied: @escaping () -> Void) {
+        self.onAuthorizationStatusDenied = onAuthorizationStatusDenied
+        
         super.init()
         
         self.lm.delegate = self
@@ -132,24 +135,6 @@ public class LocationProvider: NSObject, ObservableObject {
     }
     
 }
-
-/// Present an alert that suggests to go to the app settings screen.
-public func presentLocationSettingsAlert(alertText : String? = nil) -> Void {
-    #if os(iOS)
-    let alertController = UIAlertController (title: "Enable Location Access", message: alertText ?? "The location access for this app is set to 'Never'. Enable location access in the application settings. Go to Settings now?", preferredStyle: .alert)
-    let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
-        guard let settingsUrl = URL(string:UIApplication.openSettingsURLString) else {
-            return
-        }
-        UIApplication.shared.open(settingsUrl)
-    }
-    alertController.addAction(settingsAction)
-    let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-    alertController.addAction(cancelAction)
-    UIApplication.shared.windows[0].rootViewController?.present(alertController, animated: true, completion: nil)
-    #endif
-}
-
 
 /// Error which is thrown for lacking localization authorization.
 public enum LocationProviderError: Error {

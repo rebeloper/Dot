@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Configure the ProgressHUD
-public struct ProgressHUDConfig: Hashable {
+public struct ProgressHUDConfig {
     var title: String?
     var caption: String?
     
@@ -141,10 +141,7 @@ private struct ProgressHUDLabelView: View {
             }
             
         }
-        
         .multilineTextAlignment(.center)
-        .vibrancyEffect()
-        .vibrancyEffectStyle(.fill)
     }
 }
 
@@ -178,11 +175,7 @@ public struct ProgressHUD: View {
                                 }
                             }
                             .padding()
-                            .background(
-                                Color.white
-                                    .blurEffect()
-                                    .blurEffectStyle(.systemChromeMaterial)
-                            )
+                            .background(.thinMaterial)
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .overlay(
@@ -204,11 +197,7 @@ public struct ProgressHUD: View {
                             }
                         }
                         .padding()
-                        .background(
-                            Color.white
-                                .blurEffect()
-                                .blurEffectStyle(.systemChromeMaterial)
-                        )
+                        .background(.thinMaterial)
                         .cornerRadius(config.cornerRadius)
                         .padding()
                         .overlay(
@@ -230,11 +219,7 @@ public struct ProgressHUD: View {
                                 }
                             }
                             .padding()
-                            .background(
-                                Color.white
-                                    .blurEffect()
-                                    .blurEffectStyle(.systemChromeMaterial)
-                            )
+                            .background(.thinMaterial)
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .overlay(
@@ -250,7 +235,7 @@ public struct ProgressHUD: View {
                     
                 }
             }
-            .animation(.spring())
+            .animation(.spring(), value: 1)
             .onTapGesture {
                 if config.allowsTapToHide {
                     withAnimation {
