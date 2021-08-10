@@ -192,18 +192,23 @@ extension FlexibleSheet {
     
     private var closeButton: AnyView {
         
-        let button = Button {
+//        let button = Button {
+//            dismiss()
+//        } label: {
+//            ZStack {
+//                Image(systemName: "xmark.circle.fill")
+//                    .font(Font.title.weight(.semibold))
+//                    .accentColor(Color(UIColor.lightGray.withAlphaComponent(0.2)))
+//                Image(systemName: "xmark.circle.fill")
+//                    .font(Font.title.weight(.semibold))
+//                    .accentColor(Color(closeButtonColor))
+//            }
+//        }
+        
+        let button = SFButton(action: {
             dismiss()
-        } label: {
-            ZStack {
-                Image(systemName: "xmark.circle.fill")
-                    .font(Font.title.weight(.semibold))
-                    .accentColor(Color(UIColor.lightGray.withAlphaComponent(0.2)))
-                Image(systemName: "xmark.circle.fill")
-                    .font(Font.title.weight(.semibold))
-                    .accentColor(Color(closeButtonColor))
-            }
-        }
+        }, name: "xmark.circle.fill", font: Font.title.weight(.semibold))
+            .accentColor(Color(closeButtonColor))
         
         return AnyView(button)
     }
