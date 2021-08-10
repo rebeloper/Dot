@@ -15,7 +15,7 @@ public class AlertsManager: ObservableObject {
     @Published public var isConfirmationDialogPresented = false
     @Published public var alertItem = AlertItem()
     
-    public func show(type: AlertType = .alert, title: String? = nil, message: String? = nil, actions: [AlertAction] = []) {
+    public func show(_ type: AlertType, title: String? = nil, message: String? = nil, actions: [AlertAction] = []) {
         alertItem = AlertItem(title: title, message: message, actions: actions)
         switch type {
         case .alert:
