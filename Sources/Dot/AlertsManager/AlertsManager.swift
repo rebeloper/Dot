@@ -19,9 +19,11 @@ public class AlertsManager: ObservableObject {
         alertItem = AlertItem(title: title, message: message, actions: actions)
         switch type {
         case .alert:
-            isAlertPresented.toggle()
+            isAlertPresented = true
+            isConfirmationDialogPresented = false
         case .confirmationDialog:
-            isConfirmationDialogPresented.toggle()
+            isAlertPresented = false
+            isConfirmationDialogPresented = true
         }
     }
 }
