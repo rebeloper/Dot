@@ -54,7 +54,6 @@ public extension View {
     func usesFlexibleSheetManager(config: FlexibleSheetConfig = FlexibleSheetConfig(), containerConfig: FlexibleSheetContainerConfig = FlexibleSheetContainerConfig(), flexibleSheetFullScreenState: FlexibleSheetFullScreenState = FlexibleSheetFullScreenState()) -> some View {
         self.modifier(FlexibleSheetViewModifier(config: config, containerConfig: containerConfig))
             .environmentObject(flexibleSheetFullScreenState)
-            .usesStatusBarStyle()
     }
 }
 

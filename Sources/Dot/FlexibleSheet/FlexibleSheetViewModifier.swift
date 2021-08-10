@@ -22,9 +22,8 @@ public struct FlexibleSheetViewModifier: ViewModifier {
             content
                 .mask( RoundedRectangle(cornerRadius: flexibleSheetManager.isPresented ? containerConfig.animates ? containerConfig.cornerRadius : 0 : 0, style: containerConfig.cornerStyle) )
                 .scaleEffect(flexibleSheetManager.isPresented ? containerConfig.animates ? containerConfig.scale : 1 : 1)
-                .animation(containerConfig.animation)
+                .animation(containerConfig.animation, value: 1)
                 .disabled(flexibleSheetManager.isPresented)
-                .statusBarStyle(containerConfig.animates ? .lightContent : .default, isActive: $flexibleSheetManager.isPresented)
             
             containerConfig.coverColor.opacity(flexibleSheetManager.isPresented ? containerConfig.coverColorOpacity : 0)
             
@@ -36,7 +35,7 @@ public struct FlexibleSheetViewModifier: ViewModifier {
             }
             .mask( RoundedRectangle(cornerRadius: config.cornerRadius, style: config.cornerStyle) )
             .layoutPriority(1)
-            .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0) + (config.swipeableUp ? (flexibleSheetFullScreenState.isActive ? 0 : config.topPadding) : config.topPadding))
+            .padding(.top, /*(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0) + */(config.swipeableUp ? (flexibleSheetFullScreenState.isActive ? 0 : config.topPadding) : config.topPadding))
             .frame(height: flexibleSheetManager.isPresented ? (config.swipeableUp ? (flexibleSheetFullScreenState.isActive ? UIScreen.main.bounds.height : nil) : nil) : 0, alignment: .top)
             .gesture(
                 DragGesture()
@@ -64,7 +63,7 @@ public struct FlexibleSheetViewModifier: ViewModifier {
                         }
                     }
             )
-            .animation(config.animates ? config.animation : nil)
+            .animation(config.animates ? config.animation : nil, value: 1)
         }
         .edgesIgnoringSafeArea(.all)
         .environmentObject(flexibleSheetManager)
