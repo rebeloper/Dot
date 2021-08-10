@@ -155,7 +155,7 @@ extension FlexibleSheet {
     
     private func dragGesture(_ geometry: GeometryProxy) -> _EndedGesture<_ChangedGesture<DragGesture>> {
         
-        let gesture = DragGesture()
+        let gesture = DragGesture(minimumDistance: 44)
             .onChanged {
                 
                 guard allowsDraggingToDismiss else {
