@@ -8,13 +8,16 @@
 import SwiftUI
 
 public struct AlertItem {
+    public var type: AlertType
     public var title: String
     public var message: String?
     public var actions: [AlertAction]
     
-    public init(title: String? = nil,
-         message: String? = nil,
-         actions: [AlertAction] = []) {
+    public init(type: AlertType,
+                title: String? = nil,
+                message: String? = nil,
+                actions: [AlertAction] = []) {
+        self.type = type
         self.title = title != nil ? title! : ""
         self.message = message
         self.actions = actions

@@ -11,19 +11,11 @@ public class AlertsManager: ObservableObject {
     
     public init() {}
     
-    @Published public var isAlertPresented = false
-    @Published public var isConfirmationDialogPresented = false
-    @Published public var alertItem = AlertItem()
+    @Published public var isPresented = false
+    @Published public var alertItem = AlertItem(type: .alert)
     
-    public func show(_ type: AlertType, title: String? = nil, message: String? = nil, actions: [AlertAction] = []) {
-        alertItem = AlertItem(title: title, message: message, actions: actions)
-        switch type {
-        case .alert:
-            isAlertPresented = true
-            isConfirmationDialogPresented = false
-        case .confirmationDialog:
-            isAlertPresented = false
-            isConfirmationDialogPresented = true
-        }
+    public func show(_ type: AlertType = .alert, title: String? = nil, message: String? = nil, actions: [AlertAction] = []) {
+        alertItem = AlertItem(type: type, title: title, message: message, actions: actions)
+        isPresented.toggle()
     }
 }

@@ -13,33 +13,38 @@ public struct AlertViewModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         content
-            .confirmationDialog(alertsManager.alertItem.title, isPresented: $alertsManager.isConfirmationDialogPresented, titleVisibility: alertsManager.alertItem.title == "" ? .hidden : .visible) {
-                ForEach(alertsManager.alertItem.actions) { action in
-                    Button(role: action.role, action: action.action) {
-                        Text(action.title)
+            .if(alertsManager.alertItem.type == .alert, transform: { content in
+                content
+                    .alert(alertsManager.alertItem.title, isPresented: $alertsManager.isPresented) {
+                        ForEach(alertsManager.alertItem.actions) { action in
+                            Button(role: action.role, action: action.action) {
+                                Text(action.title)
+                            }
+                        }
+                    } message: {
+                        if alertsManager.alertItem.message != nil {
+                            Text(alertsManager.alertItem.message!)
+                        } else {
+                            EmptyView()
+                        }
                     }
-                }
-            } message: {
-                if alertsManager.alertItem.message != nil {
-                    Text(alertsManager.alertItem.message!)
-                } else {
-                    EmptyView()
-                }
-            }
-            .alert(alertsManager.alertItem.title, isPresented: $alertsManager.isAlertPresented) {
-                ForEach(alertsManager.alertItem.actions) { action in
-                    Button(role: action.role, action: action.action) {
-                        Text(action.title)
-                    }
-                }
-            } message: {
-                if alertsManager.alertItem.message != nil {
-                    Text(alertsManager.alertItem.message!)
-                } else {
-                    EmptyView()
-                }
-            }
-
+            })
+                .if(alertsManager.alertItem.type == .confirmationDialog, transform: { content in
+                    content
+                        .confirmationDialog(alertsManager.alertItem.title, isPresented: $alertsManager.isPresented, titleVisibility: alertsManager.alertItem.title == "" ? .hidden : .visible) {
+                            ForEach(alertsManager.alertItem.actions) { action in
+                                Button(role: action.role, action: action.action) {
+                                    Text(action.title)
+                                }
+                            }
+                        } message: {
+                            if alertsManager.alertItem.message != nil {
+                                Text(alertsManager.alertItem.message!)
+                            } else {
+                                EmptyView()
+                            }
+                        }
+                })
     }
 }
 
