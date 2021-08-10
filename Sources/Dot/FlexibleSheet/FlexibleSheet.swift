@@ -119,10 +119,11 @@ extension FlexibleSheet {
             
             VStack {
                 HStack {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(Font.title.weight(.semibold))
-                        .opacity(0)
-                        .padding(EdgeInsets(top: 10, leading: 13, bottom: 0, trailing: 0))
+                    if showsCloseButton {
+                        closeButton
+                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                            .opacity(0)
+                    }
                     Spacer()
                     Text(title)
                         .font(Font.headline.weight(.semibold))
@@ -191,19 +192,6 @@ extension FlexibleSheet {
     }
     
     private var closeButton: AnyView {
-        
-//        let button = Button {
-//            dismiss()
-//        } label: {
-//            ZStack {
-//                Image(systemName: "xmark.circle.fill")
-//                    .font(Font.title.weight(.semibold))
-//                    .accentColor(Color(UIColor.lightGray.withAlphaComponent(0.2)))
-//                Image(systemName: "xmark.circle.fill")
-//                    .font(Font.title.weight(.semibold))
-//                    .accentColor(Color(closeButtonColor))
-//            }
-//        }
         
         let button = SFButton(action: {
             dismiss()
