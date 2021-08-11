@@ -1,5 +1,5 @@
 //
-//  ProgressHUD.swift
+//  ToastView.swift
 //  Dot
 //
 //  Created by Alex Nagy on 10.08.2021.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-/// Configure the ProgressHUD
-public struct ProgressHUDConfig {
+/// Configure the ToastView
+public struct ToastConfig {
     var title: String?
-    var caption: String?
+    var message: String?
     
-    var type: ProgressHUDType
+    var type: ToastType
 
     var minSize: CGSize
     var cornerRadius: CGFloat
@@ -20,7 +20,7 @@ public struct ProgressHUDConfig {
     var backgroundColor: Color
 
     var titleForegroundColor: Color
-    var captionForegroundColor: Color
+    var messageForegroundColor: Color
 
     var shadowColor: Color
     var shadowRadius: CGFloat
@@ -33,29 +33,29 @@ public struct ProgressHUDConfig {
     var autoHideInterval: TimeInterval
     var shouldDisableContent: Bool
     
-    /// Creates a configuration for ProgressHUD
+    /// Creates a configuration for ToastView
     /// - Parameters:
-    ///   - type: hud type
+    ///   - type: Toast type
     ///   - minSize: minimum size of the hud
-    ///   - cornerRadius: hud corenre radius
-    ///   - backgroundColor: hud background color
+    ///   - cornerRadius: Toast corner radius
+    ///   - backgroundColor: Toast background color
     ///   - titleForegroundColor: title foreground color
-    ///   - captionForegroundColor: caption foreground color
-    ///   - shadowColor: hud shadow color
-    ///   - shadowRadius: hud shadow radius
-    ///   - borderColor: hud border color
-    ///   - borderWidth: hud border width
-    ///   - shouldAutoHide: should the hud auto hide
-    ///   - allowsTapToHide: should the hud allow tap to hide
+    ///   - messageForegroundColor: message foreground color
+    ///   - shadowColor: Toast shadow color
+    ///   - shadowRadius: Toast shadow radius
+    ///   - borderColor: Toast border color
+    ///   - borderWidth: Toast border width
+    ///   - shouldAutoHide: should the Toast auto hide
+    ///   - allowsTapToHide: should the Toast allow tap to hide
     ///   - autoHideInterval: autohide time
-    ///   - shouldDisableContent: should the hud disable the underlying content
+    ///   - shouldDisableContent: should the Toast disable the underlying content
     public init(
-        type: ProgressHUDType = .top,
+        type: ToastType = .top,
         minSize: CGSize = CGSize(width: 100.0, height: 100.0),
         cornerRadius: CGFloat = 18.0,
         backgroundColor: Color = .clear,
         titleForegroundColor: Color = .primary,
-        captionForegroundColor: Color = .secondary,
+        messageForegroundColor: Color = .secondary,
         shadowColor: Color = .clear,
         shadowRadius: CGFloat = 0.0,
         borderColor: Color = .clear,
@@ -73,7 +73,7 @@ public struct ProgressHUDConfig {
         self.backgroundColor = backgroundColor
 
         self.titleForegroundColor = titleForegroundColor
-        self.captionForegroundColor = captionForegroundColor
+        self.messageForegroundColor = messageForegroundColor
 
         self.shadowColor = shadowColor
         self.shadowRadius = shadowRadius
@@ -89,21 +89,21 @@ public struct ProgressHUDConfig {
     }
 }
 
-public enum ProgressHUDType {
+public enum ToastType {
     case top
     case center
     case bottom
 }
 
-private struct ProgressHUDLabelView: View {
+private struct ToastLabelView: View {
     
-    var type: ProgressHUDType
+    var type: ToastType
     
     var title: String?
-    var caption: String?
+    var message: String?
     
     var titleForegroundColor: Color
-    var captionForegroundColor: Color
+    var messageForegroundColor: Color
     
     var body: some View {
         Group {
@@ -116,8 +116,8 @@ private struct ProgressHUDLabelView: View {
                             .lineLimit(2)
                             .foregroundColor(.primary)
                     }
-                    if let caption = caption {
-                        Text(caption)
+                    if let message = message {
+                        Text(message)
                             .lineLimit(2)
                             .font(.system(size: 11.0, weight: .regular))
                             .foregroundColor(.secondary)
@@ -131,8 +131,8 @@ private struct ProgressHUDLabelView: View {
                             .lineLimit(2)
                             .foregroundColor(.primary)
                     }
-                    if let caption = caption {
-                        Text(caption)
+                    if let message = message {
+                        Text(message)
                             .lineLimit(2)
                             .font(.system(size: 14.0, weight: .regular))
                             .foregroundColor(.secondary)
@@ -145,13 +145,13 @@ private struct ProgressHUDLabelView: View {
     }
 }
 
-public struct ProgressHUD: View {
+public struct ToastView: View {
     @Binding var isVisible: Bool
-    var config: ProgressHUDConfig
+    var config: ToastConfig
     
     @Environment(\.colorScheme) private var colorScheme
     
-    public init(_ isVisible: Binding<Bool>, config: ProgressHUDConfig) {
+    public init(_ isVisible: Binding<Bool>, config: ToastConfig) {
         self._isVisible = isVisible
         self.config = config
     }
@@ -171,7 +171,7 @@ public struct ProgressHUD: View {
                             HStack(spacing: 12) {
                                 ProgressView()
                                 if config.title != nil {
-                                    ProgressHUDLabelView(type: config.type, title: config.title, caption: config.caption, titleForegroundColor: config.titleForegroundColor, captionForegroundColor: config.captionForegroundColor)
+                                    ToastLabelView(type: config.type, title: config.title, message: config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
                                 }
                             }
                             .padding()
@@ -179,8 +179,6 @@ public struct ProgressHUD: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .overlay(
-                                // Fix required since .border can not be used with
-                                // RoundedRectangle clip shape
                                 RoundedRectangle(cornerRadius: config.cornerRadius)
                                     .stroke(config.borderColor, lineWidth: config.borderWidth)
                             )
@@ -193,7 +191,7 @@ public struct ProgressHUD: View {
                         VStack(spacing: 20) {
                             ProgressView()
                             if config.title != nil {
-                                ProgressHUDLabelView(type: config.type, title: config.title, caption: config.caption, titleForegroundColor: config.titleForegroundColor, captionForegroundColor: config.captionForegroundColor)
+                                ToastLabelView(type: config.type, title: config.title, message: config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
                             }
                         }
                         .padding()
@@ -201,8 +199,6 @@ public struct ProgressHUD: View {
                         .cornerRadius(config.cornerRadius)
                         .padding()
                         .overlay(
-                            // Fix required since .border can not be used with
-                            // RoundedRectangle clip shape
                             RoundedRectangle(cornerRadius: config.cornerRadius)
                                 .stroke(config.borderColor, lineWidth: config.borderWidth)
                         )
@@ -215,7 +211,7 @@ public struct ProgressHUD: View {
                             HStack(spacing: 12) {
                                 ProgressView()
                                 if config.title != nil {
-                                    ProgressHUDLabelView(type: config.type, title: config.title, caption: config.caption, titleForegroundColor: config.titleForegroundColor, captionForegroundColor: config.captionForegroundColor)
+                                    ToastLabelView(type: config.type, title: config.title, message: config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
                                 }
                             }
                             .padding()
@@ -223,8 +219,6 @@ public struct ProgressHUD: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .overlay(
-                                // Fix required since .border can not be used with
-                                // RoundedRectangle clip shape
                                 RoundedRectangle(cornerRadius: config.cornerRadius)
                                     .stroke(config.borderColor, lineWidth: config.borderWidth)
                             )
