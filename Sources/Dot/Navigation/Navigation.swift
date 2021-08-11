@@ -1,5 +1,5 @@
 //
-//  NavigationManager.swift
+//  Navigation.swift
 //  Dot
 //
 //  Created by Alex Nagy on 09.08.2021.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public class NavigationManager: ObservableObject {
+public class Navigation: ObservableObject {
     
     public init() {}
     
