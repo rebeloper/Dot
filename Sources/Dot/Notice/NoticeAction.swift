@@ -1,5 +1,5 @@
 //
-//  AlertAction.swift
+//  NoticeAction.swift
 //  Dot
 //
 //  Created by Alex Nagy on 09.08.2021.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct AlertAction: Identifiable {
+public struct NoticeAction: Identifiable {
     public var id = UUID().uuidString
     public var role: ButtonRole?
     public var title: String

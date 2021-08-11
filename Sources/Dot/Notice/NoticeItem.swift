@@ -1,5 +1,5 @@
 //
-//  AlertItem.swift
+//  NoticeItem.swift
 //  Dot
 //
 //  Created by Alex Nagy on 09.08.2021.
@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-public struct AlertItem {
-    public var type: AlertType
+public struct NoticeItem {
+    public var type: NoticeType
     public var title: String
     public var message: String?
-    public var actions: [AlertAction]
+    public var actions: [NoticeAction]
     
-    public init(type: AlertType = .none,
+    public init(type: NoticeType = .none,
                 title: String? = nil,
                 message: String? = nil,
-                actions: [AlertAction] = []) {
+                actions: [NoticeAction] = []) {
         self.type = type
         self.title = title != nil ? title! : ""
         self.message = message
