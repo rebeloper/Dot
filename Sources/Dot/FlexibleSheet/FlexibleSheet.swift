@@ -17,27 +17,25 @@ public struct FlexibleSheet<Content: View>: View {
     internal var height: FlexibleSheetHeight = .proportional(0.84) // about the same as a ColorPicker
     internal var contentInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     internal var backgroundColor: UIColor = .systemBackground
-    internal var closeButtonColor: UIColor = .gray
+    internal var closeButtonColor: UIColor = .lightGray
+    internal var outsideColor: UIColor = .label
+    internal var outsideOpacity: CGFloat = 0.15
     internal var allowsDraggingToDismiss = false
-    internal var allowsTapBackgroundToDismiss = true
+    internal var allowsTapOutsideToDismiss = true
     internal var showsCloseButton = true
+    internal var cornerRadius: CGFloat = 15
+    internal var additionalOffset: CGFloat = 44
     
     private let content: () -> Content
-    private let cornerRadius: CGFloat
-    private let additionalOffset: CGFloat // this is so we can drag the sheet up a bit
     
     private var actualContentInsets: EdgeInsets {
-        return EdgeInsets(top: contentInsets.top, leading: contentInsets.leading, bottom: cornerRadius + additionalOffset + contentInsets.bottom, trailing: contentInsets.trailing)
+        return EdgeInsets(top: contentInsets.top, leading: contentInsets.leading, bottom: additionalOffset + contentInsets.bottom, trailing: contentInsets.trailing)
     }
     
     
     public init(isPresented: Binding<Bool>,
-                cornerRadius: CGFloat = 15,
-                additionalOffset: CGFloat = 44,
                 @ViewBuilder content: @escaping () -> Content) {
         _isPresented = isPresented
-        self.cornerRadius = cornerRadius
-        self.additionalOffset = additionalOffset
         self.content = content
     }
     
@@ -50,11 +48,11 @@ public struct FlexibleSheet<Content: View>: View {
                 
                 if isPresented {
                     
-                    Color.systemBlack
+                    Color(uiColor: outsideColor)
                         .ignoresSafeArea()
-                        .opacity(0.15)
+                        .opacity(outsideOpacity)
                         .onTapGesture {
-                            if allowsTapBackgroundToDismiss {
+                            if allowsTapOutsideToDismiss {
                                 dismiss()
                             }
                         }
@@ -98,8 +96,8 @@ public struct FlexibleSheet<Content: View>: View {
                                 }
                             }
                         }
-                        .frame(height: height.value(with: geometry) + cornerRadius + additionalOffset)
-                        .offset(y: cornerRadius + additionalOffset + dragOffset)
+                        .frame(height: height.value(with: geometry) + additionalOffset)
+                        .offset(y: additionalOffset + dragOffset)
                     }
                     .transition(.verticalSlide(height.value(with: geometry)))
                     .highPriorityGesture(

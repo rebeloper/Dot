@@ -31,19 +31,25 @@ extension View {
                                        contentInsets: EdgeInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
                                        backgroundColor: UIColor = .systemBackground,
                                        closeButtonColor: UIColor = .lightGray,
-                                       disableDragToDismiss: Bool = false,
-                                       disableTapBackgroundToDismiss: Bool = true,
+                                       outsideColor: UIColor = .label,
+                                       outsideOpacity: CGFloat = 0.15,
+                                       allowsDragToDismiss: Bool = false,
+                                       allowsTapOutsideToDismiss: Bool = true,
                                        showsCloseButton: Bool = false,
                                        @ViewBuilder content: @escaping () -> T) -> some View {
         modifier(FlexibleSheetViewModifier(content: {
-            FlexibleSheet(isPresented: isPresented, cornerRadius: cornerRadius, additionalOffset: additionalOffset, content: content)
+            FlexibleSheet(isPresented: isPresented, content: content)
                 .height(height)
                 .contentInsets(contentInsets)
                 .backgroundColor(backgroundColor)
                 .closeButtonColor(closeButtonColor)
-                .disableDragToDismiss(disableDragToDismiss)
-                .disableTapBackgroundToDismiss(disableTapBackgroundToDismiss)
+                .outsideColor(outsideColor)
+                .outsideOpacity(outsideOpacity)
+                .allowsDragToDismiss(allowsDragToDismiss)
+                .allowsTapOutsideToDismiss(allowsTapOutsideToDismiss)
                 .showsCloseButton(showsCloseButton)
+                .additionalOffset(additionalOffset)
+                .cornerRadius(cornerRadius)
         }))
     }
 }

@@ -41,21 +41,53 @@ extension FlexibleSheet {
         return copy
     }
     
-    public func disableDragToDismiss(_ disableDragToDismiss: Bool) -> Self {
+    /// The color for the outside
+    /// - Parameter outsideColor: a UIColor
+    public func outsideColor(_ outsideColor: UIColor) -> Self {
         var copy = self
-        copy.allowsDraggingToDismiss = !disableDragToDismiss
+        copy.outsideColor = outsideColor
         return copy
     }
     
-    public func disableTapBackgroundToDismiss(_ disableTapBackgroundToDismiss: Bool) -> Self {
+    /// The opacity for the outside
+    /// - Parameter outsideOpacity: a CGFloat between 0 and 1
+    public func outsideOpacity(_ outsideOpacity: CGFloat) -> Self {
         var copy = self
-        copy.allowsTapBackgroundToDismiss = !disableTapBackgroundToDismiss
+        copy.outsideOpacity = outsideOpacity
+        return copy
+    }
+    
+    public func allowsDragToDismiss(_ allowsDragToDismiss: Bool) -> Self {
+        var copy = self
+        copy.allowsDraggingToDismiss = allowsDragToDismiss
+        return copy
+    }
+    
+    public func allowsTapOutsideToDismiss(_ allowsTapOutsideToDismiss: Bool) -> Self {
+        var copy = self
+        copy.allowsTapOutsideToDismiss = allowsTapOutsideToDismiss
         return copy
     }
     
     public func showsCloseButton(_ showsCloseButton: Bool) -> Self {
         var copy = self
         copy.showsCloseButton = showsCloseButton
+        return copy
+    }
+    
+    /// This is so we can drag the sheet up a bit
+    /// - Parameter additionalOffset: a CGFloat
+    public func additionalOffset(_ additionalOffset: CGFloat) -> Self {
+        var copy = self
+        copy.additionalOffset = additionalOffset
+        return copy
+    }
+    
+    /// Corner radius
+    /// - Parameter cornerRadius: a CGFloat
+    public func cornerRadius(_ cornerRadius: CGFloat) -> Self {
+        var copy = self
+        copy.cornerRadius = cornerRadius
         return copy
     }
     
