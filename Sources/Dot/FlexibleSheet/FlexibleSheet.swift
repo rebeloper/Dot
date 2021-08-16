@@ -110,11 +110,11 @@ public struct FlexibleSheet<Content: View>: View {
                 }
             }
         }
-        .background(
-            NavBarAccessor(callback: { uiNavigationBar in
-                navigationBarHeight = uiNavigationBar.frame.height
-            })
-        )
+//        .background(
+//            NavBarAccessor(callback: { uiNavigationBar in
+//                navigationBarHeight = uiNavigationBar.frame.height
+//            })
+//        )
     }
 }
 
