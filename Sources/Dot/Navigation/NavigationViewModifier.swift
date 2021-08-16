@@ -29,6 +29,12 @@ public struct NavigationViewModifier: ViewModifier {
             .fullScreenCover(isPresented: $navigation.isCovered, onDismiss: navigation.onDismiss) {
                 navigation.destination
             }
+            .adaptiveSheet(isPresented: $navigation.isAdaptiveSheetPresented, detents: navigation.adaptiveSheetOptions!.detents, selectedDetentIdentifier: navigation.adaptiveSheetOptions!.selectedDetentIdentifier, largestUndimmedDetentIdentifier: navigation.adaptiveSheetOptions!.largestUndimmedDetentIdentifier, prefersScrollingExpandsWhenScrolledToEdge: navigation.adaptiveSheetOptions!.prefersScrollingExpandsWhenScrolledToEdge, prefersEdgeAttachedInCompactHeight: navigation.adaptiveSheetOptions!.prefersEdgeAttachedInCompactHeight, prefersGrabberVisible: navigation.adaptiveSheetOptions!.prefersGrabberVisible, preferredCornerRadius: navigation.adaptiveSheetOptions!.preferredCornerRadius) {
+                navigation.destination
+                    .onDisappear {
+                        navigation.onDismiss?()
+                    }
+            }
     }
 }
 
