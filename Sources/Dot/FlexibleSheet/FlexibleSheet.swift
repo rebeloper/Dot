@@ -32,6 +32,7 @@ public struct FlexibleSheet<Content: View>: View {
         return EdgeInsets(top: contentInsets.top, leading: contentInsets.leading, bottom: additionalOffset + contentInsets.bottom, trailing: contentInsets.trailing)
     }
     
+    @State private var navigationBarHeight = 0
     
     public init(isPresented: Binding<Bool>,
                 @ViewBuilder content: @escaping () -> Content) {
@@ -42,77 +43,78 @@ public struct FlexibleSheet<Content: View>: View {
     
     public var body: some View {
         
-        NavigationBarAccessor { navigationBar in
-            GeometryReader { proxy in
+        GeometryReader { proxy in
+            
+            ZStack {
                 
-                ZStack {
+                if isPresented {
                     
-                    if isPresented {
-                        
-                        Color(uiColor: outsideColor)
-                            .ignoresSafeArea()
-                            .opacity(outsideOpacity)
-                            .onTapGesture {
-                                if allowsTapOutsideToDismiss {
-                                    dismiss()
-                                }
+                    Color(uiColor: outsideColor)
+                        .ignoresSafeArea()
+                        .opacity(outsideOpacity)
+                        .onTapGesture {
+                            if allowsTapOutsideToDismiss {
+                                dismiss()
                             }
-                            .transition(.opacity)
-                            .onAppear { // we don't want the content to slide up until the background has appeared
-                                withAnimation {
-                                    hasAppeared = true
-                                }
+                        }
+                        .transition(.opacity)
+                        .onAppear { // we don't want the content to slide up until the background has appeared
+                            withAnimation {
+                                hasAppeared = true
                             }
-                            .onDisappear() {
-                                withAnimation {
-                                    hasAppeared = false
-                                }
+                        }
+                        .onDisappear() {
+                            withAnimation {
+                                hasAppeared = false
                             }
-                    }
+                        }
+                }
+                
+                if hasAppeared {
                     
-                    if hasAppeared {
+                    VStack {
                         
-                        VStack {
+                        Spacer()
+                        
+                        ZStack {
                             
-                            Spacer()
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .foregroundColor(.systemWhite)
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .foregroundColor(Color(backgroundColor))
                             
-                            ZStack {
-                                
-                                RoundedRectangle(cornerRadius: cornerRadius)
-                                    .foregroundColor(.systemWhite)
-                                RoundedRectangle(cornerRadius: cornerRadius)
-                                    .foregroundColor(Color(backgroundColor))
-                                
-                                content()
-                                    .padding(actualContentInsets)
-                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                                if showsCloseButton {
-                                    VStack {
-                                        HStack {
-                                            Spacer()
-                                            closeButton
-                                                .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
-                                        }
+                            content()
+                                .padding(actualContentInsets)
+                                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                            if showsCloseButton {
+                                VStack {
+                                    HStack {
                                         Spacer()
+                                        closeButton
+                                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
                                     }
+                                    Spacer()
                                 }
                             }
-                            .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom + navigationBar.frame.height)
-                            .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
                         }
-                        .transition(.verticalSlide(height.value(with: proxy)))
-                        .highPriorityGesture(
-                            dragGesture(proxy)
-                        )
-                        .onDisappear {
-                            dragOffset = 0
-                        }
+                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom + navigationBarHeight)
+                        .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
+                    }
+                    .transition(.verticalSlide(height.value(with: proxy)))
+                    .highPriorityGesture(
+                        dragGesture(proxy)
+                    )
+                    .onDisappear {
+                        dragOffset = 0
                     }
                 }
             }
-            .anyView()
         }
-        
+        .background(
+            NavBarAccessor(callback: { uiNavigationBar in
+                navigationBarHeight = uiNavigationBar.frame.height
+            })
+        )
     }
 }
 
@@ -190,27 +192,28 @@ public enum FlexibleSheetHeight {
     }
 }
 
+struct NavBarAccessor: UIViewControllerRepresentable {
+    var callback: (UINavigationBar) -> Void
+    private let proxyController = ViewController()
 
-
-struct NavigationBarAccessor: UIViewControllerRepresentable {
-    var callback: (UINavigationBar) -> (AnyView)
-    private let proxyViewController = ProxyViewController()
-
-    func makeUIViewController(context: UIViewControllerRepresentableContext<NavigationBarAccessor>) -> UIViewController {
-        self.proxyViewController.callback = callback
-        return proxyViewController
+    func makeUIViewController(context: UIViewControllerRepresentableContext<NavBarAccessor>) ->
+                              UIViewController {
+        proxyController.callback = callback
+        return proxyController
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavigationBarAccessor>) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavBarAccessor>) {
     }
 
-    private class ProxyViewController: UIViewController {
-        var callback: ((UINavigationBar) -> AnyView)?
+    typealias UIViewControllerType = UIViewController
+
+    private class ViewController: UIViewController {
+        var callback: (UINavigationBar) -> Void = { _ in }
 
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            if let navigationBar = self.navigationController?.navigationBar {
-                _ = self.callback?(navigationBar)
+            if let navBar = self.navigationController {
+                self.callback(navBar.navigationBar)
             }
         }
     }
