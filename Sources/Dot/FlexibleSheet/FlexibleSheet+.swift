@@ -91,4 +91,12 @@ extension FlexibleSheet {
         return copy
     }
     
+    /// Additional height of the sheet
+    /// - Parameter additionalHeight: a CGFloat
+    public func additionalHeight(_ additionalHeight: CGFloat) -> Self {
+        var copy = self
+        copy.additionalHeight = additionalHeight
+        return copy
+    }
+    
 }

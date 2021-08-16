@@ -25,14 +25,13 @@ public struct FlexibleSheet<Content: View>: View {
     internal var showsCloseButton = true
     internal var cornerRadius: CGFloat = 15
     internal var additionalOffset: CGFloat = 44
+    internal var additionalHeight: CGFloat = 0
     
     private let content: () -> Content
     
     private var actualContentInsets: EdgeInsets {
         return EdgeInsets(top: contentInsets.top, leading: contentInsets.leading, bottom: additionalOffset + contentInsets.bottom, trailing: contentInsets.trailing)
     }
-    
-    @State private var navigationBarHeight: CGFloat = 0
     
     public init(isPresented: Binding<Bool>,
                 @ViewBuilder content: @escaping () -> Content) {
@@ -97,7 +96,7 @@ public struct FlexibleSheet<Content: View>: View {
                                 }
                             }
                         }
-                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom + navigationBarHeight)
+                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom + additionalHeight)
                         .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
                     }
                     .transition(.verticalSlide(height.value(with: proxy)))
@@ -110,11 +109,6 @@ public struct FlexibleSheet<Content: View>: View {
                 }
             }
         }
-//        .background(
-//            NavBarAccessor(callback: { uiNavigationBar in
-//                navigationBarHeight = uiNavigationBar.frame.height
-//            })
-//        )
     }
 }
 
@@ -192,29 +186,3 @@ public enum FlexibleSheetHeight {
     }
 }
 
-struct NavBarAccessor: UIViewControllerRepresentable {
-    var callback: (UINavigationBar) -> Void
-    private let proxyController = ViewController()
-
-    func makeUIViewController(context: UIViewControllerRepresentableContext<NavBarAccessor>) ->
-                              UIViewController {
-        proxyController.callback = callback
-        return proxyController
-    }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavBarAccessor>) {
-    }
-
-    typealias UIViewControllerType = UIViewController
-
-    private class ViewController: UIViewController {
-        var callback: (UINavigationBar) -> Void = { _ in }
-
-        override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            if let navBar = self.navigationController {
-                self.callback(navBar.navigationBar)
-            }
-        }
-    }
-}

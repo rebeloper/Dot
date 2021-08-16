@@ -28,6 +28,7 @@ struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent:
 extension View {
     public func flexibleSheet<T: View>(isPresented: Binding<Bool>,
                                        height: FlexibleSheetHeight = .proportional(0.84),
+                                       additionalHeight: CGFloat = 0,
                                        cornerRadius: CGFloat = 15,
                                        additionalOffset: CGFloat = 44,
                                        contentInsets: EdgeInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
@@ -42,6 +43,7 @@ extension View {
         modifier(FlexibleSheetViewModifier(isPresented: isPresented, content: {
             FlexibleSheet(isPresented: isPresented, content: content)
                 .height(height)
+                .additionalHeight(additionalHeight)
                 .contentInsets(contentInsets)
                 .backgroundColor(backgroundColor)
                 .closeButtonColor(closeButtonColor)
