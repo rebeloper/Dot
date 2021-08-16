@@ -82,12 +82,17 @@ public struct FlexibleSheet<Content: View>: View {
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .foregroundColor(Color(backgroundColor))
                             
-                            content()
-                                .padding(actualContentInsets)
-                                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                                .if(embedInStackNavigationView) { view in
-                                    view.embedInStackNavigationView()
-                                }
+                            if embedInStackNavigationView {
+                                content()
+                                    .padding(actualContentInsets)
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                                    .embedInStackNavigationView()
+                            } else {
+                                content()
+                                    .padding(actualContentInsets)
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                            }
+                            
                             
                             if showsCloseButton {
                                 VStack {
