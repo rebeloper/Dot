@@ -36,7 +36,7 @@ public extension View {
                                 adaptiveSheetOptions: AdaptiveSheetOptions = AdaptiveSheetOptions(),
                                 @ViewBuilder content: @escaping () -> T)-> some View {
         modifier(AdaptiveSheetViewModifier(isPresented: isPresented,
-                                           adaptiveSheetOptions : adaptiveSheetOptions,
+                                           adaptiveSheetOptions: adaptiveSheetOptions,
                                            content: content))
     }
 }
