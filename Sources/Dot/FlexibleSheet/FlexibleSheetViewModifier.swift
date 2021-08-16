@@ -19,7 +19,7 @@ struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent:
     
     func body(content: Content) -> some View {
         ZStack {
-            content.disabled(!isPresented)
+            content.disabled(isPresented)
             self.content()
         }
     }
