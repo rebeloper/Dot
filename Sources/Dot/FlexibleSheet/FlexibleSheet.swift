@@ -42,73 +42,76 @@ public struct FlexibleSheet<Content: View>: View {
     
     public var body: some View {
         
-        GeometryReader { proxy in
-            
-            ZStack {
+        NavigationBarAccessor { navigationBar in
+            GeometryReader { proxy in
                 
-                if isPresented {
+                ZStack {
                     
-                    Color(uiColor: outsideColor)
-                        .ignoresSafeArea()
-                        .opacity(outsideOpacity)
-                        .onTapGesture {
-                            if allowsTapOutsideToDismiss {
-                                dismiss()
-                            }
-                        }
-                        .transition(.opacity)
-                        .onAppear { // we don't want the content to slide up until the background has appeared
-                            withAnimation {
-                                hasAppeared = true
-                            }
-                        }
-                        .onDisappear() {
-                            withAnimation {
-                                hasAppeared = false
-                            }
-                        }
-                }
-                
-                if hasAppeared {
-                    
-                    VStack {
+                    if isPresented {
                         
-                        Spacer()
-                        
-                        ZStack {
-                            
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .foregroundColor(.systemWhite)
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .foregroundColor(Color(backgroundColor))
-                            
-                            content()
-                                .padding(actualContentInsets)
-                                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                            if showsCloseButton {
-                                VStack {
-                                    HStack {
-                                        Spacer()
-                                        closeButton
-                                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
-                                    }
-                                    Spacer()
+                        Color(uiColor: outsideColor)
+                            .ignoresSafeArea()
+                            .opacity(outsideOpacity)
+                            .onTapGesture {
+                                if allowsTapOutsideToDismiss {
+                                    dismiss()
                                 }
                             }
-                        }
-                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom)
-                        .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
+                            .transition(.opacity)
+                            .onAppear { // we don't want the content to slide up until the background has appeared
+                                withAnimation {
+                                    hasAppeared = true
+                                }
+                            }
+                            .onDisappear() {
+                                withAnimation {
+                                    hasAppeared = false
+                                }
+                            }
                     }
-                    .transition(.verticalSlide(height.value(with: proxy)))
-                    .highPriorityGesture(
-                        dragGesture(proxy)
-                    )
-                    .onDisappear {
-                        dragOffset = 0
+                    
+                    if hasAppeared {
+                        
+                        VStack {
+                            
+                            Spacer()
+                            
+                            ZStack {
+                                
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .foregroundColor(.systemWhite)
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .foregroundColor(Color(backgroundColor))
+                                
+                                content()
+                                    .padding(actualContentInsets)
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                                if showsCloseButton {
+                                    VStack {
+                                        HStack {
+                                            Spacer()
+                                            closeButton
+                                                .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                                        }
+                                        Spacer()
+                                    }
+                                }
+                            }
+                            .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom + navigationBar.frame.height)
+                            .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
+                        }
+                        .transition(.verticalSlide(height.value(with: proxy)))
+                        .highPriorityGesture(
+                            dragGesture(proxy)
+                        )
+                        .onDisappear {
+                            dragOffset = 0
+                        }
                     }
                 }
             }
         }
+        
     }
 }
 
@@ -186,3 +189,28 @@ public enum FlexibleSheetHeight {
     }
 }
 
+
+
+struct NavigationBarAccessor: UIViewControllerRepresentable {
+    var callback: (UINavigationBar) -> (AnyView)
+    private let proxyViewController = ProxyViewController()
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<NavigationBarAccessor>) -> UIViewController {
+        self.proxyViewController.callback = callback
+        return proxyViewController
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavigationBarAccessor>) {
+    }
+
+    private class ProxyViewController: UIViewController {
+        var callback: ((UINavigationBar) -> AnyView)?
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            if let navigationBar = self.navigationController?.navigationBar {
+                _ = self.callback?(navigationBar)
+            }
+        }
+    }
+}
