@@ -25,7 +25,6 @@ public struct FlexibleSheet<Content: View>: View {
     internal var showsCloseButton = true
     internal var cornerRadius: CGFloat = 15
     internal var additionalOffset: CGFloat = 44
-    internal var additionalHeight: CGFloat = 0
     
     private let content: () -> Content
     
@@ -96,7 +95,7 @@ public struct FlexibleSheet<Content: View>: View {
                                 }
                             }
                         }
-                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom + additionalHeight)
+                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom)
                         .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
                     }
                     .transition(.verticalSlide(height.value(with: proxy)))
