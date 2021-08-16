@@ -19,12 +19,15 @@ struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent:
     
     func body(content: Content) -> some View {
         ZStack {
-            Color.black
+            if isPresented {
+                Color.black.edgesIgnoringSafeArea(.all)
+            }
             
             content
                 .scaleEffect(isPresented ? 0.95 : 1.0)
                 .cornerRadius(isPresented ? 15 : 0)
                 .animation(.default, value: 1)
+                .transition(.scale)
             
             self.content()
         }
