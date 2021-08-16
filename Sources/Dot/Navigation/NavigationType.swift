@@ -8,5 +8,5 @@
 import Foundation
 
 public enum NavigationType {
-    case page, sheet, fullScreenCover, adaptiveSheet
+    case page, sheet, fullScreenCover
 }

@@ -23,12 +23,6 @@ public struct NavigationViewModifier: ViewModifier {
                     EmptyView()
                 })
             )
-            .adaptiveSheet(isPresented: $navigation.isAdaptiveSheetPresented, adaptiveSheetOptions: navigation.adaptiveSheetOptions) {
-                navigation.destination
-                    .onDisappear {
-                        navigation.onDismiss?()
-                    }
-            }
             .sheet(isPresented: $navigation.isPresented, onDismiss: navigation.onDismiss) {
                 navigation.destination
             }
