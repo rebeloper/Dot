@@ -21,6 +21,8 @@ public class Navigation: ObservableObject {
     
     public func present<Destination: View>(_ type: NavigationType, adaptiveSheetOptions: AdaptiveSheetOptions = AdaptiveSheetOptions(), @ViewBuilder destination: () -> (Destination), onDismiss: (() -> Void)? = nil) {
         self.destination = AnyView(destination())
+        self.adaptiveSheetOptions = adaptiveSheetOptions
+        
         switch type {
         case .page:
             self.onDismiss = onDismiss
@@ -35,8 +37,6 @@ public class Navigation: ObservableObject {
             self.onDismiss = onDismiss
             isAdaptiveSheetPresented = true
         }
-        
-        self.adaptiveSheetOptions = adaptiveSheetOptions
     }
     
 }
