@@ -9,16 +9,16 @@ import SwiftUI
 
 public struct AdaptiveSheetViewControllerRepresentable<Content: View>: UIViewControllerRepresentable {
     
-    let content: Content
     @Binding var isPresented: Bool
     let adaptiveSheetOptions: AdaptiveSheetOptions
+    let content: Content
     
     public init(isPresented: Binding<Bool>,
                 adaptiveSheetOptions: AdaptiveSheetOptions,
                 @ViewBuilder content: @escaping () -> Content) {
-        self.content = content()
-        self.adaptiveSheetOptions = adaptiveSheetOptions
         self._isPresented = isPresented
+        self.adaptiveSheetOptions = adaptiveSheetOptions
+        self.content = content()
     }
     
     public func makeCoordinator() -> Coordinator {
@@ -33,9 +33,9 @@ public struct AdaptiveSheetViewControllerRepresentable<Content: View>: UIViewCon
     }
     
     public func updateUIViewController(_ uiViewController: AdaptiveSheetViewController<Content>, context: Context) {
-        if isPresented{
+        if isPresented {
             uiViewController.presentModalView()
-        }else{
+        } else {
             uiViewController.dismissModalView()
         }
     }

@@ -26,8 +26,8 @@ public struct AdaptiveSheetOptions {
         self.detents = detents
         self.selectedDetentIdentifier = selectedDetentIdentifier
         self.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
-        self.prefersEdgeAttachedInCompactHeight = prefersEdgeAttachedInCompactHeight
         self.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
+        self.prefersEdgeAttachedInCompactHeight = prefersEdgeAttachedInCompactHeight
         self.prefersGrabberVisible = prefersGrabberVisible
         self.preferredCornerRadius = preferredCornerRadius
     }

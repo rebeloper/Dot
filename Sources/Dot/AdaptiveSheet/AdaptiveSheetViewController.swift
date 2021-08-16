@@ -9,27 +9,27 @@ import SwiftUI
 
 public class AdaptiveSheetViewController<Content: View>: UIViewController {
     
-    let content: Content
     let coordinator: AdaptiveSheetViewControllerRepresentable<Content>.Coordinator
     let adaptiveSheetOptions: AdaptiveSheetOptions
+    let content: Content
     
     private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
     public init(coordinator: AdaptiveSheetViewControllerRepresentable<Content>.Coordinator,
                 adaptiveSheetOptions: AdaptiveSheetOptions = AdaptiveSheetOptions(),
                 @ViewBuilder content: @escaping () -> Content) {
-        self.content = content()
         self.coordinator = coordinator
         self.adaptiveSheetOptions = adaptiveSheetOptions
+        self.content = content()
         super.init(nibName: nil, bundle: .main)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func dismissModalView(){
+    func dismissModalView() {
         dismiss(animated: true, completion: nil)
     }
-    func presentModalView(){
+    func presentModalView() {
         
         let hostingController = UIHostingController(rootView: content)
         
@@ -49,7 +49,7 @@ public class AdaptiveSheetViewController<Content: View>: UIViewController {
             sheet.prefersGrabberVisible = adaptiveSheetOptions.prefersGrabberVisible
             sheet.preferredCornerRadius = adaptiveSheetOptions.preferredCornerRadius
         }
-        if presentedViewController == nil{
+        if presentedViewController == nil {
             present(hostingController, animated: true, completion: nil)
         }
     }
