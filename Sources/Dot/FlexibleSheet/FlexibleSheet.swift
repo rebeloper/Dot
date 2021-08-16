@@ -110,6 +110,7 @@ public struct FlexibleSheet<Content: View>: View {
                     }
                 }
             }
+            .anyView()
         }
         
     }
