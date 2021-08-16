@@ -42,7 +42,7 @@ public struct FlexibleSheet<Content: View>: View {
     
     public var body: some View {
         
-        GeometryReader { geometry in
+        GeometryReader { proxy in
             
             ZStack {
                 
@@ -96,12 +96,12 @@ public struct FlexibleSheet<Content: View>: View {
                                 }
                             }
                         }
-                        .frame(height: height.value(with: geometry) + additionalOffset + geometry.safeAreaInsets.bottom)
-                        .offset(y: additionalOffset + geometry.safeAreaInsets.bottom + dragOffset)
+                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom)
+                        .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
                     }
-                    .transition(.verticalSlide(height.value(with: geometry)))
+                    .transition(.verticalSlide(height.value(with: proxy)))
                     .highPriorityGesture(
-                        dragGesture(geometry)
+                        dragGesture(proxy)
                     )
                     .onDisappear {
                         dragOffset = 0
