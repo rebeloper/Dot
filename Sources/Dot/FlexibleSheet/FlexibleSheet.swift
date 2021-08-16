@@ -32,7 +32,7 @@ public struct FlexibleSheet<Content: View>: View {
         return EdgeInsets(top: contentInsets.top, leading: contentInsets.leading, bottom: additionalOffset + contentInsets.bottom, trailing: contentInsets.trailing)
     }
     
-    @State private var navigationBarHeight = 0
+    @State private var navigationBarHeight: CGFloat = 0
     
     public init(isPresented: Binding<Bool>,
                 @ViewBuilder content: @escaping () -> Content) {
