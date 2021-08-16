@@ -22,16 +22,10 @@ struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent:
             if isPresented {
                 Color.black.edgesIgnoringSafeArea(.all)
             }
-            
             content
-                .scaleEffect(
-                    withAnimation({
-                        isPresented ? 0.98 : 1.0
-                    })
-                )
-                .clipShape(RoundedRectangle(cornerRadius: withAnimation({
-                    isPresented ? 15 : 0
-                })))
+                .scaleEffect(isPresented ? 0.98 : 1.0)
+                .clipShape(RoundedRectangle(cornerRadius: isPresented ? 15 : 0))
+                .animation(.easeInOut, value: 1)
                 .transition(.scale)
             
             self.content()
