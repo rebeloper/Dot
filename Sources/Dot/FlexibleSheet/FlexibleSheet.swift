@@ -95,7 +95,7 @@ public struct FlexibleSheet<Content: View>: View {
                                 }
                             }
                         }
-                        .frame(height: height.value(with: proxy) + additionalOffset + proxy.safeAreaInsets.bottom)
+                        .frame(height: height.value(with: proxy) + additionalOffsetHeight() + proxy.safeAreaInsets.bottom)
                         .offset(y: additionalOffset + proxy.safeAreaInsets.bottom + dragOffset)
                     }
                     .transition(.verticalSlide(height.value(with: proxy)))
@@ -108,6 +108,10 @@ public struct FlexibleSheet<Content: View>: View {
                 }
             }
         }
+    }
+    
+    func additionalOffsetHeight() -> CGFloat {
+        additionalOffset > 0 ? additionalOffset : -additionalOffset
     }
 }
 
