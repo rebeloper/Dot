@@ -11,31 +11,13 @@ public struct AdaptiveSheetViewModifier<T: View>: ViewModifier {
     
     let sheetContent: T
     @Binding var isPresented: Bool
-    let detents : [UISheetPresentationController.Detent]
-    let selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-    let largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-    let prefersScrollingExpandsWhenScrolledToEdge: Bool
-    let prefersEdgeAttachedInCompactHeight: Bool
-    let prefersGrabberVisible: Bool
-    let preferredCornerRadius: CGFloat?
+    let adaptiveSheetOptions: AdaptiveSheetOptions
     
     public init(isPresented: Binding<Bool>,
-                detents: [UISheetPresentationController.Detent] = [.medium(), .large()],
-                selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                prefersScrollingExpandsWhenScrolledToEdge: Bool = false,
-                prefersEdgeAttachedInCompactHeight: Bool = true,
-                prefersGrabberVisible: Bool = false,
-                preferredCornerRadius: CGFloat? = nil,
+                adaptiveSheetOptions: AdaptiveSheetOptions,
                 @ViewBuilder content: @escaping () -> T) {
         self.sheetContent = content()
-        self.detents = detents
-        self.selectedDetentIdentifier = selectedDetentIdentifier
-        self.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
-        self.prefersEdgeAttachedInCompactHeight = prefersEdgeAttachedInCompactHeight
-        self.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
-        self.prefersGrabberVisible = prefersGrabberVisible
-        self.preferredCornerRadius = preferredCornerRadius
+        self.adaptiveSheetOptions = adaptiveSheetOptions
         self._isPresented = isPresented
     }
     
@@ -43,13 +25,7 @@ public struct AdaptiveSheetViewModifier<T: View>: ViewModifier {
         ZStack{
             content
             AdaptiveSheetViewControllerRepresentable(isPresented: $isPresented,
-                                                     detents: detents,
-                                                     selectedDetentIdentifier: selectedDetentIdentifier,
-                                                     largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier,
-                                                     prefersScrollingExpandsWhenScrolledToEdge: prefersScrollingExpandsWhenScrolledToEdge,
-                                                     prefersEdgeAttachedInCompactHeight: prefersEdgeAttachedInCompactHeight,
-                                                     prefersGrabberVisible: prefersGrabberVisible,
-                                                     preferredCornerRadius: preferredCornerRadius,
+                                                     adaptiveSheetOptions: adaptiveSheetOptions,
                                                      content: {sheetContent}).frame(width: 0, height: 0)
         }
     }
@@ -57,23 +33,11 @@ public struct AdaptiveSheetViewModifier<T: View>: ViewModifier {
 
 public extension View {
     func adaptiveSheet<T: View>(isPresented: Binding<Bool>,
-                                detents : [UISheetPresentationController.Detent] = [.medium(), .large()],
-                                selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                                largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                                prefersScrollingExpandsWhenScrolledToEdge: Bool = false,
-                                prefersEdgeAttachedInCompactHeight: Bool = true,
-                                prefersGrabberVisible: Bool = false,
-                                preferredCornerRadius: CGFloat? = nil,
+                                adaptiveSheetOptions: AdaptiveSheetOptions = AdaptiveSheetOptions(),
                                 @ViewBuilder content: @escaping () -> T)-> some View {
         modifier(AdaptiveSheetViewModifier(isPresented: isPresented,
-                               detents : detents,
-                               selectedDetentIdentifier: selectedDetentIdentifier,
-                               largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier,
-                               prefersScrollingExpandsWhenScrolledToEdge: prefersScrollingExpandsWhenScrolledToEdge,
-                               prefersEdgeAttachedInCompactHeight: prefersEdgeAttachedInCompactHeight,
-                               prefersGrabberVisible: prefersGrabberVisible,
-                               preferredCornerRadius: preferredCornerRadius,
-                               content: content))
+                                           adaptiveSheetOptions : adaptiveSheetOptions,
+                                           content: content))
     }
 }
 

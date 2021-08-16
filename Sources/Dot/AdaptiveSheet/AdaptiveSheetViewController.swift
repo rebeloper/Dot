@@ -11,33 +11,15 @@ public class AdaptiveSheetViewController<Content: View>: UIViewController {
     
     let content: Content
     let coordinator: AdaptiveSheetViewControllerRepresentable<Content>.Coordinator
-    let detents : [UISheetPresentationController.Detent]
-    let selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-    let largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-    let prefersScrollingExpandsWhenScrolledToEdge: Bool
-    let prefersEdgeAttachedInCompactHeight: Bool
-    let prefersGrabberVisible: Bool
-    let preferredCornerRadius: CGFloat?
+    let adaptiveSheetOptions: AdaptiveSheetOptions
     
     private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
     public init(coordinator: AdaptiveSheetViewControllerRepresentable<Content>.Coordinator,
-                detents : [UISheetPresentationController.Detent] = [.medium(), .large()],
-                selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = .medium,
-                prefersScrollingExpandsWhenScrolledToEdge: Bool = false,
-                prefersEdgeAttachedInCompactHeight: Bool = true,
-                prefersGrabberVisible: Bool = false,
-                preferredCornerRadius: CGFloat? = nil,
+                adaptiveSheetOptions: AdaptiveSheetOptions = AdaptiveSheetOptions(),
                 @ViewBuilder content: @escaping () -> Content) {
         self.content = content()
         self.coordinator = coordinator
-        self.detents = detents
-        self.selectedDetentIdentifier = selectedDetentIdentifier
-        self.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
-        self.prefersEdgeAttachedInCompactHeight = prefersEdgeAttachedInCompactHeight
-        self.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
-        self.prefersGrabberVisible = prefersGrabberVisible
-        self.preferredCornerRadius = preferredCornerRadius
+        self.adaptiveSheetOptions = adaptiveSheetOptions
         super.init(nibName: nil, bundle: .main)
     }
     
@@ -58,14 +40,14 @@ public class AdaptiveSheetViewController<Content: View>: UIViewController {
             hostPopover.sourceView = super.view
             let sheet = hostPopover.adaptiveSheetPresentationController
             //As of 13 Beta 4 if .medium() is the only detent in landscape error occurs
-            sheet.detents = (isLandscape ? [.large()] : detents)
-            sheet.selectedDetentIdentifier = (isLandscape ? .large : selectedDetentIdentifier)
-            sheet.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
-            sheet.prefersEdgeAttachedInCompactHeight = prefersEdgeAttachedInCompactHeight
+            sheet.detents = (isLandscape ? [.large()] : adaptiveSheetOptions.detents)
+            sheet.selectedDetentIdentifier = (isLandscape ? .large : adaptiveSheetOptions.selectedDetentIdentifier)
+            sheet.largestUndimmedDetentIdentifier = adaptiveSheetOptions.largestUndimmedDetentIdentifier
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = adaptiveSheetOptions.prefersScrollingExpandsWhenScrolledToEdge
+            sheet.prefersEdgeAttachedInCompactHeight = adaptiveSheetOptions.prefersEdgeAttachedInCompactHeight
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-            sheet.prefersGrabberVisible = prefersGrabberVisible
-            sheet.preferredCornerRadius = preferredCornerRadius
+            sheet.prefersGrabberVisible = adaptiveSheetOptions.prefersGrabberVisible
+            sheet.preferredCornerRadius = adaptiveSheetOptions.preferredCornerRadius
         }
         if presentedViewController == nil{
             present(hostingController, animated: true, completion: nil)
@@ -79,7 +61,7 @@ public class AdaptiveSheetViewController<Content: View>: UIViewController {
             self.presentedViewController?.popoverPresentationController?.adaptiveSheetPresentationController.detents = [.large()]
         } else {
             isLandscape = false
-            self.presentedViewController?.popoverPresentationController?.adaptiveSheetPresentationController.detents = detents
+            self.presentedViewController?.popoverPresentationController?.adaptiveSheetPresentationController.detents = adaptiveSheetOptions.detents
         }
     }
 }

@@ -11,31 +11,13 @@ public struct AdaptiveSheetViewControllerRepresentable<Content: View>: UIViewCon
     
     let content: Content
     @Binding var isPresented: Bool
-    let detents : [UISheetPresentationController.Detent]
-    let selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-    let largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-    let prefersScrollingExpandsWhenScrolledToEdge: Bool
-    let prefersEdgeAttachedInCompactHeight: Bool
-    let prefersGrabberVisible: Bool
-    let preferredCornerRadius: CGFloat?
+    let adaptiveSheetOptions: AdaptiveSheetOptions
     
     public init(isPresented: Binding<Bool>,
-                detents : [UISheetPresentationController.Detent] = [.medium(), .large()],
-                selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
-                prefersScrollingExpandsWhenScrolledToEdge: Bool = false,
-                prefersEdgeAttachedInCompactHeight: Bool = true,
-                prefersGrabberVisible: Bool = false,
-                preferredCornerRadius: CGFloat? = nil,
+                adaptiveSheetOptions: AdaptiveSheetOptions,
                 @ViewBuilder content: @escaping () -> Content) {
         self.content = content()
-        self.detents = detents
-        self.selectedDetentIdentifier = selectedDetentIdentifier
-        self.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
-        self.prefersEdgeAttachedInCompactHeight = prefersEdgeAttachedInCompactHeight
-        self.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
-        self.prefersGrabberVisible = prefersGrabberVisible
-        self.preferredCornerRadius = preferredCornerRadius
+        self.adaptiveSheetOptions = adaptiveSheetOptions
         self._isPresented = isPresented
     }
     
@@ -45,13 +27,7 @@ public struct AdaptiveSheetViewControllerRepresentable<Content: View>: UIViewCon
     
     public func makeUIViewController(context: Context) -> AdaptiveSheetViewController<Content> {
         let vc = AdaptiveSheetViewController(coordinator: context.coordinator,
-                                             detents : detents,
-                                             selectedDetentIdentifier: selectedDetentIdentifier,
-                                             largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier,
-                                             prefersScrollingExpandsWhenScrolledToEdge:  prefersScrollingExpandsWhenScrolledToEdge,
-                                             prefersEdgeAttachedInCompactHeight: prefersEdgeAttachedInCompactHeight,
-                                             prefersGrabberVisible: prefersGrabberVisible,
-                                             preferredCornerRadius: preferredCornerRadius,
+                                             adaptiveSheetOptions : adaptiveSheetOptions,
                                              content: {content})
         return vc
     }
