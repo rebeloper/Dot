@@ -19,16 +19,7 @@ struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent:
     
     func body(content: Content) -> some View {
         ZStack {
-            if isPresented {
-                Color.black.edgesIgnoringSafeArea(.all)
-            }
-            
-            content
-                .transition(.scale)
-                .scaleEffect(isPresented ? 0.95 : 1.0)
-                .cornerRadius(isPresented ? 15 : 0)
-                .clipShape(RoundedRectangle(cornerRadius: isPresented ? 15 : 0))
-            
+            content.disabled(isPresented)
             self.content()
         }
     }
