@@ -16,7 +16,7 @@ public struct AdaptiveSheetOptions {
     let prefersGrabberVisible: Bool
     let preferredCornerRadius: CGFloat?
     
-    public init(detents : [UISheetPresentationController.Detent] = [.medium(), .large()],
+    public init(detents: [UISheetPresentationController.Detent] = [.medium(), .large()],
                 selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
                 largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier? = nil,
                 prefersScrollingExpandsWhenScrolledToEdge: Bool = false,
