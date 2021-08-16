@@ -96,8 +96,8 @@ public struct FlexibleSheet<Content: View>: View {
                                 }
                             }
                         }
-                        .frame(height: height.value(with: geometry) + additionalOffset)
-                        .offset(y: additionalOffset + dragOffset)
+                        .frame(height: height.value(with: geometry) + additionalOffset + geometry.safeAreaInsets.bottom)
+                        .offset(y: additionalOffset + geometry.safeAreaInsets.bottom + dragOffset)
                     }
                     .transition(.verticalSlide(height.value(with: geometry)))
                     .highPriorityGesture(
