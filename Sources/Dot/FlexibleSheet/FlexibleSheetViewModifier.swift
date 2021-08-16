@@ -26,6 +26,7 @@ struct FlexibleSheetViewModifier<SheetContent>: ViewModifier where SheetContent:
             content
                 .transition(.scale)
                 .scaleEffect(isPresented ? 0.95 : 1.0)
+                .cornerRadius(isPresented ? 15 : 0)
                 .clipShape(RoundedRectangle(cornerRadius: isPresented ? 15 : 0))
             
             self.content()
