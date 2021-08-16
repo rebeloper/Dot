@@ -91,4 +91,12 @@ extension FlexibleSheet {
         return copy
     }
     
+    /// Corner radius
+    /// - Parameter cornerRadius: a CGFloat
+    public func embedInStackNavigationView(_ embedInStackNavigationView: Bool) -> Self {
+        var copy = self
+        copy.embedInStackNavigationView = embedInStackNavigationView
+        return copy
+    }
+    
 }

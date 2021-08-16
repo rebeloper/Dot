@@ -25,6 +25,7 @@ public struct FlexibleSheet<Content: View>: View {
     internal var showsCloseButton = true
     internal var cornerRadius: CGFloat = 15
     internal var additionalOffset: CGFloat = 44
+    internal var embedInStackNavigationView: Bool = false
     
     private let content: () -> Content
     
@@ -84,6 +85,10 @@ public struct FlexibleSheet<Content: View>: View {
                             content()
                                 .padding(actualContentInsets)
                                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                                .if(embedInStackNavigationView) { view in
+                                    view.embedInStackNavigationView()
+                                }
+                            
                             if showsCloseButton {
                                 VStack {
                                     HStack {

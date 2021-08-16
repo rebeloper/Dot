@@ -38,6 +38,7 @@ extension View {
                                        allowsDragToDismiss: Bool = false,
                                        allowsTapOutsideToDismiss: Bool = true,
                                        showsCloseButton: Bool = false,
+                                       embedInStackNavigationView: Bool = false,
                                        @ViewBuilder content: @escaping () -> T) -> some View {
         modifier(FlexibleSheetViewModifier(isPresented: isPresented, content: {
             FlexibleSheet(isPresented: isPresented, content: content)
@@ -52,6 +53,7 @@ extension View {
                 .showsCloseButton(showsCloseButton)
                 .additionalOffset(additionalOffset)
                 .cornerRadius(cornerRadius)
+                .embedInStackNavigationView(embedInStackNavigationView)
         }))
     }
 }
