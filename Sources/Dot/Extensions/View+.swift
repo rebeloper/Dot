@@ -114,4 +114,11 @@ public extension View {
         }
     }
     
+    /// Configures the title display mode to `.inline` for this view and also configures the view's title for purposes of navigation, using a string.
+    /// - Parameter title: The string to display.
+    func navigationInlineTitle(_ title: String) -> some View {
+        self.navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(title)
+    }
+    
 }
