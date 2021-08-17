@@ -67,8 +67,10 @@ public struct PinField: View {
     
     public var backgroundField: some View {
         let boundPin = Binding<String>(get: { self.pin }, set: { newValue in
-            self.pin = newValue
-            self.submitPin()
+            if self.pin != newValue {
+                self.pin = newValue
+                self.submitPin()
+            }
         })
         
         return TextField("", text: boundPin, prompt: nil)
