@@ -16,6 +16,7 @@ import SwiftUI
 public struct PinField: View {
     
     @State private var pin: String = ""
+    @State private var didFailPinCheck: Bool = false
     
     private var password: String
     private var digitsCount: Int
@@ -67,7 +68,7 @@ public struct PinField: View {
     
     public var backgroundField: some View {
         let boundPin = Binding<String>(get: { self.pin }, set: { newValue in
-            if self.pin != newValue && self.pin != "" {
+            if self.pin != newValue && !self.didFailPinCheck {
                 self.pin = newValue
                 print("---> \(newValue)")
                 self.submitPin()
@@ -84,16 +85,19 @@ public struct PinField: View {
         if pin.count == digitsCount {
             if password == "" {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    didFailPinCheck = false
                     onSuccess(pin)
                 }
                 return
             }
             if pin == password {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    didFailPinCheck = false
                     onSuccess(pin)
                 }
             } else {
                 if pin != "" {
+                    didFailPinCheck = true
                     let failedPin = pin
                     pin = ""
                     onFailiure(failedPin)
