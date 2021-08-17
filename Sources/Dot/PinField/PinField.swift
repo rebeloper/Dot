@@ -59,7 +59,10 @@ public struct PinField: View {
             Spacer()
         }
         .onAppear {
-            pinIsFocused = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                print("pinIsFocused")
+                pinIsFocused = true
+            }
         }
     }
     
