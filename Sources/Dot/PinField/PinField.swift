@@ -93,8 +93,8 @@ public struct PinField: View {
                 }
             } else {
                 let failedPin = pin
-                pin = ""
                 onFailiure(failedPin)
+                pin = ""
             }
         }
     }
