@@ -98,6 +98,9 @@ public struct PinField: View {
             } else {
                 if pin != "" {
                     didFailPinCheck = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        didFailPinCheck = false
+                    }
                     let failedPin = pin
                     pin = ""
                     onFailiure(failedPin)
