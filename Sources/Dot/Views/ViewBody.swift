@@ -7,4 +7,4 @@
 
 import SwiftUI
 
-public typealias ViewBody = TightLazyVStack
+public typealias ViewBody = TightVStack
