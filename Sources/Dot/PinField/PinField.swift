@@ -41,8 +41,6 @@ public struct PinField: View {
         self.font = font
         self.onSuccess = onSuccess
         self.onFailiure = onFailiure
-        
-        pinIsFocused = true
     }
     
     public var body: some View {
@@ -59,6 +57,9 @@ public struct PinField: View {
                 Image(systemName: self.getImageName(at: index)).font(font)
             }
             Spacer()
+        }
+        .onAppear {
+            pinIsFocused = true
         }
     }
     
@@ -89,6 +90,7 @@ public struct PinField: View {
             if password == "" {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     didFailPinCheck = false
+                    pinIsFocused = false
                     onSuccess(pin)
                 }
                 return
@@ -96,6 +98,7 @@ public struct PinField: View {
             if pin == password {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     didFailPinCheck = false
+                    pinIsFocused = false
                     onSuccess(pin)
                 }
             } else {
