@@ -17,6 +17,7 @@ public struct PinField: View {
     
     @State private var pin: String = ""
     @State private var didFailPinCheck: Bool = false
+    @FocusState private var pinIsFocused: Bool
     
     private var password: String
     private var digitsCount: Int
@@ -70,7 +71,6 @@ public struct PinField: View {
         let boundPin = Binding<String>(get: { self.pin }, set: { newValue in
             if self.pin != newValue && !self.didFailPinCheck {
                 self.pin = newValue
-                print("---> \(newValue)")
                 self.submitPin()
             }
         })
@@ -79,6 +79,7 @@ public struct PinField: View {
             .keyboardType(.numberPad)
             .accentColor(.clear)
             .foregroundColor(.clear)
+            .focused($pinIsFocused)
     }
     
     public func submitPin() {
