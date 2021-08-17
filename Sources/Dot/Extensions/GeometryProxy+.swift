@@ -1,0 +1,36 @@
+//
+//  GeometryProxy+.swift
+//  Dot
+//
+//  Created by Alex Nagy on 17.08.2021.
+//
+
+import SwiftUI
+
+public extension GeometryProxy {
+    
+    /// The height of the container view.
+    var height: CGFloat {
+        size.height
+    }
+    
+    /// The width of the container view.
+    var width: CGFloat {
+        size.width
+    }
+    
+    /// The precentage height of the container view.
+    /// - Parameter percentage: between 0.0 - 1.0
+    /// - Returns: the precentage height of the container view.
+    func height(_ percentage: CGFloat) -> CGFloat {
+        size.height * percentage
+    }
+    
+    /// The precentage width of the container view.
+    /// - Parameter percentage: between 0.0 - 1.0
+    /// - Returns: the precentage width of the container view.
+    func width(_ percentage: CGFloat) -> CGFloat {
+        size.width * percentage
+    }
+}
+
