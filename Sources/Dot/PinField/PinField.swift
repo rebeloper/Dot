@@ -69,6 +69,7 @@ public struct PinField: View {
         let boundPin = Binding<String>(get: { self.pin }, set: { newValue in
             if self.pin != newValue {
                 self.pin = newValue
+                print("---> \(newValue)")
                 self.submitPin()
             }
         })
@@ -95,7 +96,6 @@ public struct PinField: View {
                 if pin != "" {
                     let failedPin = pin
                     pin = ""
-                    print("---> \(failedPin)")
                     onFailiure(failedPin)
                 }
             }
