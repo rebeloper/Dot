@@ -16,7 +16,6 @@ import SwiftUI
 public struct PinField: View {
     
     @State private var pin: String = ""
-    @State private var focusable = [true]
     
     private var password: String
     private var digitsCount: Int
@@ -46,11 +45,6 @@ public struct PinField: View {
         ZStack {
             pinDots
             backgroundField
-        }
-        .onChange(of: focusable) { (focusable) in
-            if focusable.first == true {
-                pin = ""
-            }
         }
     }
     
@@ -86,14 +80,12 @@ public struct PinField: View {
     public func submitPin() {
         if pin.count == digitsCount {
             if password == "" {
-                focusable = [false]
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     onSuccess(pin)
                 }
                 return
             }
             if pin == password {
-                focusable = [false]
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     onSuccess(pin)
                 }
