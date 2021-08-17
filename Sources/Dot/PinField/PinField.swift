@@ -41,6 +41,8 @@ public struct PinField: View {
         self.font = font
         self.onSuccess = onSuccess
         self.onFailiure = onFailiure
+        
+        pinIsFocused = true
     }
     
     public var body: some View {
