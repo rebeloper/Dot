@@ -18,4 +18,35 @@ public class Notice: ObservableObject {
         item = NoticeItem(type: type, title: title, message: message, actions: actions)
         isPresented.toggle()
     }
+    
+    public func present(alert type: NoticeDefaultType, message: String? = nil, actions: [NoticeAction] = [NoticeAction(role: .cancel, title: "Ok", action: { })]) {
+        var title = ""
+        switch type {
+        case .error:
+            title = "Error"
+        case .success:
+            title = "Success"
+        case .warning:
+            title = "Warning"
+        case .info:
+            title = "Info"
+        }
+        present(.alert, title: title, message: message, actions: actions)
+    }
+    
+    public func present(confirmationDialog type: NoticeDefaultType, message: String? = nil, actions: [NoticeAction] = [NoticeAction(role: .cancel, title: "Ok", action: { })]) {
+        var title = ""
+        switch type {
+        case .error:
+            title = "Error"
+        case .success:
+            title = "Success"
+        case .warning:
+            title = "Warning"
+        case .info:
+            title = "Info"
+        }
+        present(.confirmationDialog, title: title, message: message, actions: actions)
+    }
+    
 }
