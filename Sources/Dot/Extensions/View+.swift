@@ -161,4 +161,13 @@ public extension View {
             .contentShape(Rectangle())
             .onTapGesture(count:count, perform:action)
     }
+    
+    /// Clips this view to its bounding rectangular frame and defines the content shape for hit testing.
+    /// - Parameters:
+    ///   - cornerRadius: corner radius. Default is 15
+    ///   - style: rounded corner style. Default is .circular
+    func clippedContent(cornerRadius: CGFloat = 15, style: RoundedCornerStyle = .circular) -> some View {
+        self.clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: style))
+            .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: style))
+    }
 }
