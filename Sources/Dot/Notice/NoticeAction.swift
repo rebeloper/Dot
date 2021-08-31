@@ -23,7 +23,7 @@ public struct NoticeAction: Identifiable {
 }
 
 public extension NoticeAction {
-    static func none(title: String, action: @escaping () -> Void = {}) -> NoticeAction {
+    static func regular(title: String, action: @escaping () -> Void = {}) -> NoticeAction {
         NoticeAction(role: .none, title: title, action: action)
     }
     
