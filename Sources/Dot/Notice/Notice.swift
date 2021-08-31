@@ -34,7 +34,7 @@ public class Notice: ObservableObject {
         present(.alert, title: title, message: message, actions: actions)
     }
     
-    public func present(confirmationDialog type: NoticeDefaultType, message: String? = nil, actions: [NoticeAction] = [NoticeAction(role: .cancel, title: "Ok", action: { })]) {
+    public func present(confirmationDialog type: NoticeDefaultType, message: String? = nil, actions: [NoticeAction] = [.cancel(title: "Ok")]) {
         var title = ""
         switch type {
         case .error:
