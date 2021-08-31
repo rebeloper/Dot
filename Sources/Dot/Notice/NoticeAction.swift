@@ -11,13 +11,27 @@ public struct NoticeAction: Identifiable {
     public var id = UUID().uuidString
     public var role: ButtonRole?
     public var title: String
-    public var action: () -> Void
+    public var action: (() -> Void)?
     
     public init(role: ButtonRole? = nil,
-         title: String,
-         action: @escaping () -> Void) {
+                title: String,
+                action: (() -> Void)? = nil) {
         self.role = role
         self.title = title
         self.action = action
+    }
+}
+
+public extension NoticeAction {
+    static func none(title: String, action: (() -> Void)? = nil) -> NoticeAction {
+        NoticeAction(role: .none, title: title, action: action)
+    }
+    
+    static func destructive(title: String, action: (() -> Void)? = nil) -> NoticeAction {
+        NoticeAction(role: .destructive, title: title, action: action)
+    }
+    
+    static func cancel(title: String = "Cancel", action: (() -> Void)? = nil) -> NoticeAction {
+        NoticeAction(role: .cancel, title: title, action: action)
     }
 }
