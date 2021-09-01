@@ -144,7 +144,4 @@ public struct LoremPicsum {
         people.randomElement() ?? person0
     }
     
-    public static func random() -> Image {
-        people.append(contentsOf: images).randomElement() ?? person0
-    }
 }
