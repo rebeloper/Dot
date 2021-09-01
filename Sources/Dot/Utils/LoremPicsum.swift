@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct LoremPicsum {
-   public var foodAndDrink: Image {
+   public static var foodAndDrink: Image {
        Image("slashio-photography-bKAWpR4y5nU-unsplash", bundle: Bundle.module)
    }
 }
