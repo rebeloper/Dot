@@ -170,4 +170,67 @@ public extension View {
         self.clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: style))
             .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: style))
     }
+    
+    /// Creates a lazy vertical stack view with the given spacing,
+    /// vertical alignment, pinning behavior, and content.
+    ///
+    /// - Parameters:
+    ///     - alignment: The guide for aligning the subviews in this stack. All
+    ///     child views have the same horizontal screen coordinate.
+    ///     - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///     - pinnedViews: The kinds of child views that will be pinned.
+    func vertical(alignment: HorizontalAlignment = .center, spacing: CGFloat? = nil, pinnedViews: PinnedScrollableViews = .init()) -> some View {
+        LazyVStack(alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            self
+        }
+    }
+    
+    /// Creates a lazy horizontal stack view with the given spacing,
+    /// vertical alignment, pinning behavior, and content.
+    ///
+    /// - Parameters:
+    ///     - alignment: The guide for aligning the subviews in this stack. All
+    ///       child views have the same vertical screen coordinate.
+    ///     - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///     - pinnedViews: The kinds of child views that will be pinned.
+    func horizontal(alignment: VerticalAlignment = .center, spacing: CGFloat? = nil, pinnedViews: PinnedScrollableViews = .init()) -> some View {
+        LazyHStack(alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            self
+        }
+    }
+    
+    /// Creates a new instance that's scrollable in the direction of the given
+    /// axis and can show indicators while scrolling.
+    ///
+    /// - Parameters:
+    ///   - axes: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    func scrolls(_ axis: ScrollAxis,
+                 showsIndicators: Bool = true,
+                 verticalAlignment: VerticalAlignment = .center,
+                 horizontalAlignment: HorizontalAlignment = .center,
+                 spacing: CGFloat? = nil,
+                 pinnedViews: PinnedScrollableViews = .init()) -> some View {
+        ScrollView(axis == .vertically ? .vertical : .horizontal, showsIndicators: showsIndicators) {
+            if axis == .vertically {
+                self.vertical(alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews)
+            } else {
+                self.horizontal(alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews)
+            }
+        }
+    }
 }
