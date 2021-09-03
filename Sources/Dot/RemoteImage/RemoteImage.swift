@@ -76,7 +76,7 @@ public enum RemoteImagePhase {
          success(Image),
          failure(Error)
     
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         if case .empty = self {
             return true
         } else {
@@ -84,7 +84,7 @@ public enum RemoteImagePhase {
         }
     }
     
-    var image: Image? {
+    public var image: Image? {
         if case let .success(image) = self {
             return image
         } else {
@@ -92,7 +92,7 @@ public enum RemoteImagePhase {
         }
     }
     
-    var error: Error? {
+    public var error: Error? {
         if case let .failure(error) = self {
             return error
         } else {
