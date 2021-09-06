@@ -1,5 +1,5 @@
 //
-//  Enums.swift
+//  SwipeableViewEnums.swift
 //  Dot
 //
 //  Created by Alex Nagy on 17.08.2021.
