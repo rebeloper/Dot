@@ -114,14 +114,14 @@ public struct RefreshableScrollView<Content: View>: View {
                 // to keep it below the loading view, hence the alignmentGuide.
                 if axis == .vertical {
                     LazyVStack(alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
-                        content
+                        content.asPushOutView()
                     }
                     .alignmentGuide(.top, computeValue: { _ in
                         (state == .loading) ? -refreshViewLenght : 0
                     })
                 } else {
                     LazyHStack(alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
-                        content
+                        content.asPushOutView()
                     }
                     .alignmentGuide(.leading, computeValue: { _ in
                         (state == .loading) ? -refreshViewLenght : 0
