@@ -233,4 +233,33 @@ public extension View {
             }
         }
     }
+    
+    /// Creates a new instance that's scrollable in the direction of the given
+    /// axis, has swipe to refresh and can show indicators while scrolling.
+    ///
+    /// - Parameters:
+    ///   - axes: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    func scrolls(_ axis: ScrollAxis,
+                 showsIndicators: Bool = true,
+                 verticalAlignment: VerticalAlignment = .center,
+                 horizontalAlignment: HorizontalAlignment = .center,
+                 spacing: CGFloat? = nil,
+                 pinnedViews: PinnedScrollableViews = .init(),
+                 onRefresh: @escaping OnRefresh) -> some View {
+        RefreshableScrollView(axis == .vertically ? .vertical : .horizontal, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefresh: onRefresh) {
+            self
+        }
+    }
 }
