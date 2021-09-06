@@ -183,7 +183,7 @@ public extension View {
     ///     - pinnedViews: The kinds of child views that will be pinned.
     func vertical(alignment: HorizontalAlignment = .center, spacing: CGFloat? = nil, pinnedViews: PinnedScrollableViews = .init()) -> some View {
         LazyVStack(alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
-            self.asPushOutView()
+            self
         }
     }
     
@@ -199,7 +199,7 @@ public extension View {
     ///     - pinnedViews: The kinds of child views that will be pinned.
     func horizontal(alignment: VerticalAlignment = .center, spacing: CGFloat? = nil, pinnedViews: PinnedScrollableViews = .init()) -> some View {
         LazyHStack(alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
-            self.asPushOutView()
+            self
         }
     }
     
