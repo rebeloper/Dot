@@ -10,15 +10,20 @@ import SwiftUI
 public extension View {
     
     /// Wraps the View in a NavigationView
-    /// - Returns: A view embeded in a NavigationView
-    func embedInNavigationView() -> some View {
-        NavigationView { self }
-    }
-    
-    /// Wraps the View in a NavigationView with StackNavigationViewStyle
-    /// - Returns: A view embeded in a NavigationView
-    func embedInStackNavigationView() -> some View {
-        NavigationView { self }.navigationViewStyle(StackNavigationViewStyle())
+    /// - Parameter style: the navigation style
+    /// - Returns: A view embeded in a NavigationView with optional style
+    @ViewBuilder
+    func navigatable(style: NavigatableStyle = .stack) -> some View {
+        switch style {
+        case .none:
+            NavigationView { self }
+        case .stack:
+            NavigationView { self }.navigationViewStyle(.stack)
+        case .automatic:
+            NavigationView { self }.navigationViewStyle(.automatic)
+        case .columns:
+            NavigationView { self }.navigationViewStyle(.columns)
+        }
     }
     
     /// Wraps the View in AnyView
