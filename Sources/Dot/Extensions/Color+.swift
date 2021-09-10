@@ -93,3 +93,8 @@ public extension Color {
     static let fixedClear = Color(UIColor.clear)
 }
 
+public extension Color {
+    func uiColor() -> UIColor {
+        UIColor(self)
+    }
+}

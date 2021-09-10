@@ -46,7 +46,7 @@ public struct NavigationBarModifier: ViewModifier {
             content
             VStack {
                 GeometryReader { geometry in
-                    VStack(spacing: 0.2) {
+                    VStack {
                         if let material = material {
                             Color.clear.opacity(0)
                                 .frame(height: geometry.safeAreaInsets.top)
