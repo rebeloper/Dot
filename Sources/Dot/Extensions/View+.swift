@@ -257,7 +257,7 @@ public extension View {
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
     ///   - onOffsetChange: Optional callback returning the scroll view offset.
-    func scrolls(_ axis: ScrollAxis = .vertically,
+    func scrolls(_ axis: ScrollAxis,
                  gridItems: [GridItem] = gridItems_1,
                  showsIndicators: Bool = true,
                  verticalAlignment: VerticalAlignment = .center,
