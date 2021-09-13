@@ -1,5 +1,5 @@
 //
-//  RefreshableScrollView.swift
+//  RefreshableScrollViewWithOffset.swift
 //  Dot
 //
 //  Created by Alex Nagy on 06.09.2021.
@@ -55,7 +55,7 @@ public typealias RefreshComplete = () -> Void
 // once it's done refreshing.
 public typealias OnRefresh = (@escaping RefreshComplete) -> Void
 
-// Tracks the state of the RefreshableScrollView - it's either:
+// Tracks the state of the RefreshableScrollViewWithOffset - it's either:
 // 1. waiting for a scroll to happen
 // 2. has been primed by pulling down beyond THRESHOLD
 // 3. is doing the refreshing.
@@ -63,15 +63,16 @@ private enum RefreshState {
     case waiting, primed, loading
 }
 
-public struct RefreshableScrollView<Content: View>: View {
-    let axis: Axis.Set
-    let showsIndicators: Bool
-    let verticalAlignment: VerticalAlignment
-    let horizontalAlignment: HorizontalAlignment
-    let spacing: CGFloat?
-    let pinnedViews: PinnedScrollableViews
-    let onRefresh: OnRefresh // the refreshing action
-    let content: Content // the ScrollView content
+public struct RefreshableScrollViewWithOffset<Content: View>: View {
+    private var axis: Axis.Set
+    private var showsIndicators: Bool
+    private var verticalAlignment: VerticalAlignment
+    private var horizontalAlignment: HorizontalAlignment
+    private var spacing: CGFloat?
+    private var pinnedViews: PinnedScrollableViews
+    private var onRefresh: OnRefresh // the refreshing action
+    private var onOffsetChange: ((CGFloat) -> Void)?
+    private var content: Content // the ScrollView content
     
     @State private var state = RefreshState.waiting // the current state
     
@@ -82,13 +83,14 @@ public struct RefreshableScrollView<Content: View>: View {
     
     // We use a custom constructor to allow for usage of a @ViewBuilder for the content
     public init(_ axis: Axis.Set = .vertical,
-         showsIndicators: Bool = true,
-         verticalAlignment: VerticalAlignment = .center,
-         horizontalAlignment: HorizontalAlignment = .center,
-         spacing: CGFloat? = nil,
-         pinnedViews: PinnedScrollableViews = .init(),
-         onRefresh: @escaping OnRefresh,
-         @ViewBuilder content: () -> Content) {
+                showsIndicators: Bool = true,
+                verticalAlignment: VerticalAlignment = .center,
+                horizontalAlignment: HorizontalAlignment = .center,
+                spacing: CGFloat? = nil,
+                pinnedViews: PinnedScrollableViews = .init(),
+                onRefresh: @escaping OnRefresh,
+                onOffsetChange: ((CGFloat) -> Void)?,
+                @ViewBuilder content: () -> Content) {
         self.axis = axis
         self.showsIndicators = showsIndicators
         self.verticalAlignment = verticalAlignment
@@ -96,12 +98,13 @@ public struct RefreshableScrollView<Content: View>: View {
         self.spacing = spacing
         self.pinnedViews = pinnedViews
         self.onRefresh = onRefresh
+        self.onOffsetChange = onOffsetChange
         self.content = content()
     }
     
     public var body: some View {
         // The root view is a regular ScrollView
-        ScrollView(axis, showsIndicators: showsIndicators) {
+        ScrollViewWithOffset(axis, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onOffsetChange: onOffsetChange) {
             // The ZStack allows us to position the PositionIndicator,
             // the content and the loading view, all on top of each other.
             ZStack(alignment: axis == .vertical ? .top : .leading) {

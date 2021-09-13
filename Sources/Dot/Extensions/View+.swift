@@ -256,15 +256,24 @@ public extension View {
     ///       subviews.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    @ViewBuilder
     func scrolls(_ axis: ScrollAxis,
                  showsIndicators: Bool = true,
                  verticalAlignment: VerticalAlignment = .center,
                  horizontalAlignment: HorizontalAlignment = .center,
                  spacing: CGFloat? = nil,
                  pinnedViews: PinnedScrollableViews = .init(),
-                 onRefresh: @escaping OnRefresh) -> some View {
-        RefreshableScrollView(axis == .vertically ? .vertical : .horizontal, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefresh: onRefresh) {
-            self
+                 onRefresh: OnRefresh? = nil,
+                 onOffsetChange: ((CGFloat) -> ())? = nil) -> some View {
+        if onRefresh == nil {
+            ScrollViewWithOffset(axis == .vertically ? .vertical : .horizontal, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onOffsetChange: onOffsetChange) {
+                self
+            }
+        } else {
+            RefreshableScrollViewWithOffset(axis == .vertically ? .vertical : .horizontal, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefresh: onRefresh!, onOffsetChange: onOffsetChange) {
+                self
+            }
         }
     }
 }
