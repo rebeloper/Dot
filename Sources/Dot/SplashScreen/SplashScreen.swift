@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SplashScreen<Content: View, Background: View>: View {
+public struct SplashScreen<Content: View, Background: View>: View {
     
     @Binding private var isActive: Bool
     private var scale: CGFloat
@@ -23,7 +23,7 @@ struct SplashScreen<Content: View, Background: View>: View {
     @State private var pulsates = true
     @State private var animationState = true
     
-    init(isActive: Binding<Bool>,
+    public init(isActive: Binding<Bool>,
          scale: CGFloat = 20,
          delay: CGFloat = 0.3,
          animation: SplashScreenAnimation = .scale,
@@ -41,7 +41,7 @@ struct SplashScreen<Content: View, Background: View>: View {
         self.background = background
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             background().ignoresSafeArea()
             
@@ -93,12 +93,12 @@ struct SplashScreen<Content: View, Background: View>: View {
     }
 }
 
-enum SplashScreenAnimation {
+public enum SplashScreenAnimation {
     case none, scale, fadeInOut, wiggle, moveHorizontally, moveVertically
 }
 
 
-extension View {
+public extension View {
     func splashScreen<Content: View, Background: View>(isActive: Binding<Bool>,
                                                        scale: CGFloat = 20,
                                                        delay: CGFloat = 0.3,
