@@ -13,6 +13,7 @@ public struct SplashScreen<Content: View, Background: View>: View {
     private var scale: CGFloat
     private var delay: CGFloat
     private var pulseScale: CGFloat
+    private var animationDuration: CGFloat
     private var animation: SplashScreenAnimation
     private var content: () -> Content
     private var background: () -> Background
@@ -26,6 +27,7 @@ public struct SplashScreen<Content: View, Background: View>: View {
     /// - scale: the scale of the content when the splash view is dismissed
     /// - delay: the delay of animation when the splash view is dismissed
     /// - pulseScale: the value the pulse animation has
+    /// - animationDuration: the duration of the animation
     /// - animation: the pulse animation
     /// - content: the content that is centered in the splash screen
     /// - background: the background of the splash screen
@@ -33,6 +35,7 @@ public struct SplashScreen<Content: View, Background: View>: View {
                 scale: CGFloat = 20,
                 delay: CGFloat = 0.3,
                 pulseScale: CGFloat = 0.95,
+                animationDuration: CGFloat = 1,
                 animation: SplashScreenAnimation = .scale,
                 @ViewBuilder content: @escaping () -> Content,
                 @ViewBuilder background: @escaping () -> Background) {
@@ -40,6 +43,7 @@ public struct SplashScreen<Content: View, Background: View>: View {
         self.scale = scale
         self.delay = delay
         self.pulseScale = pulseScale
+        self.animationDuration = animationDuration
         self.animation = animation
         self.content = content
         self.background = background
@@ -90,7 +94,7 @@ public struct SplashScreen<Content: View, Background: View>: View {
     }
     
     private func pulsate() {
-        withAnimation(shouldAnimate ? .default : .easeInOut.repeatForever(autoreverses: true)) {
+        withAnimation(.easeInOut(duration: Double(animationDuration)).repeatForever(while: !shouldAnimate)) {
             if shouldAnimate { return }
             pulsates.toggle()
         }
@@ -109,6 +113,7 @@ public extension View {
     /// - scale: the scale of the content when the splash view is dismissed
     /// - delay: the delay of animation when the splash view is dismissed
     /// - pulseScale: the value the pulse animation has
+    /// - animationDuration: the duration of the animation
     /// - animation: the pulse animation
     /// - content: the content that is centered in the splash screen
     /// - background: the background of the splash screen
@@ -116,11 +121,12 @@ public extension View {
                                                        scale: CGFloat = 20,
                                                        delay: CGFloat = 0.3,
                                                        pulseScale: CGFloat = 0.95,
+                                                       animationDuration: CGFloat = 1,
                                                        animation: SplashScreenAnimation = .scale,
                                                        @ViewBuilder content: @escaping () -> Content,
                                                        @ViewBuilder background: @escaping () -> Background) -> some View {
         self.overlay(
-            SplashScreen(isActive: isActive, scale: scale, delay: delay, pulseScale: pulseScale, animation: animation, content: content, background: background)
+            SplashScreen(isActive: isActive, scale: scale, delay: delay, pulseScale: pulseScale, animationDuration: animationDuration, animation: animation, content: content, background: background)
         )
     }
 }
