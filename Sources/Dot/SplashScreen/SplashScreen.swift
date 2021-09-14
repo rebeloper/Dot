@@ -99,23 +99,24 @@ public enum SplashScreenAnimation {
 
 
 public extension View {
-    func splashScreen<Content: View, Background: View>(isActive: Binding<Bool>,
-                                                       scale: CGFloat = 20,
-                                                       delay: CGFloat = 0.3,
-                                                       animation: SplashScreenAnimation = .scale,
-                                                       animationValue: CGFloat = 0.95,
-                                                       animationDuration: CGFloat = 1,
-                                                       @ViewBuilder content: @escaping () -> Content,
-                      @ViewBuilder background: @escaping () -> Background) -> some View {
-        self.overlay(
-            SplashScreen(isActive: isActive,
-                         scale: scale,
-                         delay: delay,
-                         animation: animation,
-                         animationValue: animationValue,
-                         animationDuration: animationDuration,
-                         content: content,
-                         background: background)
-        )
-    }
+    func splashScreen<Content: View, Background: View>(
+        isActive: Binding<Bool>,
+        scale: CGFloat = 20,
+        delay: CGFloat = 0.3,
+        animation: SplashScreenAnimation = .scale,
+        animationValue: CGFloat = 0.95,
+        animationDuration: CGFloat = 1,
+        @ViewBuilder content: @escaping () -> Content,
+        @ViewBuilder background: @escaping () -> Background) -> some View {
+            self.overlay(
+                SplashScreen(isActive: isActive,
+                             scale: scale,
+                             delay: delay,
+                             animation: animation,
+                             animationValue: animationValue,
+                             animationDuration: animationDuration,
+                             content: content,
+                             background: background)
+            )
+        }
 }
