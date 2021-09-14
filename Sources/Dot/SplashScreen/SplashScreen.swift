@@ -90,7 +90,7 @@ public struct SplashScreen<Content: View, Background: View>: View {
     }
     
     private func pulsate() {
-        withAnimation(.easeInOut.repeatForever(autoreverses: true)) {
+        withAnimation(shouldAnimate ? .default : .easeInOut.repeatForever(autoreverses: true)) {
             if shouldAnimate { return }
             pulsates.toggle()
         }
