@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ScrollableGrid<Content: View>: View {
+public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
     private var axis: Axis.Set
     private var gridItems: [GridItem]
     private var showsIndicators: Bool
@@ -19,6 +19,8 @@ public struct ScrollableGrid<Content: View>: View {
     private var onRefresh: OnRefresh? // the refreshing action
     private var onOffsetChange: ((CGFloat) -> Void)?
     private var content: () -> Content
+    private var header: (() -> Header)?
+    private var footer: (() -> Footer)?
     
     @State private var state = RefreshState.waiting // the current state
     
@@ -44,6 +46,8 @@ public struct ScrollableGrid<Content: View>: View {
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
     ///   - onOffsetChange: Optional callback returning the scroll view offset.
     ///   - content: The content of the scrollable grid.
+    ///   - header: The header of the scrollable grid.
+    ///   - footer: The footer of the scrollable grid.
     public init(scrolls: ScrollAxis = .vertically,
                 gridItems: [GridItem] = gridItems_1,
                 showsIndicators: Bool = true,
@@ -54,7 +58,9 @@ public struct ScrollableGrid<Content: View>: View {
                 onRefreshTreshold: CGFloat = 60,
                 onRefresh: OnRefresh? = nil,
                 onOffsetChange: ((CGFloat) -> Void)? = nil,
-                @ViewBuilder content: @escaping () -> Content) {
+                @ViewBuilder content: @escaping () -> Content,
+                @ViewBuilder header: @escaping () -> Header,
+                @ViewBuilder footer: @escaping () -> Footer) {
         self.gridItems = gridItems
         self.axis = scrolls == .vertically ? .vertical : .horizontal
         self.showsIndicators = showsIndicators
@@ -66,6 +72,8 @@ public struct ScrollableGrid<Content: View>: View {
         self.onRefresh = onRefresh
         self.onOffsetChange = onOffsetChange
         self.content = content
+        self.header = header
+        self.footer = footer
     }
     
     public var body: some View {
@@ -81,17 +89,55 @@ public struct ScrollableGrid<Content: View>: View {
                 
                 ScrollView(axis, showsIndicators: showsIndicators) {
                     if axis == .vertical {
-                        VStack {
+                        VStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .vertical)
                             content()
-                                .verticalGrid(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews)
+                                .if(header != nil && footer != nil, transform: { content in
+                                    content.verticalGridWithHeaderAndFooter(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
+                                        header!()
+                                    } footer: {
+                                        footer!()
+                                    }
+                                })
+                                    .if(header == nil && footer == nil, transform: { content in
+                                        content.verticalGrid(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews)
+                                    })
+                                    .if(header != nil && footer == nil, transform: { content in
+                                        content.verticalGridWithHeader(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, header: {
+                                            header!()
+                                        })
+                                    })
+                                    .if(header == nil && footer != nil, transform: { content in
+                                        content.verticalGridWithFooter(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, footer: {
+                                            footer!()
+                                        })
+                                    })
                         }
                         .offset(y: (state == .loading) ? refreshViewLenght : 0)
                     } else {
-                        HStack {
+                        HStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .horizontal)
                             content()
-                                .horizontalGrid(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews)
+                                .if(header != nil && footer != nil, transform: { content in
+                                    content.horizontalGridWithHeaderAndFooter(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
+                                        header!()
+                                    } footer: {
+                                        footer!()
+                                    }
+                                })
+                                    .if(header == nil && footer == nil, transform: { content in
+                                        content.horizontalGrid(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews)
+                                    })
+                                    .if(header != nil && footer == nil, transform: { content in
+                                        content.horizontalGridWithHeader(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews, header: {
+                                            header!()
+                                        })
+                                    })
+                                    .if(header == nil && footer != nil, transform: { content in
+                                        content.horizontalGridWithFooter(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews, footer: {
+                                            footer!()
+                                        })
+                                    })
                         }
                         .offset(x: (state == .loading) ? refreshViewLenght : 0)
                     }
@@ -216,4 +262,502 @@ public let gridItems_5 = [GridItem(spacing: 0), GridItem(spacing: 0), GridItem(s
 public struct ScrollViewOffsetPreferenceKey: PreferenceKey {
     public static var defaultValue: CGFloat = .zero
     public static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {}
+}
+
+public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    ///   - content: The content of the scrollable grid.
+    init(scrolls: ScrollAxis = .vertically,
+         gridItems: [GridItem] = gridItems_1,
+         showsIndicators: Bool = true,
+         verticalAlignment: VerticalAlignment = .center,
+         horizontalAlignment: HorizontalAlignment = .center,
+         spacing: CGFloat? = 0,
+         pinnedViews: PinnedScrollableViews = .init(),
+         onRefreshTreshold: CGFloat = 60,
+         onRefresh: OnRefresh? = nil,
+         onOffsetChange: ((CGFloat) -> Void)? = nil,
+         @ViewBuilder content: @escaping () -> Content) {
+        self.gridItems = gridItems
+        self.axis = scrolls == .vertically ? .vertical : .horizontal
+        self.showsIndicators = showsIndicators
+        self.verticalAlignment = verticalAlignment
+        self.horizontalAlignment = horizontalAlignment
+        self.spacing = spacing
+        self.pinnedViews = pinnedViews
+        self.onRefreshTreshold = onRefreshTreshold
+        self.onRefresh = onRefresh
+        self.onOffsetChange = onOffsetChange
+        self.content = content
+        self.header = nil
+        self.footer = nil
+    }
+}
+
+public extension ScrollableGrid where Footer == EmptyView {
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    ///   - content: The content of the scrollable grid.
+    ///   - header: The header of the scrollable grid.
+    init(scrolls: ScrollAxis = .vertically,
+         gridItems: [GridItem] = gridItems_1,
+         showsIndicators: Bool = true,
+         verticalAlignment: VerticalAlignment = .center,
+         horizontalAlignment: HorizontalAlignment = .center,
+         spacing: CGFloat? = 0,
+         pinnedViews: PinnedScrollableViews = .init(),
+         onRefreshTreshold: CGFloat = 60,
+         onRefresh: OnRefresh? = nil,
+         onOffsetChange: ((CGFloat) -> Void)? = nil,
+         @ViewBuilder content: @escaping () -> Content,
+         @ViewBuilder header: @escaping () -> Header) {
+        self.gridItems = gridItems
+        self.axis = scrolls == .vertically ? .vertical : .horizontal
+        self.showsIndicators = showsIndicators
+        self.verticalAlignment = verticalAlignment
+        self.horizontalAlignment = horizontalAlignment
+        self.spacing = spacing
+        self.pinnedViews = pinnedViews
+        self.onRefreshTreshold = onRefreshTreshold
+        self.onRefresh = onRefresh
+        self.onOffsetChange = onOffsetChange
+        self.content = content
+        self.header = header
+        self.footer = nil
+    }
+}
+
+public extension ScrollableGrid where Header == EmptyView {
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    ///   - content: The content of the scrollable grid.
+    ///   - footer: The footer of the scrollable grid.
+    init(scrolls: ScrollAxis = .vertically,
+         gridItems: [GridItem] = gridItems_1,
+         showsIndicators: Bool = true,
+         verticalAlignment: VerticalAlignment = .center,
+         horizontalAlignment: HorizontalAlignment = .center,
+         spacing: CGFloat? = 0,
+         pinnedViews: PinnedScrollableViews = .init(),
+         onRefreshTreshold: CGFloat = 60,
+         onRefresh: OnRefresh? = nil,
+         onOffsetChange: ((CGFloat) -> Void)? = nil,
+         @ViewBuilder content: @escaping () -> Content,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        self.gridItems = gridItems
+        self.axis = scrolls == .vertically ? .vertical : .horizontal
+        self.showsIndicators = showsIndicators
+        self.verticalAlignment = verticalAlignment
+        self.horizontalAlignment = horizontalAlignment
+        self.spacing = spacing
+        self.pinnedViews = pinnedViews
+        self.onRefreshTreshold = onRefreshTreshold
+        self.onRefresh = onRefresh
+        self.onOffsetChange = onOffsetChange
+        self.content = content
+        self.header = nil
+        self.footer = footer
+    }
+}
+
+public extension View {
+    /// Creates a lazy grid that grows vertically, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - columns: An array of grid items to size and position each row of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    ///   - header: The header of the scrollable grid.
+    ///   - footer: The footer of the scrollable grid.
+    func verticalGridWithHeaderAndFooter<Header: View, Footer: View>(
+        _ columns: [GridItem] = gridItems_1,
+        alignment: HorizontalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init(),
+        @ViewBuilder header: @escaping () -> Header,
+        @ViewBuilder footer: @escaping () -> Footer) -> some View {
+        LazyVGrid(columns: columns, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            Section {
+                self
+            } header: {
+                header()
+            } footer: {
+                footer()
+            }
+        }
+    }
+    
+    /// Creates a lazy grid that grows horizontally, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - rows: An array of grid items to size and position each column of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    ///   - header: The header of the scrollable grid.
+    ///   - footer: The footer of the scrollable grid.
+    func horizontalGridWithHeaderAndFooter<Header: View, Footer: View>(
+        _ rows: [GridItem] = gridItems_1,
+        alignment: VerticalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init(),
+        @ViewBuilder header: @escaping () -> Header,
+        @ViewBuilder footer: @escaping () -> Footer) -> some View {
+        LazyHGrid(rows: rows, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            Section {
+                self
+            } header: {
+                header()
+            } footer: {
+                footer()
+            }
+        }
+    }
+    
+    /// Creates a lazy grid that grows vertically, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - columns: An array of grid items to size and position each row of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    ///   - header: The header of the scrollable grid.
+    func verticalGridWithHeader<Header: View>(
+        _ columns: [GridItem] = gridItems_1,
+        alignment: HorizontalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init(),
+        @ViewBuilder header: @escaping () -> Header) -> some View {
+        LazyVGrid(columns: columns, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            Section {
+                self
+            } header: {
+                header()
+            }
+        }
+    }
+    
+    /// Creates a lazy grid that grows horizontally, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - rows: An array of grid items to size and position each column of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    ///   - header: The header of the scrollable grid.
+    func horizontalGridWithHeader<Header: View>(
+        _ rows: [GridItem] = gridItems_1,
+        alignment: VerticalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init(),
+        @ViewBuilder header: @escaping () -> Header) -> some View {
+        LazyHGrid(rows: rows, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            Section {
+                self
+            } header: {
+                header()
+            }
+        }
+    }
+    
+    /// Creates a lazy grid that grows vertically, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - columns: An array of grid items to size and position each row of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    ///   - footer: The footer of the scrollable grid.
+    func verticalGridWithFooter<Footer: View>(
+        _ columns: [GridItem] = gridItems_1,
+        alignment: HorizontalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init(),
+        @ViewBuilder footer: @escaping () -> Footer) -> some View {
+        LazyVGrid(columns: columns, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            Section {
+                self
+            } footer: {
+                footer()
+            }
+        }
+    }
+    
+    /// Creates a lazy grid that grows horizontally, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - rows: An array of grid items to size and position each column of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    ///   - footer: The footer of the scrollable grid.
+    func horizontalGridWithFooter<Footer: View>(
+        _ rows: [GridItem] = gridItems_1,
+        alignment: VerticalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init(),
+        @ViewBuilder footer: @escaping () -> Footer) -> some View {
+        LazyHGrid(rows: rows, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            Section {
+                self
+            } footer: {
+                footer()
+            }
+        }
+    }
+    
+    /// Creates a lazy grid that grows vertically, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - columns: An array of grid items to size and position each row of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    func verticalGrid(
+        _ columns: [GridItem] = gridItems_1,
+        alignment: HorizontalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init()) -> some View {
+        LazyVGrid(columns: columns, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            self
+        }
+    }
+    
+    /// Creates a lazy grid that grows horizontally, given the provided properties.
+    ///
+    /// - Parameters:
+    ///   - rows: An array of grid items to size and position each column of
+    ///    the grid.
+    ///   - alignment: The alignment of the grid within its parent view.
+    ///   - spacing: The spacing between the grid and the next item in its
+    ///   parent view.
+    ///   - pinnedViews: Views to pin to the bounds of a parent scroll view.
+    func horizontalGrid(
+        _ rows: [GridItem] = gridItems_1,
+        alignment: VerticalAlignment = .center,
+        spacing: CGFloat? = nil,
+        pinnedViews: PinnedScrollableViews = .init()) -> some View {
+        LazyHGrid(rows: rows, alignment: alignment, spacing: spacing, pinnedViews: pinnedViews) {
+            self
+        }
+    }
+    
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    ///   - header: The header of the scrollable grid.
+    ///   - footer: The footer of the scrollable grid.
+    func scrolls<Header: View, Footer: View>(_ axis: ScrollAxis,
+                 gridItems: [GridItem] = gridItems_1,
+                 showsIndicators: Bool = true,
+                 verticalAlignment: VerticalAlignment = .center,
+                 horizontalAlignment: HorizontalAlignment = .center,
+                 spacing: CGFloat? = 0,
+                 pinnedViews: PinnedScrollableViews = .init(),
+                 onRefreshTreshold: CGFloat = 60,
+                 onRefresh: OnRefresh? = nil,
+                 onOffsetChange: ((CGFloat) -> ())? = nil,
+                 @ViewBuilder header: @escaping () -> Header,
+                 @ViewBuilder footer: @escaping () -> Footer) -> some View {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+            self
+        } header: {
+            header()
+        } footer: {
+            footer()
+        }
+    }
+    
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    func scrolls(_ axis: ScrollAxis,
+                 gridItems: [GridItem] = gridItems_1,
+                 showsIndicators: Bool = true,
+                 verticalAlignment: VerticalAlignment = .center,
+                 horizontalAlignment: HorizontalAlignment = .center,
+                 spacing: CGFloat? = 0,
+                 pinnedViews: PinnedScrollableViews = .init(),
+                 onRefreshTreshold: CGFloat = 60,
+                 onRefresh: OnRefresh? = nil,
+                 onOffsetChange: ((CGFloat) -> ())? = nil) -> some View {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+            self
+        }
+    }
+    
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    ///   - header: The header of the scrollable grid.
+    func scrolls<Header: View>(_ axis: ScrollAxis,
+                 gridItems: [GridItem] = gridItems_1,
+                 showsIndicators: Bool = true,
+                 verticalAlignment: VerticalAlignment = .center,
+                 horizontalAlignment: HorizontalAlignment = .center,
+                 spacing: CGFloat? = 0,
+                 pinnedViews: PinnedScrollableViews = .init(),
+                 onRefreshTreshold: CGFloat = 60,
+                 onRefresh: OnRefresh? = nil,
+                 onOffsetChange: ((CGFloat) -> ())? = nil,
+                 @ViewBuilder header: @escaping () -> Header) -> some View {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+            self
+        } header: {
+            header()
+        }
+    }
+    
+    /// Creates a new instance that's scrollable.
+    ///
+    /// - Parameters:
+    ///   - scrolls: The scroll view's scrollable axis. The default axis is the
+    ///     vertical axis.
+    ///   - gridItems: An array of grid items.
+    ///   - showsIndicators: A Boolean value that indicates whether the scroll
+    ///     view displays the scrollable component of the content offset, in a way
+    ///     suitable for the platform. The default value for this parameter is
+    ///     `true`.
+    ///   - verticalAlignment: The guide for aligning the subviews in this stack. All child views have the same vertical screen coordinate.
+    ///   - horizontalAlignment: The guide for aligning the subviews in this stack. All child views have the same horizontal screen coordinate.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///       want the stack to choose a default distance for each pair of
+    ///       subviews.
+    ///   - pinnedViews: The kinds of child views that will be pinned.
+    ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
+    ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
+    ///   - onOffsetChange: Optional callback returning the scroll view offset.
+    ///   - footer: The footer of the scrollable grid.
+    func scrolls<Footer: View>(_ axis: ScrollAxis,
+                 gridItems: [GridItem] = gridItems_1,
+                 showsIndicators: Bool = true,
+                 verticalAlignment: VerticalAlignment = .center,
+                 horizontalAlignment: HorizontalAlignment = .center,
+                 spacing: CGFloat? = 0,
+                 pinnedViews: PinnedScrollableViews = .init(),
+                 onRefreshTreshold: CGFloat = 60,
+                 onRefresh: OnRefresh? = nil,
+                 onOffsetChange: ((CGFloat) -> ())? = nil,
+                 @ViewBuilder footer: @escaping () -> Footer) -> some View {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+            self
+        } footer: {
+            footer()
+        }
+    }
 }
