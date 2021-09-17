@@ -11,12 +11,17 @@ public class Notice: ObservableObject {
     
     public init() {}
     
+    @Published private var isPreviousPresented = false
     @Published public var isPresented = false
     @Published public var item = NoticeItem()
     
     public func present(_ type: NoticeType = .alert, title: String? = nil, message: String? = nil, actions: [NoticeAction] = []) {
+        if isPreviousPresented {
+            isPresented = false
+        }
         item = NoticeItem(type: type, title: title, message: message, actions: actions)
-        isPresented.toggle()
+        isPresented = true
+        isPreviousPresented = true
     }
     
     public func present(alert type: NoticeDefaultType, message: String? = nil, actions: [NoticeAction] = [NoticeAction(role: .cancel, title: "Ok", action: { })]) {
