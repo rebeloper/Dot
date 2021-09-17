@@ -21,6 +21,11 @@ public struct NoticeViewModifier: ViewModifier {
                                 Text(action.title)
                             }
                         }
+                        if !containsCancelAction(actions: notice.item.actions) {
+                            Button(role: .cancel) { } label: {
+                                Text("Cancel")
+                            }
+                        }
                     } message: {
                         if notice.item.message != nil {
                             Text(notice.item.message!)
@@ -45,6 +50,16 @@ public struct NoticeViewModifier: ViewModifier {
                             }
                         }
                 })
+    }
+    
+    private func containsCancelAction(actions: [NoticeAction]) -> Bool {
+        var contains = false
+        actions.forEach { action in
+            if action.role == .cancel {
+                contains = true
+            }
+        }
+        return contains
     }
 }
 

@@ -20,8 +20,10 @@ public class Notice: ObservableObject {
             isPresented = false
         }
         item = NoticeItem(type: type, title: title, message: message, actions: actions)
-        isPresented = true
-        isPreviousPresented = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            self.isPresented = true
+            self.isPreviousPresented = true
+        }
     }
     
     public func present(alert type: NoticeDefaultType, message: String? = nil, actions: [NoticeAction] = [NoticeAction(role: .cancel, title: "Ok", action: { })]) {
