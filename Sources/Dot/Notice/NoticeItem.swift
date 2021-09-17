@@ -18,7 +18,7 @@ public struct NoticeItem {
                 message: String? = nil,
                 actions: [NoticeAction] = []) {
         self.type = type
-        self.title = title != nil ? title! : ""
+        self.title = title != nil ? title! : (type == .alert && message = nil) ? "Alert" : ""
         self.message = message
         self.actions = actions
     }
