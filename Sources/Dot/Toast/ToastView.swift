@@ -147,13 +147,13 @@ private struct ToastLabelView: View {
 
 public struct ToastView: View {
     @Binding var isVisible: Bool
-    var config: ToastConfig
+    @Binding var config: ToastConfig
     
     @Environment(\.colorScheme) private var colorScheme
     
-    public init(_ isVisible: Binding<Bool>, config: ToastConfig) {
+    public init(_ isVisible: Binding<Bool>, config: Binding<ToastConfig>) {
         self._isVisible = isVisible
-        self.config = config
+        self._config = config
     }
     
     public var body: some View {
