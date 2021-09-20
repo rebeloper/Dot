@@ -99,8 +99,8 @@ private struct ToastLabelView: View {
     
     var type: ToastType
     
-    var title: String?
-    var message: String?
+    @Binding var title: String?
+    @Binding var message: String?
     
     var titleForegroundColor: Color
     var messageForegroundColor: Color
@@ -171,7 +171,7 @@ public struct ToastView: View {
                             HStack(spacing: 12) {
                                 ProgressView()
                                 if config.title != nil {
-                                    ToastLabelView(type: config.type, title: config.title, message: config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
+                                    ToastLabelView(type: config.type, title: $config.title, message: $config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
                                 }
                             }
                             .padding()
@@ -191,7 +191,7 @@ public struct ToastView: View {
                         VStack(spacing: 20) {
                             ProgressView()
                             if config.title != nil {
-                                ToastLabelView(type: config.type, title: config.title, message: config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
+                                ToastLabelView(type: config.type, title: $config.title, message: $config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
                             }
                         }
                         .padding()
@@ -211,7 +211,7 @@ public struct ToastView: View {
                             HStack(spacing: 12) {
                                 ProgressView()
                                 if config.title != nil {
-                                    ToastLabelView(type: config.type, title: config.title, message: config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
+                                    ToastLabelView(type: config.type, title: $config.title, message: $config.message, titleForegroundColor: config.titleForegroundColor, messageForegroundColor: config.messageForegroundColor)
                                 }
                             }
                             .padding()
