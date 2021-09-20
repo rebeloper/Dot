@@ -48,7 +48,7 @@ public extension View {
         return self.modifier(ShowsTabBarViewModifier())
     }
 
-    func hiddesTabBar() -> some View {
+    func hidesTabBar() -> some View {
         return self.modifier(HidesTabBarViewModifier())
     }
 }
