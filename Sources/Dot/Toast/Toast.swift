@@ -10,8 +10,7 @@ import SwiftUI
 public class Toast: ObservableObject {
     
     @Published public var isPresented: Bool = false
-    
-    public var config: ToastConfig
+    @Published public var config: ToastConfig
     
     /// Creates a Toast
     /// - Parameter config: Toast Configuration
@@ -26,19 +25,15 @@ public class Toast: ObservableObject {
     public func present(_ title: String? = nil, message: String? = nil) {
         self.config.title = title
         self.config.message = message
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            withAnimation {
-                self.isPresented = true
-            }
+        withAnimation {
+            isPresented = true
         }
     }
     
     /// Dismisses the Toast
     public func dismiss() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            withAnimation {
-                self.isPresented = false
-            }
+        withAnimation {
+            isPresented = false
         }
     }
     
