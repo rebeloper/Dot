@@ -11,6 +11,10 @@ public struct TabBarAccessor: UIViewControllerRepresentable {
     public var callback: (UITabBar) -> Void
     public let proxyController = ViewController()
     
+    public init(callback: (UITabBar) -> Void) {
+        self.callback = callback
+    }
+    
     public func makeUIViewController(context: UIViewControllerRepresentableContext<TabBarAccessor>) ->
     UIViewController {
         proxyController.callback = callback
