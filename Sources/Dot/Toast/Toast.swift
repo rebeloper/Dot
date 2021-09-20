@@ -26,15 +26,19 @@ public class Toast: ObservableObject {
     public func present(_ title: String? = nil, message: String? = nil) {
         self.config.title = title
         self.config.message = message
-        withAnimation {
-            isPresented = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+            withAnimation {
+                isPresented = true
+            }
         }
     }
     
     /// Dismisses the Toast
     public func dismiss() {
-        withAnimation {
-            isPresented = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+            withAnimation {
+                isPresented = false
+            }
         }
     }
     
