@@ -22,10 +22,10 @@ public struct TabBarAccessor: UIViewControllerRepresentable {
     
     public typealias UIViewControllerType = UIViewController
     
-    private class ViewController: UIViewController {
-        var callback: (UITabBar) -> Void = { _ in }
+    public class ViewController: UIViewController {
+        public var callback: (UITabBar) -> Void = { _ in }
         
-        override func viewWillAppear(_ animated: Bool) {
+        public override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             if let tabBar = self.tabBarController {
                 self.callback(tabBar.tabBar)
