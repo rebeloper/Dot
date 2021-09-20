@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct TabBarAccessor: UIViewControllerRepresentable {
     public var callback: (UITabBar) -> Void
-    private let proxyController = ViewController()
+    public let proxyController = ViewController()
     
     public func makeUIViewController(context: UIViewControllerRepresentableContext<TabBarAccessor>) ->
     UIViewController {
