@@ -170,7 +170,7 @@ public struct ToastView: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
-                            .transition(AnyTransition.move(edge: .top)/*.combined(with: .opacity)*/)
+                            .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                             
                             Spacer()
                         }
@@ -187,7 +187,7 @@ public struct ToastView: View {
                         .cornerRadius(config.cornerRadius)
                         .padding()
                         .shadow(color: config.shadowColor, radius: config.shadowRadius)
-                        .transition(AnyTransition.move(edge: .top)/*.combined(with: .opacity)*/)
+                        .transition(AnyTransition.opacity)
                         
                     case .bottom:
                         VStack {
@@ -204,7 +204,7 @@ public struct ToastView: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
-                            .transition(AnyTransition.move(edge: .top)/*.combined(with: .opacity)*/)
+                            .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
                             
                         }
                         
