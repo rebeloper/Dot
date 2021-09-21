@@ -34,6 +34,6 @@ public struct NavigationViewModifier: ViewModifier {
 
 public extension View {
     func uses(_ navigation: Navigation) -> some View {
-        self.modifier(NavigationViewModifier(navigation: navigation))
+        modifier(NavigationViewModifier(navigation: navigation))
     }
 }

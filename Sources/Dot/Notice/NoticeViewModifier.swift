@@ -65,6 +65,6 @@ public struct NoticeViewModifier: ViewModifier {
 
 public extension View {
     func uses(_ notice: Notice) -> some View {
-        self.modifier(NoticeViewModifier(notice: notice))
+        modifier(NoticeViewModifier(notice: notice))
     }
 }

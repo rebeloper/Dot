@@ -44,8 +44,7 @@ public extension View {
     /// - Parameter toast: Toast
     /// - Returns: a view with a Toast
     func uses(_ toast: Toast) -> some View {
-        self.disabled(toast.config.shouldDisableContent ? toast.isPresented : false)
-            .modifier(ToastViewModifier(toast: toast))
+        modifier(ToastViewModifier(toast: toast))
     }
 }
 
