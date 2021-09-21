@@ -8,7 +8,6 @@
 import Combine
 
 public struct AsyncPromise<T: Codable> {
-    @available(iOS 15.0, *)
     public static func fulfil(_ promise: Future<T, Error>, storedIn cancellables: inout Set<AnyCancellable>) async throws -> T {
         try await withCheckedThrowingContinuation({ continuation in
             promise.sink { result in
