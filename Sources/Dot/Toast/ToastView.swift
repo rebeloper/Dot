@@ -16,8 +16,8 @@ public struct ToastConfig {
 
     var minSize: CGSize
     var cornerRadius: CGFloat
-
-    var backgroundColor: Color
+    
+    var material: Material
 
     var titleForegroundColor: Color
     var messageForegroundColor: Color
@@ -25,9 +25,8 @@ public struct ToastConfig {
     var shadowColor: Color
     var shadowRadius: CGFloat
 
-    var borderColor: Color
-    var borderWidth: CGFloat
-
+    var backgroundColor: Color
+    
     var shouldAutoHide: Bool
     var allowsTapToHide: Bool
     var autoHideInterval: TimeInterval
@@ -37,13 +36,12 @@ public struct ToastConfig {
     ///   - type: Toast type
     ///   - minSize: minimum size of the hud
     ///   - cornerRadius: Toast corner radius
-    ///   - backgroundColor: Toast background color
+    ///   - material: Toast material background
     ///   - titleForegroundColor: title foreground color
     ///   - messageForegroundColor: message foreground color
     ///   - shadowColor: Toast shadow color
     ///   - shadowRadius: Toast shadow radius
-    ///   - borderColor: Toast border color
-    ///   - borderWidth: Toast border width
+    ///   - backgroundColor: Toast background color
     ///   - shouldAutoHide: should the Toast auto hide
     ///   - allowsTapToHide: should the Toast allow tap to hide
     ///   - autoHideInterval: autohide time
@@ -51,13 +49,12 @@ public struct ToastConfig {
         type: ToastType = .top,
         minSize: CGSize = CGSize(width: 100.0, height: 100.0),
         cornerRadius: CGFloat = 18.0,
-        backgroundColor: Color = .gray.opacity(0.2),
+        material: Material = .thinMaterial,
         titleForegroundColor: Color = .primary,
         messageForegroundColor: Color = .secondary,
         shadowColor: Color = .clear,
         shadowRadius: CGFloat = 0.0,
-        borderColor: Color = .clear,
-        borderWidth: CGFloat = 0.0,
+        backgroundColor: Color = .gray.opacity(0.2),
         shouldAutoHide: Bool = false,
         allowsTapToHide: Bool = false,
         autoHideInterval: TimeInterval = 10.0
@@ -67,7 +64,7 @@ public struct ToastConfig {
         self.minSize = minSize
         self.cornerRadius = cornerRadius
 
-        self.backgroundColor = backgroundColor
+        self.material = material
 
         self.titleForegroundColor = titleForegroundColor
         self.messageForegroundColor = messageForegroundColor
@@ -75,9 +72,8 @@ public struct ToastConfig {
         self.shadowColor = shadowColor
         self.shadowRadius = shadowRadius
 
-        self.borderColor = borderColor
-        self.borderWidth = borderWidth
-
+        self.backgroundColor = backgroundColor
+        
         self.shouldAutoHide = shouldAutoHide
         self.allowsTapToHide = allowsTapToHide
         self.autoHideInterval = autoHideInterval
@@ -170,13 +166,9 @@ public struct ToastView: View {
                                 }
                             }
                             .padding()
-                            .background(.thinMaterial)
+                            .background(config.material)
                             .cornerRadius(config.cornerRadius)
                             .padding()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: config.cornerRadius)
-                                    .stroke(config.borderColor, lineWidth: config.borderWidth)
-                            )
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
                             
                             Spacer()
@@ -190,13 +182,9 @@ public struct ToastView: View {
                             }
                         }
                         .padding()
-                        .background(.thinMaterial)
+                        .background(config.material)
                         .cornerRadius(config.cornerRadius)
                         .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: config.cornerRadius)
-                                .stroke(config.borderColor, lineWidth: config.borderWidth)
-                        )
                         .shadow(color: config.shadowColor, radius: config.shadowRadius)
                         
                     case .bottom:
@@ -210,13 +198,9 @@ public struct ToastView: View {
                                 }
                             }
                             .padding()
-                            .background(.thinMaterial)
+                            .background(config.material)
                             .cornerRadius(config.cornerRadius)
                             .padding()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: config.cornerRadius)
-                                    .stroke(config.borderColor, lineWidth: config.borderWidth)
-                            )
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
                         }
                         
