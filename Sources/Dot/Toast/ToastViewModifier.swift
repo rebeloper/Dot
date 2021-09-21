@@ -13,7 +13,7 @@ public struct ToastViewModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         ZStack {
-            content.disabled(toast.config.shouldDisableContent ? toast.isPresented : false)
+            content//.disabled(toast.config.shouldDisableContent ? toast.isPresented : false)
             ToastView($toast.isPresented, config: $toast.config)
         }
     }
