@@ -19,3 +19,11 @@ public struct ToastViewModifier: ViewModifier {
     }
 }
 
+public extension View {
+    /// Adds a Toast to the view
+    /// - Parameter toast: Toast
+    /// - Returns: a view with a Toast
+    func uses(_ toast: Toast) -> some View {
+        modifier(ToastViewModifier(toast: toast))
+    }
+}

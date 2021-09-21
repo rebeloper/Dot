@@ -31,7 +31,6 @@ public struct ToastConfig {
     var shouldAutoHide: Bool
     var allowsTapToHide: Bool
     var autoHideInterval: TimeInterval
-    var shouldDisableContent: Bool
     
     /// Creates a configuration for ToastView
     /// - Parameters:
@@ -48,12 +47,11 @@ public struct ToastConfig {
     ///   - shouldAutoHide: should the Toast auto hide
     ///   - allowsTapToHide: should the Toast allow tap to hide
     ///   - autoHideInterval: autohide time
-    ///   - shouldDisableContent: should the Toast disable the underlying content
     public init(
         type: ToastType = .top,
         minSize: CGSize = CGSize(width: 100.0, height: 100.0),
         cornerRadius: CGFloat = 18.0,
-        backgroundColor: Color = .clear,
+        backgroundColor: Color = .gray.opacity(0.2),
         titleForegroundColor: Color = .primary,
         messageForegroundColor: Color = .secondary,
         shadowColor: Color = .clear,
@@ -62,8 +60,7 @@ public struct ToastConfig {
         borderWidth: CGFloat = 0.0,
         shouldAutoHide: Bool = false,
         allowsTapToHide: Bool = false,
-        autoHideInterval: TimeInterval = 10.0,
-        shouldDisableContent: Bool = true
+        autoHideInterval: TimeInterval = 10.0
     ) {
         self.type = type
         
@@ -84,8 +81,6 @@ public struct ToastConfig {
         self.shouldAutoHide = shouldAutoHide
         self.allowsTapToHide = allowsTapToHide
         self.autoHideInterval = autoHideInterval
-        
-        self.shouldDisableContent = shouldDisableContent
     }
 }
 

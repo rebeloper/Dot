@@ -39,14 +39,3 @@ public class Toast: ObservableObject {
     
 }
 
-public extension View {
-    /// Adds a Toast to the view
-    /// - Parameter toast: Toast
-    /// - Returns: a view with a Toast
-    func uses(_ toast: Toast) -> some View {
-        self.disabled(toast.config.shouldDisableContent ? toast.isPresented : false)
-            .modifier(ToastViewModifier(toast: toast))
-    }
-}
-
-
