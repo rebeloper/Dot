@@ -170,10 +170,10 @@ public struct ToastView: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
-                            .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                             
                             Spacer()
                         }
+                        .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                         
                     case .center:
                         VStack(spacing: 20) {
@@ -204,9 +204,9 @@ public struct ToastView: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
-                            .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
                             
                         }
+                        .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
                         
                     }
                     
