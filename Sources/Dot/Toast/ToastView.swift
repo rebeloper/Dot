@@ -170,6 +170,7 @@ public struct ToastView: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
+                            .transition(AnyTransition.move(edge: .top)/*.combined(with: .opacity)*/)
                             
                             Spacer()
                         }
@@ -186,6 +187,7 @@ public struct ToastView: View {
                         .cornerRadius(config.cornerRadius)
                         .padding()
                         .shadow(color: config.shadowColor, radius: config.shadowRadius)
+                        .transition(AnyTransition.move(edge: .top)/*.combined(with: .opacity)*/)
                         
                     case .bottom:
                         VStack {
@@ -202,14 +204,14 @@ public struct ToastView: View {
                             .cornerRadius(config.cornerRadius)
                             .padding()
                             .shadow(color: config.shadowColor, radius: config.shadowRadius)
+                            .transition(AnyTransition.move(edge: .top)/*.combined(with: .opacity)*/)
+                            
                         }
                         
                     }
                     
                 }
             }
-            .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
-            .animation(.spring(), value: 1)
             .onTapGesture {
                 if config.allowsTapToHide {
                     withAnimation {
