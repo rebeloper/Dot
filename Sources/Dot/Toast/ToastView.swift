@@ -208,6 +208,7 @@ public struct ToastView: View {
                     
                 }
             }
+            .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
             .animation(.spring(), value: 1)
             .onTapGesture {
                 if config.allowsTapToHide {
