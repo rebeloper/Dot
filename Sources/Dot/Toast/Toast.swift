@@ -31,9 +31,11 @@ public class Toast: ObservableObject {
     }
     
     /// Dismisses the Toast
-    public func dismiss() {
-        withAnimation {
-            isPresented = false
+    public func dismiss(after: Double = 0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + after) {
+            withAnimation {
+                self.isPresented = false
+            }
         }
     }
     
