@@ -10,7 +10,7 @@ import Combine
 /// A type of object with a set of ``AnyCancellable``s and with a publisher that emits before the object has changed.
 ///
 /// By default an ``ObservableObject`` synthesizes an ``ObservableObject/objectWillChange-2oa5v`` publisher that emits the changed value before any of its `@Published` properties changes.
-public class ObservedObservableObject: ObservableObject {
+open class ObservedObservableObject: ObservableObject {
     
     /// A Set of type-erasing cancellable objects that execute a provided closure when canceled.
     ///
