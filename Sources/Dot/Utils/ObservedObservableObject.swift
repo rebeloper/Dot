@@ -17,5 +17,5 @@ open class ObservedObservableObject: ObservableObject {
     /// Subscriber implementations can use this type to provide a “cancellation token” that makes it possible for a caller to cancel a publisher, but not to use the ``Subscription`` object to request items.
     ///
     /// An ``AnyCancellable`` instance automatically calls ``Cancellable/cancel()`` when deinitialized.
-    public var cancellables: Set<AnyCancellable> = []
+    open var cancellables: Set<AnyCancellable> = []
 }
