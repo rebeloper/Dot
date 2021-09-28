@@ -179,33 +179,4 @@ public extension View {
             self
         }
     }
-    
-    /// Adds an asynchronous action to perform when this view recognizes a tap gesture.
-    ///
-    /// - Parameters:
-    ///    - count: The number of taps or clicks required to trigger the action
-    ///      closure provided in `action`. Defaults to `1`.
-    ///    - action: The action to perform.
-    func onAsyncTapGesture(count: Int = 1, perform action: @escaping () async throws -> Void) -> some View {
-        self.onTapGesture(count: count) {
-            Task {
-                action
-            }
-        }
-    }
-    
-    /// Adds an asynchronous action to perform when this view recognizes a tap gesture. Clips this view to its bounding rectangular frame and defines the content shape for hit testing.
-    /// - Parameters:
-    ///   - count: The number of taps or clicks required to trigger the action
-    ///      closure provided in `action`. Defaults to `1`.
-    ///   - cornerRadius: corner radius. Default is 0
-    ///   - style: rounded corner style. Default is .circular
-    ///   - action: The action to perform.
-    func onAsyncClippedTapGesture(count: Int = 1, cornerRadius: CGFloat = 0, style: RoundedCornerStyle = .circular, perform action: @escaping () async throws -> Void) -> some View {
-        self.onClippedTapGesture(count: count, cornerRadius: cornerRadius, style: style) {
-            Task {
-                action
-            }
-        }
-    }
 }
