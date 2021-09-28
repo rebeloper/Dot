@@ -14,7 +14,7 @@ public extension Button {
     /// - Parameters:
     ///   - task: The asynchronous task to perform when the user triggers the button.
     ///   - label: A view that describes the purpose of the button's `task`.
-    init(task: @escaping () -> Void, @ViewBuilder taskLabel: () -> Label) {
+    init(task: @escaping () async throws -> Void, @ViewBuilder taskLabel: () -> Label) {
         self.init {
             Task {
                 task
@@ -31,7 +31,7 @@ public extension Button {
     ///     `nil` means that the button doesn't have an assigned role.
     ///   - task: The asynchronous task to perform when the user triggers the button.
     ///   - label: A view that describes the purpose of the button's `task`.
-    init(role: ButtonRole?, task: @escaping () -> Void, @ViewBuilder taskLabel: () -> Label) {
+    init(role: ButtonRole?, task: @escaping () async throws -> Void, @ViewBuilder taskLabel: () -> Label) {
         self.init(role: role) {
             Task {
                 task
@@ -55,7 +55,7 @@ public extension Button where Label == Text {
     ///   - taskTitleKey: The key for the button's localized title, that describes
     ///     the purpose of the button's `task`.
     ///   - task: The action to perform when the user triggers the button.
-    init(taskTitleKey: LocalizedStringKey, task: @escaping () -> Void) {
+    init(taskTitleKey: LocalizedStringKey, task: @escaping () async throws -> Void) {
         self.init(taskTitleKey) {
             Task {
                 task
@@ -75,7 +75,7 @@ public extension Button where Label == Text {
     ///   - role: An optional semantic role that describes the button. A value of
     ///     `nil` means that the button doesn't have an assigned role.
     ///   - task: The action to perform when the user triggers the button.
-    init(taskTitleKey: LocalizedStringKey, role: ButtonRole?, task: @escaping () -> Void) {
+    init(taskTitleKey: LocalizedStringKey, role: ButtonRole?, task: @escaping () async throws -> Void) {
         self.init(taskTitleKey, role: role) {
             Task {
                 task
@@ -92,7 +92,7 @@ public extension Button where Label == Text {
     /// - Parameters:
     ///   - taskTitle: A string that describes the purpose of the button's `task`.
     ///   - task: The action to perform when the user triggers the button.
-    init<S>(taskTitle: S, task: @escaping () -> Void) where S : StringProtocol {
+    init<S>(taskTitle: S, task: @escaping () async throws -> Void) where S : StringProtocol {
         self.init(taskTitle) {
             Task {
                 task
@@ -111,7 +111,7 @@ public extension Button where Label == Text {
     ///   - role: An optional semantic role that describes the button. A value of
     ///     `nil` means that the button doesn't have an assigned role.
     ///   - task: The action to perform when the user triggers the button.
-    init<S>(taskTitle: S, role: ButtonRole?, task: @escaping () -> Void) where S : StringProtocol {
+    init<S>(taskTitle: S, role: ButtonRole?, task: @escaping () async throws -> Void) where S : StringProtocol {
         self.init(taskTitle, role: role) {
             Task {
                 task

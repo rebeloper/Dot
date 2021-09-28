@@ -186,7 +186,7 @@ public extension View {
     ///    - count: The number of taps or clicks required to trigger the action
     ///      closure provided in `action`. Defaults to `1`.
     ///    - action: The action to perform.
-    func onAsyncTapGesture(count: Int = 1, perform action: @escaping () -> Void) -> some View {
+    func onAsyncTapGesture(count: Int = 1, perform action: @escaping () async throws -> Void) -> some View {
         self.onTapGesture(count: count) {
             Task {
                 action
@@ -201,7 +201,7 @@ public extension View {
     ///   - cornerRadius: corner radius. Default is 0
     ///   - style: rounded corner style. Default is .circular
     ///   - action: The action to perform.
-    func onAsyncClippedTapGesture(count: Int = 1, cornerRadius: CGFloat = 0, style: RoundedCornerStyle = .circular, perform action: @escaping () -> Void) -> some View {
+    func onAsyncClippedTapGesture(count: Int = 1, cornerRadius: CGFloat = 0, style: RoundedCornerStyle = .circular, perform action: @escaping () async throws -> Void) -> some View {
         self.onClippedTapGesture(count: count, cornerRadius: cornerRadius, style: style) {
             Task {
                 action
