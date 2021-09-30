@@ -11,15 +11,18 @@ public typealias NoticeController = UIAlertController
 public typealias NoticeControllerStyle = NoticeController.Style
 public typealias NoticeButton = UIAlertAction
 
+/// `alert` / `confirmationDialog` presenter
 public struct Notice {
     
-    /// Presents a notice with an `alert` / `confirmationDialog` style and optional `title`, `message` and `buttons`
+    /// Presents a notice with an `alert` / `confirmationDialog` style and optional `title`, `message`, `buttons`, animation flag and `completion`
     /// - Parameters:
     ///   - style: style of the notice
     ///   - title: title of the notice; default is `nil`
     ///   - message: message of the notice; default is `nil`
     ///   - buttons: buttons of the notice; default is none set, but addig a `cancel` button with an `OK` title instead
-    public static func present(_ style: NoticeStyle, title: String? = nil, message: String? = nil, buttons: [NoticeButton] = []) {
+    ///   - flag: animation flag; default is `true`
+    ///   - completion: completion callback
+    public static func present(_ style: NoticeStyle, title: String? = nil, message: String? = nil, buttons: [NoticeButton] = [], animated flag: Bool = true, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: getNoticeControllerStyle(for: style))
         if buttons.isEmpty {
             alert.addAction(NoticeButton(title: "OK", style: .cancel))
@@ -28,7 +31,7 @@ public struct Notice {
                 alert.addAction(button)
             }
         }
-        alert.presentNotice()
+        alert.presentNotice(animated: flag, completion: completion)
     }
     
     /// Presents a notice `type` with a `message` and optional an `alert` / `confirmationDialog` style (default is `alert`) and `buttons`. The `title` of the notice is definded by the `type`
@@ -74,7 +77,12 @@ public struct Notice {
 }
 
 public extension NoticeButton {
-    convenience init(title: String, style: Style, action: (() -> ())?) {
+    /// Create and return a notice button with the specified `title`, `action` and optional `style` (default is `default`)
+    /// - Parameters:
+    ///   - title: title of the notice button
+    ///   - style: style of the notice button, default is `default`
+    ///   - action: action of the notice button
+    convenience init(title: String, style: Style = .default, action: (() -> ())?) {
         self.init(title: title, style: style) { _ in
             action?()
         }
@@ -83,12 +91,20 @@ public extension NoticeButton {
 
 public extension NoticeController {
     
-    func presentNotice() {
-        UIApplication.rootViewController()?.present(self, animated: true, completion: nil)
+    /// Presents a Notice on the root view controller with optional animation flag and completion
+    /// - Parameters:
+    ///   - flag: animation flag; default is `true`
+    ///   - completion: completion callback
+    func presentNotice(animated flag: Bool = true, completion: (() -> Void)? = nil) {
+        UIApplication.rootViewController()?.present(self, animated: flag, completion: completion)
     }
-
-    func dismissNotice() {
-        UIApplication.rootViewController()?.dismiss(animated: true, completion: nil)
+    
+    /// Dismisses a Notice on the root view controller with optional animation flag and completion
+    /// - Parameters:
+    ///   - flag: animation flag; default is `true`
+    ///   - completion: completion callback
+    func dismissNotice(animated flag: Bool = true, completion: (() -> Void)? = nil) {
+        UIApplication.rootViewController()?.dismiss(animated: flag, completion: completion)
     }
 }
 
