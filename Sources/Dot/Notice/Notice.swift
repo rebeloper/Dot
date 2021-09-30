@@ -25,7 +25,7 @@ public struct Notice {
     public static func present(_ style: NoticeStyle, title: String? = nil, message: String? = nil, buttons: [NoticeButton] = [], animated flag: Bool = true, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: getNoticeControllerStyle(for: style))
         if buttons.isEmpty {
-            alert.addAction(NoticeButton(title: "OK", style: .cancel))
+            alert.addAction(NoticeButton(.ok))
         } else {
             buttons.forEach { button in
                 alert.addAction(button)
@@ -87,6 +87,48 @@ public extension NoticeButton {
             action?()
         }
     }
+    
+    /// Create and return a notice button with the specified `title` from the `type` and optional `style` (default is `cancel`) and `action`
+    /// - Parameters:
+    ///   - type: type of the notice button
+    ///   - style: style of the notice button, default is `cancel`
+    ///   - action: action of the notice button
+    convenience init(_ type: NoticeButtonType, style: Style = .cancel, action: (() -> ())? = nil) {
+        var title = ""
+        switch type {
+        case .ok:
+            title = "OK"
+        case .cancel:
+            title = "Cancel"
+        case .agree:
+            title = "Agree"
+        case .later:
+            title = "Later"
+        case .remindMeLater:
+            title = "Remind me later"
+        case .skip:
+            title = "Skip"
+        case .dontAskAgain:
+            title = "Don't ask again"
+        case .dismiss:
+            title = "Dismiss"
+        case .forward:
+            title = "Forward"
+        case .back:
+            title = "Back"
+        case .previous:
+            title = "Previous"
+        case .next:
+            title = "Next"
+        case .yes:
+            title = "Yes"
+        case .no:
+            title = "No"
+        }
+        self.init(title: title, style: style) { _ in
+            action?()
+        }
+    }
 }
 
 public extension NoticeController {
@@ -114,4 +156,8 @@ public enum NoticeType {
 
 public enum NoticeStyle {
     case confirmationDialog, alert
+}
+
+public enum NoticeButtonType {
+    case ok, cancel, agree, later, remindMeLater, skip, dontAskAgain, dismiss, forward, back, previous, next, yes, no
 }
