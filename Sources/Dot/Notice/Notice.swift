@@ -34,6 +34,16 @@ public struct Notice {
         alert.presentNotice(animated: flag, completion: completion)
     }
     
+    /// Presents a notice with an `alert` / `confirmationDialog` style and optional `title`, `message`, `buttons`, animation flag and `completion`
+    /// - Parameters:
+    ///   - style: style of the notice
+    ///   - title: title of the notice; default is `nil`
+    ///   - message: message of the notice; default is `nil`
+    ///   - buttons: buttons of the notice; default is none set, but addig a `cancel` button with an `OK` title instead
+    public static func present(_ style: NoticeStyle, title: String? = nil, message: String? = nil, buttons: [NoticeButton] = []) {
+        present(style, title: title, message: message, buttons: buttons, animated: true, completion: nil)
+    }
+    
     /// Presents a notice `type` with a `message` and optional an `alert` / `confirmationDialog` style (default is `alert`) and `buttons`. The `title` of the notice is definded by the `type`
     /// - Parameters:
     ///   - type: type of the notice
