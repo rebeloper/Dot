@@ -124,6 +124,10 @@ public extension NoticeButton {
             title = "Yes"
         case .no:
             title = "No"
+        case .confirm:
+            title = "Confirm"
+        case .deny:
+            title = "Deny"
         }
         self.init(title: title, style: style) { _ in
             action?()
@@ -159,5 +163,5 @@ public enum NoticeStyle {
 }
 
 public enum NoticeButtonType {
-    case ok, cancel, agree, later, remindMeLater, skip, dontAskAgain, dismiss, forward, back, previous, next, yes, no
+    case ok, cancel, agree, later, remindMeLater, skip, dontAskAgain, dismiss, forward, back, previous, next, yes, no, confirm, deny
 }
