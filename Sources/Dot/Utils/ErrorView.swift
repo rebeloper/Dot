@@ -9,12 +9,17 @@ import SwiftUI
 
 public struct ErrorView: View {
     
-    public let error: Error
+    private let error: Error
+    
+    public init(_ error: Error) {
+        self.error = error
+    }
     
     public var body: some View {
         let _ = print("ErrorView: \(error.localizedDescription)")
         Image(systemName: "exclamationmark.triangle.fill")
             .foregroundColor(.systemGray5)
+            .asPushOutView()
     }
 }
 

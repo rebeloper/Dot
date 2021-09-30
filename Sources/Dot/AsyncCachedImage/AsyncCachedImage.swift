@@ -26,10 +26,8 @@ public struct AsyncCachedImage<Content>: View where Content: View {
 
     public var body: some View {
         if let cached = AsyncImageCache[url] {
-            let _ = print("AsyncCachedImage: cached \(url.absoluteString)")
             content(.success(cached))
         } else {
-            let _ = print("AsyncCachedImage: request \(url.absoluteString)")
             AsyncImage(url: url,
                        scale: scale,
                        transaction: transaction) { phase in
