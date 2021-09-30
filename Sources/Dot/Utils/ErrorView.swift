@@ -18,6 +18,7 @@ public struct ErrorView: View {
     public var body: some View {
         let _ = print("ErrorView: \(error.localizedDescription)")
         Image(systemName: "exclamationmark.triangle.fill")
+            .imageScale(.large)
             .foregroundColor(.systemGray5)
             .asPushOutView()
     }
