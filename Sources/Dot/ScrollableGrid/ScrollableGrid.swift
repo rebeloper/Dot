@@ -14,8 +14,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
     private var verticalAlignment: VerticalAlignment
     private var horizontalAlignment: HorizontalAlignment
     private var spacing: CGFloat?
-    private var startOffset: CGFloat
-    private var endOffset: CGFloat
+    private var startPadding: CGFloat
+    private var endPadding: CGFloat
     private var pinnedViews: PinnedScrollableViews
     private var onRefreshTreshold: CGFloat
     private var onRefresh: OnRefresh? // the refreshing action
@@ -43,8 +43,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -58,8 +58,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                 verticalAlignment: VerticalAlignment = .center,
                 horizontalAlignment: HorizontalAlignment = .center,
                 spacing: CGFloat? = 0,
-                startOffset: CGFloat = 0,
-                endOffset: CGFloat = 0,
+                startPadding: CGFloat = 0,
+                endPadding: CGFloat = 0,
                 pinnedViews: PinnedScrollableViews = .init(),
                 onRefreshTreshold: CGFloat = 60,
                 onRefresh: OnRefresh? = nil,
@@ -73,8 +73,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
-        self.startOffset = startOffset
-        self.endOffset = endOffset
+        self.startPadding = startPadding
+        self.endPadding = endPadding
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -99,7 +99,7 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                     if axis == .vertical {
                         VStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .vertical)
-                            Spacer().frame(width: 0, height: startOffset)
+                            Spacer().frame(width: 0, height: startPadding)
                             content()
                                 .if(header != nil && footer != nil, transform: { content in
                                     content.verticalGridWithHeaderAndFooter(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
@@ -121,13 +121,13 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                                             footer!()
                                         })
                                     })
-                                    Spacer().frame(width: 0, height: endOffset)
+                                    Spacer().frame(width: 0, height: endPadding)
                         }
                         .offset(y: (state == .loading) ? refreshViewLenght : 0)
                     } else {
                         HStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .horizontal)
-                            Spacer().frame(width: startOffset, height: 0)
+                            Spacer().frame(width: startPadding, height: 0)
                             content()
                                 .if(header != nil && footer != nil, transform: { content in
                                     content.horizontalGridWithHeaderAndFooter(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
@@ -149,7 +149,7 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                                             footer!()
                                         })
                                     })
-                                    Spacer().frame(width: endOffset, height: 0)
+                                    Spacer().frame(width: endPadding, height: 0)
                         }
                         .offset(x: (state == .loading) ? refreshViewLenght : 0)
                     }
@@ -292,8 +292,8 @@ public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -305,8 +305,8 @@ public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
          verticalAlignment: VerticalAlignment = .center,
          horizontalAlignment: HorizontalAlignment = .center,
          spacing: CGFloat? = 0,
-         startOffset: CGFloat = 0,
-         endOffset: CGFloat = 0,
+         startPadding: CGFloat = 0,
+         endPadding: CGFloat = 0,
          pinnedViews: PinnedScrollableViews = .init(),
          onRefreshTreshold: CGFloat = 60,
          onRefresh: OnRefresh? = nil,
@@ -318,8 +318,8 @@ public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
-        self.startOffset = startOffset
-        self.endOffset = endOffset
+        self.startPadding = startPadding
+        self.endPadding = endPadding
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -346,8 +346,8 @@ public extension ScrollableGrid where Footer == EmptyView {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -360,8 +360,8 @@ public extension ScrollableGrid where Footer == EmptyView {
          verticalAlignment: VerticalAlignment = .center,
          horizontalAlignment: HorizontalAlignment = .center,
          spacing: CGFloat? = 0,
-         startOffset: CGFloat = 0,
-         endOffset: CGFloat = 0,
+         startPadding: CGFloat = 0,
+         endPadding: CGFloat = 0,
          pinnedViews: PinnedScrollableViews = .init(),
          onRefreshTreshold: CGFloat = 60,
          onRefresh: OnRefresh? = nil,
@@ -374,8 +374,8 @@ public extension ScrollableGrid where Footer == EmptyView {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
-        self.startOffset = startOffset
-        self.endOffset = endOffset
+        self.startPadding = startPadding
+        self.endPadding = endPadding
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -402,8 +402,8 @@ public extension ScrollableGrid where Header == EmptyView {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -416,8 +416,8 @@ public extension ScrollableGrid where Header == EmptyView {
          verticalAlignment: VerticalAlignment = .center,
          horizontalAlignment: HorizontalAlignment = .center,
          spacing: CGFloat? = 0,
-         startOffset: CGFloat = 0,
-         endOffset: CGFloat = 0,
+         startPadding: CGFloat = 0,
+         endPadding: CGFloat = 0,
          pinnedViews: PinnedScrollableViews = .init(),
          onRefreshTreshold: CGFloat = 60,
          onRefresh: OnRefresh? = nil,
@@ -430,8 +430,8 @@ public extension ScrollableGrid where Header == EmptyView {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
-        self.startOffset = startOffset
-        self.endOffset = endOffset
+        self.startPadding = startPadding
+        self.endPadding = endPadding
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -654,8 +654,8 @@ public extension View {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -668,15 +668,15 @@ public extension View {
                                              verticalAlignment: VerticalAlignment = .center,
                                              horizontalAlignment: HorizontalAlignment = .center,
                                              spacing: CGFloat? = 0,
-                                             startOffset: CGFloat = 0,
-                                             endOffset: CGFloat = 0,
+                                             startPadding: CGFloat = 0,
+                                             endPadding: CGFloat = 0,
                                              pinnedViews: PinnedScrollableViews = .init(),
                                              onRefreshTreshold: CGFloat = 60,
                                              onRefresh: OnRefresh? = nil,
                                              onOffsetChange: ((CGFloat) -> ())? = nil,
                                              @ViewBuilder header: @escaping () -> Header,
                                              @ViewBuilder footer: @escaping () -> Footer) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startOffset: startOffset, endOffset: endOffset, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         } header: {
             header()
@@ -700,8 +700,8 @@ public extension View {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -712,13 +712,13 @@ public extension View {
                  verticalAlignment: VerticalAlignment = .center,
                  horizontalAlignment: HorizontalAlignment = .center,
                  spacing: CGFloat? = 0,
-                 startOffset: CGFloat = 0,
-                 endOffset: CGFloat = 0,
+                 startPadding: CGFloat = 0,
+                 endPadding: CGFloat = 0,
                  pinnedViews: PinnedScrollableViews = .init(),
                  onRefreshTreshold: CGFloat = 60,
                  onRefresh: OnRefresh? = nil,
                  onOffsetChange: ((CGFloat) -> ())? = nil) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startOffset: startOffset, endOffset: endOffset, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         }
     }
@@ -738,8 +738,8 @@ public extension View {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -751,14 +751,14 @@ public extension View {
                                verticalAlignment: VerticalAlignment = .center,
                                horizontalAlignment: HorizontalAlignment = .center,
                                spacing: CGFloat? = 0,
-                               startOffset: CGFloat = 0,
-                               endOffset: CGFloat = 0,
+                               startPadding: CGFloat = 0,
+                               endPadding: CGFloat = 0,
                                pinnedViews: PinnedScrollableViews = .init(),
                                onRefreshTreshold: CGFloat = 60,
                                onRefresh: OnRefresh? = nil,
                                onOffsetChange: ((CGFloat) -> ())? = nil,
                                @ViewBuilder header: @escaping () -> Header) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startOffset: startOffset, endOffset: endOffset, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         } header: {
             header()
@@ -780,8 +780,8 @@ public extension View {
     ///   - spacing: The distance between adjacent subviews, or `nil` if you
     ///       want the stack to choose a default distance for each pair of
     ///       subviews.
-    ///   - startOffset: The top / leading offset of the scrollable grid.
-    ///   - endOffset: The bottom / trailing offset of the scrollabel grid.   
+    ///   - startPadding: The top / leading padding of the scrollable grid.
+    ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - pinnedViews: The kinds of child views that will be pinned.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
     ///   - onRefresh: The action to take when the scroll view is pulled. Finish the refresh by calling the ``RefreshComplete``
@@ -793,14 +793,14 @@ public extension View {
                                verticalAlignment: VerticalAlignment = .center,
                                horizontalAlignment: HorizontalAlignment = .center,
                                spacing: CGFloat? = 0,
-                               startOffset: CGFloat = 0,
-                               endOffset: CGFloat = 0,
+                               startPadding: CGFloat = 0,
+                               endPadding: CGFloat = 0,
                                pinnedViews: PinnedScrollableViews = .init(),
                                onRefreshTreshold: CGFloat = 60,
                                onRefresh: OnRefresh? = nil,
                                onOffsetChange: ((CGFloat) -> ())? = nil,
                                @ViewBuilder footer: @escaping () -> Footer) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startOffset: startOffset, endOffset: endOffset, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         } footer: {
             footer()
