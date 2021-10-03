@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Tappable<Label> : View where Label : View {
+public struct Tappable<Label> : View where Label : View {
     
     private let count: Int
     private let cornerRadius: CGFloat
@@ -22,7 +22,7 @@ struct Tappable<Label> : View where Label : View {
     ///   - style: rounded corner style. Default is .circular
     ///   - action: The action to perform
     ///   - label: A view that describes the purpose of the tappable's `action`.
-    init(count: Int = 1,
+    public init(count: Int = 1,
          cornerRadius: CGFloat = 0,
          style: RoundedCornerStyle = .circular,
          action: @escaping () -> Void,
@@ -34,7 +34,7 @@ struct Tappable<Label> : View where Label : View {
         self.label = label
     }
     
-    var body: some View {
+    public var body: some View {
         label().onClippedTapGesture(count: count, cornerRadius: cornerRadius, style: style, perform: action)
     }
 }
