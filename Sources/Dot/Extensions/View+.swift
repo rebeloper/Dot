@@ -83,6 +83,23 @@ public extension View {
         }
     }
     
+    @ViewBuilder
+    /// Can create a `Push Out View` from a
+    /// - Parameters:
+    ///   - isPushOutView: should create a `Push Out View` from a `Pull In View`
+    ///   - backgroundColor: The color of the area outside of the `Pull In View`
+    /// - Returns: a `Push Out View` or a `Pull In View`
+    func isPushOutView(_ isPushOutView: Bool = true, backgroundColor: Color = .clear) -> some View {
+        if isPushOutView {
+            ZStack {
+                backgroundColor
+                self
+            }
+        } else {
+            self
+        }
+    }
+    
     /// Widens the tappable area of the view. Use it for system images that rarely register taps.
     /// - Parameter square: the side of the square area
     /// - Returns: a view that is better tappable
