@@ -14,6 +14,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
     private var verticalAlignment: VerticalAlignment
     private var horizontalAlignment: HorizontalAlignment
     private var spacing: CGFloat?
+    private var startOffset: CGFloat?
+    private var endOffset: CGFloat?
     private var pinnedViews: PinnedScrollableViews
     private var onRefreshTreshold: CGFloat
     private var onRefresh: OnRefresh? // the refreshing action
@@ -54,6 +56,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                 verticalAlignment: VerticalAlignment = .center,
                 horizontalAlignment: HorizontalAlignment = .center,
                 spacing: CGFloat? = 0,
+                startOffset: CGFloat? = 0,
+                endOffset: CGFloat? = 0,
                 pinnedViews: PinnedScrollableViews = .init(),
                 onRefreshTreshold: CGFloat = 60,
                 onRefresh: OnRefresh? = nil,
@@ -67,6 +71,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
+        self.startOffset = startOffset
+        self.endOffset = endOffset
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -91,6 +97,7 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                     if axis == .vertical {
                         VStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .vertical)
+                            Spacer().frame(width: 0, height: startOffset)
                             content()
                                 .if(header != nil && footer != nil, transform: { content in
                                     content.verticalGridWithHeaderAndFooter(gridItems, alignment: horizontalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
@@ -112,11 +119,13 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                                             footer!()
                                         })
                                     })
+                                    Spacer().frame(width: 0, height: endOffset)
                         }
                         .offset(y: (state == .loading) ? refreshViewLenght : 0)
                     } else {
                         HStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .horizontal)
+                            Spacer().frame(width: startOffset, height: 0)
                             content()
                                 .if(header != nil && footer != nil, transform: { content in
                                     content.horizontalGridWithHeaderAndFooter(gridItems, alignment: verticalAlignment, spacing: spacing, pinnedViews: pinnedViews) {
@@ -138,6 +147,7 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                                             footer!()
                                         })
                                     })
+                                    Spacer().frame(width: endOffset, height: 0)
                         }
                         .offset(x: (state == .loading) ? refreshViewLenght : 0)
                     }
@@ -291,6 +301,8 @@ public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
          verticalAlignment: VerticalAlignment = .center,
          horizontalAlignment: HorizontalAlignment = .center,
          spacing: CGFloat? = 0,
+         startOffset: CGFloat? = 0,
+         endOffset: CGFloat? = 0,
          pinnedViews: PinnedScrollableViews = .init(),
          onRefreshTreshold: CGFloat = 60,
          onRefresh: OnRefresh? = nil,
@@ -302,6 +314,8 @@ public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
+        self.startOffset = startOffset
+        self.endOffset = endOffset
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -340,6 +354,8 @@ public extension ScrollableGrid where Footer == EmptyView {
          verticalAlignment: VerticalAlignment = .center,
          horizontalAlignment: HorizontalAlignment = .center,
          spacing: CGFloat? = 0,
+         startOffset: CGFloat? = 0,
+         endOffset: CGFloat? = 0,
          pinnedViews: PinnedScrollableViews = .init(),
          onRefreshTreshold: CGFloat = 60,
          onRefresh: OnRefresh? = nil,
@@ -352,6 +368,8 @@ public extension ScrollableGrid where Footer == EmptyView {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
+        self.startOffset = startOffset
+        self.endOffset = endOffset
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
@@ -390,6 +408,8 @@ public extension ScrollableGrid where Header == EmptyView {
          verticalAlignment: VerticalAlignment = .center,
          horizontalAlignment: HorizontalAlignment = .center,
          spacing: CGFloat? = 0,
+         startOffset: CGFloat? = 0,
+         endOffset: CGFloat? = 0,
          pinnedViews: PinnedScrollableViews = .init(),
          onRefreshTreshold: CGFloat = 60,
          onRefresh: OnRefresh? = nil,
@@ -402,6 +422,8 @@ public extension ScrollableGrid where Header == EmptyView {
         self.verticalAlignment = verticalAlignment
         self.horizontalAlignment = horizontalAlignment
         self.spacing = spacing
+        self.startOffset = startOffset
+        self.endOffset = endOffset
         self.pinnedViews = pinnedViews
         self.onRefreshTreshold = onRefreshTreshold
         self.onRefresh = onRefresh
