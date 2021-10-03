@@ -13,7 +13,7 @@ public struct DateText: View {
     
     /// Creates view that displays a date in a text view
     /// - Parameter date: The date
-    init(_ date: Date) {
+    public init(_ date: Date) {
         self.date = date
     }
     
