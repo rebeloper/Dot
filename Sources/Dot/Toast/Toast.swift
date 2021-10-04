@@ -10,6 +10,7 @@ import SwiftUI
 public class Toast: ObservableObject {
     
     @Published private var shouldPresent: Bool = false
+    @Published private var shouldDismiss: Bool = false
     @Published public var isPresented: Bool = false
     @Published public var config: ToastConfig
     
@@ -24,10 +25,11 @@ public class Toast: ObservableObject {
     ///   - title: title of the Toast
     ///   - message: message of the Toast
     ///   - throttle: delay for the presentation; default is `0.5` to present the Toast only if it was not dismissed before our delay
-    public func present(_ title: String? = nil, message: String? = nil, throttle: Double = 0.5) {
+    public func present(_ title: String? = nil, message: String? = nil, after: Double = 0, throttle: Double = 0.5) {
         shouldPresent = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + throttle) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
             if self.shouldPresent {
+                self.shouldDismiss = false
                 self.config.title = title
                 self.config.message = message
                 withAnimation {
@@ -38,12 +40,17 @@ public class Toast: ObservableObject {
     }
     
     /// Dismisses the Toast
-    /// - Parameter after: delay for the dismiss; default is `0`
-    public func dismiss(after: Double = 0) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + after) {
-            self.shouldPresent = false
-            withAnimation {
-                self.isPresented = false
+    /// - Parameters:
+    ///    - after: delay for the dismiss; default is `0`
+    ///    - throttle: delay for the dismiss; default is `0.5` to delay the dismiss of the Toast if it was presented before our delay duration
+    public func dismiss(after: Double = 0, throttle: Double = 0.5)) {
+        shouldDismiss = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
+            if shouldDismiss {
+                self.shouldPresent = false
+                withAnimation {
+                    self.isPresented = false
+                }
             }
         }
     }
