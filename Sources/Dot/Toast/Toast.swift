@@ -43,7 +43,7 @@ public class Toast: ObservableObject {
     /// - Parameters:
     ///    - after: delay for the dismiss; default is `0`
     ///    - throttle: delay for the dismiss; default is `0.5` to delay the dismiss of the Toast if it was presented before our delay duration
-    public func dismiss(after: Double = 0, throttle: Double = 0.5)) {
+    public func dismiss(after: Double = 0, throttle: Double = 0.5) {
         shouldDismiss = true
         DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
             if shouldDismiss {
