@@ -46,7 +46,7 @@ public class Toast: ObservableObject {
     public func dismiss(after: Double = 0, throttle: Double = 0.5) {
         shouldDismiss = true
         DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
-            if shouldDismiss {
+            if self.shouldDismiss {
                 self.shouldPresent = false
                 withAnimation {
                     self.isPresented = false
