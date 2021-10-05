@@ -38,7 +38,7 @@ public class Toast: ObservableObject {
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle + 0.5) {
-            mayDismiss = true
+            self.mayDismiss = true
         }
     }
     
