@@ -61,7 +61,7 @@ public struct ToastConfig {
         messageForegroundColor: Color = .secondary,
         shadowColor: Color = .clear,
         shadowRadius: CGFloat = 0.0,
-        backgroundColor: Color = .gray.opacity(0.2),
+        backgroundColor: Color = .black.opacity(0.2),
         shouldAutoHide: Bool = false,
         allowsTapToHide: Bool = false,
         autoHideInterval: TimeInterval = 10.0
