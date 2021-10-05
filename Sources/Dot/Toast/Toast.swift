@@ -37,7 +37,7 @@ public class Toast: ObservableObject {
                 }
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle + 1) {
             self.mayDismiss = true
         }
     }
@@ -47,7 +47,7 @@ public class Toast: ObservableObject {
     ///    - after: delay for the dismiss; default is `0`
     ///    - throttle: delay for the dismiss; default is `0.5` to delay the dismiss of the Toast if it was presented before our delay duration
     public func dismiss(after: Double = 0, throttle: Double = 0.5) {
-        let wait: Double = mayDismiss ? 0 : 0.5
+        let wait: Double = mayDismiss ? 0 : 1
         DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle + wait) {
             self.shouldPresent = false
             withAnimation {
