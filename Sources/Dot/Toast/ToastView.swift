@@ -13,6 +13,9 @@ public struct ToastConfig {
     var message: String?
     
     var type: ToastType
+    
+    var throttle: Double
+    var minPresentedTime: Double
 
     var minSize: CGSize
     var cornerRadius: CGFloat
@@ -34,6 +37,8 @@ public struct ToastConfig {
     /// Creates a configuration for ToastView
     /// - Parameters:
     ///   - type: Toast type
+    ///   - throttle: the throttle for the Toast to be presented and dismissed
+    ///   - minPresentedTime: minimum time the Toast will be presented
     ///   - minSize: minimum size of the hud
     ///   - cornerRadius: Toast corner radius
     ///   - material: Toast material background
@@ -47,6 +52,8 @@ public struct ToastConfig {
     ///   - autoHideInterval: autohide time
     public init(
         type: ToastType = .top,
+        throttle: Double = 0.5,
+        minPresentedTime: Double = 1.0,
         minSize: CGSize = CGSize(width: 100.0, height: 100.0),
         cornerRadius: CGFloat = 18.0,
         material: Material = .thinMaterial,
@@ -60,6 +67,9 @@ public struct ToastConfig {
         autoHideInterval: TimeInterval = 10.0
     ) {
         self.type = type
+        
+        self.throttle = throttle
+        self.minPresentedTime = minPresentedTime
         
         self.minSize = minSize
         self.cornerRadius = cornerRadius

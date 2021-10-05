@@ -24,11 +24,10 @@ public class Toast: ObservableObject {
     /// - Parameters:
     ///   - title: title of the Toast
     ///   - message: message of the Toast
-    ///   - throttle: delay for the presentation; default is `0.5` to present the Toast only if it was not dismissed before our delay
-    public func present(_ title: String? = nil, message: String? = nil, after: Double = 0, throttle: Double = 0.5) {
+    public func present(_ title: String? = nil, message: String? = nil) {
         shouldPresent = true
         mayDismiss = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
             if self.shouldPresent {
                 self.config.title = title
                 self.config.message = message
@@ -37,18 +36,15 @@ public class Toast: ObservableObject {
                 }
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + config.minPresentedTime) {
             self.mayDismiss = true
         }
     }
     
     /// Dismisses the Toast
-    /// - Parameters:
-    ///    - after: delay for the dismiss; default is `0`
-    ///    - throttle: delay for the dismiss; default is `0.5` to delay the dismiss of the Toast if it was presented before our delay duration
-    public func dismiss(after: Double = 0, throttle: Double = 0.5) {
-        let wait: Double = mayDismiss ? 0 : 1
-        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle + wait) {
+    public func dismiss() {
+        let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
+        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + minPresentedTime) {
             self.shouldPresent = false
             withAnimation {
                 self.isPresented = false
