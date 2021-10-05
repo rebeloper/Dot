@@ -46,7 +46,7 @@ public class Toast: ObservableObject {
     public func dismiss() {
         let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
-            shouldPresent = false
+            self.shouldPresent = false
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + minPresentedTime) {
             withAnimation {
