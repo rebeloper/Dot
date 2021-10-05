@@ -46,6 +46,7 @@ public class Toast: ObservableObject {
     public func dismiss(after: Double = 0, throttle: Double = 0.5) {
         var wait: Double = 0
         let isPresentedDuration = isPresentedDate.timeIntervalSinceNow + after
+        print("isPresentedDuration: \(isPresentedDuration)")
         if isPresentedDuration < throttle {
             wait = 0.5
         }
