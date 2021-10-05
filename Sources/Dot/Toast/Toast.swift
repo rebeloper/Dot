@@ -10,8 +10,8 @@ import SwiftUI
 public class Toast: ObservableObject {
     
     @Published private var shouldPresent: Bool = false
-    @Published private var shouldDismiss: Bool = false
     @Published public var isPresented: Bool = false
+    @Published public var isPresentedDate: Date = Date()
     @Published public var config: ToastConfig
     
     /// Creates a Toast
@@ -29,7 +29,7 @@ public class Toast: ObservableObject {
         shouldPresent = true
         DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
             if self.shouldPresent {
-                self.shouldDismiss = false
+                self.isPresentedDate = Date()
                 self.config.title = title
                 self.config.message = message
                 withAnimation {
@@ -44,13 +44,15 @@ public class Toast: ObservableObject {
     ///    - after: delay for the dismiss; default is `0`
     ///    - throttle: delay for the dismiss; default is `0.5` to delay the dismiss of the Toast if it was presented before our delay duration
     public func dismiss(after: Double = 0, throttle: Double = 0.5) {
-        shouldDismiss = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + after + throttle) {
-            if self.shouldDismiss {
-                self.shouldPresent = false
-                withAnimation {
-                    self.isPresented = false
-                }
+        var wait: Double = 0
+        let isPresentedDuration = isPresentedDate.timeIntervalSinceNow + after
+        if isPresentedDuration < throttle {
+            wait = 0.5
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + after + wait) {
+            self.shouldPresent = false
+            withAnimation {
+                self.isPresented = false
             }
         }
     }
