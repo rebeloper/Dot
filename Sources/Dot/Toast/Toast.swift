@@ -9,7 +9,6 @@ import SwiftUI
 
 public class Toast: ObservableObject {
     
-    @Published private var shouldPresent: Bool = false
     @Published public var isPresented: Bool = false
     @Published private var mayDismiss: Bool = false
     @Published private var isThrottled: Bool = false
@@ -26,15 +25,14 @@ public class Toast: ObservableObject {
     ///   - title: title of the Toast
     ///   - message: message of the Toast
     public func present(_ title: String? = nil, message: String? = nil) {
-        shouldPresent = true
         mayDismiss = false
+        isThrottled = true
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
-            if self.shouldPresent {
-                self.config.title = title
-                self.config.message = message
-                withAnimation {
-                    self.isPresented = true
-                }
+            self.isThrottled = false
+            self.config.title = title
+            self.config.message = message
+            withAnimation {
+                self.isPresented = true
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + config.minPresentedTime) {
@@ -44,13 +42,14 @@ public class Toast: ObservableObject {
     
     /// Dismisses the Toast
     public func dismiss() {
-        let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
-        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
-            self.shouldPresent = false
-        }
+        let minPresentedTime: Double = mayDismiss ? 0 : isThrottled ? 0 : config.minPresentedTime
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + minPresentedTime) {
-            withAnimation {
+            if self.isThrottled {
                 self.isPresented = false
+            } else {
+                withAnimation {
+                    self.isPresented = false
+                }
             }
         }
     }
