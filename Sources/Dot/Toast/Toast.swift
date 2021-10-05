@@ -46,13 +46,11 @@ public class Toast: ObservableObject {
     
     /// Dismisses the Toast
     public func dismiss() {
-        let isThrottled = isThrottled
-        shouldPresent = !isThrottled
-        let minPresentedTime: Double = mayDismiss ? 0 : isThrottled ? 0 : config.minPresentedTime
-        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + minPresentedTime) {
-            if isThrottled {
-                self.isPresented = false
-            } else {
+        if isThrottled {
+            shouldPresent = false
+        } else {
+            let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
+            DispatchQueue.main.asyncAfter(deadline: .now() + minPresentedTime) {
                 withAnimation {
                     self.isPresented = false
                 }

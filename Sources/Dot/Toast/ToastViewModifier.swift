@@ -26,4 +26,12 @@ public extension View {
     func uses(_ toast: Toast) -> some View {
         modifier(ToastViewModifier(toast: toast))
     }
+    
+    /// Adds a Toast to the view and sets it as an ``@EnvironmentObject``
+    /// - Parameter toast: Toast
+    /// - Returns: a view with a Toast
+    func usesEnvironmentObject(_ toast: Toast) -> some View {
+        self.uses(toast)
+            .environmentObject(toast)
+    }
 }
