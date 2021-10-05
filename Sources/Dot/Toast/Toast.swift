@@ -31,7 +31,7 @@ public class Toast: ObservableObject {
         isThrottled = true
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
             self.isThrottled = false
-            if shouldPresent {
+            if self.shouldPresent {
                 self.config.title = title
                 self.config.message = message
                 withAnimation {
