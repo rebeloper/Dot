@@ -12,6 +12,7 @@ public class Toast: ObservableObject {
     @Published private var shouldPresent: Bool = false
     @Published public var isPresented: Bool = false
     @Published private var mayDismiss: Bool = false
+    @Published private var isThrottled: Bool = false
     @Published public var config: ToastConfig
     
     /// Creates a Toast
@@ -44,8 +45,10 @@ public class Toast: ObservableObject {
     /// Dismisses the Toast
     public func dismiss() {
         let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
+        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
+            shouldPresent = false
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + minPresentedTime) {
-            self.shouldPresent = false
             withAnimation {
                 self.isPresented = false
             }
