@@ -28,6 +28,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
     
     private var refreshViewLenght: CGFloat = 30
     
+    @State private var size: CGSize = .zero
+    
     /// Creates a new instance that's scrollable.
     ///
     /// - Parameters:
@@ -154,6 +156,10 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                         .offset(x: (state == .loading) ? refreshViewLenght : 0)
                     }
                 }
+                .onPreferenceChange(ViewSizeKey.self) {
+                    size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
+                }
+                .frame(width: axis == .horizontal ? nil : size.width, height: axis == .vertical ? nil : size.height)
                 
                 // The loading view. It's offset to the top of the content unless we're loading.
                 ZStack {
@@ -206,6 +212,12 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
     
 }
 
+private struct ViewSizeKey: PreferenceKey {
+    static var defaultValue: CGSize { .zero }
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = value == .zero ? CGSize(width: value.width + nextValue().width, height: value.height + nextValue().height) : value
+    }
+}
 
 // There are two type of positioning views - one that scrolls with the content,
 // and one that stays fixed
@@ -443,6 +455,20 @@ public extension ScrollableGrid where Header == EmptyView {
 }
 
 public extension View {
+    
+    func scrollableItem() -> some View {
+        self.background(GeometryReader { gp in
+            // calculate height by consumed background and store in
+            // view preference
+            Color.clear
+                .preference(key: ViewSizeKey.self,
+                            value: gp.frame(in: .local).size)
+                .onAppear {
+                    print("->> \(gp.frame(in: .local).size)")
+                }
+        })
+    }
+    
     /// Creates a lazy grid that grows vertically, given the provided properties.
     ///
     /// - Parameters:
