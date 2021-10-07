@@ -196,7 +196,8 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
         .onPreferenceChange(ViewSizeKey.self) {
             size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
         }
-        .frame(width: axis == .vertical ? size.width : nil, height: axis == .vertical ? nil : size.height)
+//        .frame(width: axis == .vertical ? size.width : nil, height: axis == .vertical ? nil : size.height)
+        .frame(height: axis == .vertical ? nil : size.height)
     }
     
     public func scrollViewOffsetReader(axes: Axis.Set) -> some View {
