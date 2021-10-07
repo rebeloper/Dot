@@ -156,12 +156,6 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                         .offset(x: (state == .loading) ? refreshViewLenght : 0)
                     }
                 }
-                .if(axis == .vertical, transform: { view in
-                    view.frame(width: size.width)
-                })
-                    .if(axis == .horizontal, transform: { view in
-                        view.frame(height: size.height)
-                    })
                 
                 // The loading view. It's offset to the top of the content unless we're loading.
                 ZStack {
@@ -198,10 +192,16 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                     }
                 }
             })
-            .onPreferenceChange(ViewSizeKey.self) {
-                size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
-            }
         }
+        .onPreferenceChange(ViewSizeKey.self) {
+            size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
+        }
+        .if(axis == .vertical, transform: { view in
+            view.frame(width: size.width)
+        })
+            .if(axis == .horizontal, transform: { view in
+                view.frame(height: size.height)
+            })
     }
     
     public func scrollViewOffsetReader(axes: Axis.Set) -> some View {
