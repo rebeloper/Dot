@@ -126,6 +126,7 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                                     Spacer().frame(width: 0, height: endPadding)
                         }
                         .offset(y: (state == .loading) ? refreshViewLenght : 0)
+                        .frame(width: size.width)
                     } else {
                         HStack(spacing: 0) {
                             scrollViewOffsetReader(axes: .horizontal)
@@ -154,12 +155,9 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                                     Spacer().frame(width: endPadding, height: 0)
                         }
                         .offset(x: (state == .loading) ? refreshViewLenght : 0)
+                        .frame(height: size.height)
                     }
                 }
-                .onPreferenceChange(ViewSizeKey.self) {
-                    size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
-                }
-                .frame(width: axis == .horizontal ? nil : size.width, height: axis == .vertical ? nil : size.height)
                 
                 // The loading view. It's offset to the top of the content unless we're loading.
                 ZStack {
@@ -196,6 +194,9 @@ public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
                     }
                 }
             })
+            .onPreferenceChange(ViewSizeKey.self) {
+                size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
+            }
         }
     }
     
