@@ -1,5 +1,5 @@
 //
-//  ScrollableGrid.swift
+//  ScrollingGrid.swift
 //  Dot
 //
 //  Created by Alex Nagy on 13.09.2021.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ScrollableGrid<Content: View, Header: View, Footer: View>: View {
+public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
     private var axis: Axis.Set
     private var gridItems: [GridItem]
     private var showsIndicators: Bool
@@ -288,7 +288,7 @@ public struct ScrollViewOffsetPreferenceKey: PreferenceKey {
     public static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {}
 }
 
-public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
+public extension ScrollingGrid where Header == EmptyView, Footer == EmptyView {
     /// Creates a new instance that's scrollable.
     ///
     /// - Parameters:
@@ -342,7 +342,7 @@ public extension ScrollableGrid where Header == EmptyView, Footer == EmptyView {
     }
 }
 
-public extension ScrollableGrid where Footer == EmptyView {
+public extension ScrollingGrid where Footer == EmptyView {
     /// Creates a new instance that's scrollable.
     ///
     /// - Parameters:
@@ -398,7 +398,7 @@ public extension ScrollableGrid where Footer == EmptyView {
     }
 }
 
-public extension ScrollableGrid where Header == EmptyView {
+public extension ScrollingGrid where Header == EmptyView {
     /// Creates a new instance that's scrollable.
     ///
     /// - Parameters:
@@ -454,8 +454,29 @@ public extension ScrollableGrid where Header == EmptyView {
     }
 }
 
+/// ``ForEach`` inside ``Group`` with ``scrollableItem``s. ``data`` must be an array of ``Identifiable``s. Use with ``.scrolls(...)``
+public struct ScrollableGrid<I: Identifiable, C: View>: View {
+    
+    private let data: [I]
+    private let content: (I) -> (C)
+    
+    public init(_ data: [I], @ViewBuilder _ content: @escaping (I) -> (C)) {
+        self.data = data
+        self.content = content
+    }
+    
+    public var body: some View {
+        Group {
+            ForEach(data) { identifiable in
+                content(identifiable).scrollableItem()
+            }
+        }
+    }
+}
+
 public extension View {
     
+    /// Gives the view a ``ViewSizeKey`` preference key
     func scrollableItem() -> some View {
         self.background(GeometryReader { gp in
             // calculate height by consumed background and store in
@@ -463,9 +484,6 @@ public extension View {
             Color.clear
                 .preference(key: ViewSizeKey.self,
                             value: gp.frame(in: .local).size)
-                .onAppear {
-                    print("->> \(gp.frame(in: .local).size)")
-                }
         })
     }
     
@@ -702,7 +720,7 @@ public extension View {
                                              onOffsetChange: ((CGFloat) -> ())? = nil,
                                              @ViewBuilder header: @escaping () -> Header,
                                              @ViewBuilder footer: @escaping () -> Footer) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollingGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         } header: {
             header()
@@ -744,7 +762,7 @@ public extension View {
                  onRefreshTreshold: CGFloat = 60,
                  onRefresh: OnRefresh? = nil,
                  onOffsetChange: ((CGFloat) -> ())? = nil) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollingGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         }
     }
@@ -784,7 +802,7 @@ public extension View {
                                onRefresh: OnRefresh? = nil,
                                onOffsetChange: ((CGFloat) -> ())? = nil,
                                @ViewBuilder header: @escaping () -> Header) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollingGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         } header: {
             header()
@@ -826,7 +844,7 @@ public extension View {
                                onRefresh: OnRefresh? = nil,
                                onOffsetChange: ((CGFloat) -> ())? = nil,
                                @ViewBuilder footer: @escaping () -> Footer) -> some View {
-        ScrollableGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
+        ScrollingGrid(scrolls: axis, gridItems: gridItems, showsIndicators: showsIndicators, verticalAlignment: verticalAlignment, horizontalAlignment: horizontalAlignment, spacing: spacing, startPadding: startPadding, endPadding: endPadding, pinnedViews: pinnedViews, onRefreshTreshold: onRefreshTreshold, onRefresh: onRefresh, onOffsetChange: onOffsetChange) {
             self
         } footer: {
             footer()
