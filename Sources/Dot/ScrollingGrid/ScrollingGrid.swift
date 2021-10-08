@@ -28,8 +28,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
     
     private var refreshViewLenght: CGFloat = 30
     
-    @State private var size: CGSize = .zero
-    
     /// Creates a new instance that's scrollable.
     ///
     /// - Parameters:
@@ -193,10 +191,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
                 }
             })
         }
-        .onPreferenceChange(ViewSizeKey.self) {
-            size = CGSize(width: max(size.width, $0.width), height: max(size.height, $0.height))
-        }
-        .frame(height: axis == .vertical ? nil : size.height)
     }
     
     public func scrollViewOffsetReader(axes: Axis.Set) -> some View {
@@ -210,13 +204,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
         .frame(width: axes == .vertical ? nil : 1, height: axes == .vertical ? 1 : nil)
     }
     
-}
-
-private struct ViewSizeKey: PreferenceKey {
-    static var defaultValue: CGSize { .zero }
-    static func reduce(value: inout Value, nextValue: () -> Value) {
-        value = value == .zero ? CGSize(width: value.width + nextValue().width, height: value.height + nextValue().height) : value
-    }
 }
 
 // There are two type of positioning views - one that scrolls with the content,
@@ -468,24 +455,13 @@ public struct ScrollableGrid<I: Identifiable, C: View>: View {
     public var body: some View {
         Group {
             ForEach(data) { identifiable in
-                content(identifiable).scrollableItem()
+                content(identifiable)
             }
         }
     }
 }
 
 public extension View {
-    
-    /// Gives the view a ``ViewSizeKey`` preference key
-    func scrollableItem() -> some View {
-        self.background(GeometryReader { gp in
-            // calculate height by consumed background and store in
-            // view preference
-            Color.clear
-                .preference(key: ViewSizeKey.self,
-                            value: gp.frame(in: .local).size)
-        })
-    }
     
     /// Creates a lazy grid that grows vertically, given the provided properties.
     ///
