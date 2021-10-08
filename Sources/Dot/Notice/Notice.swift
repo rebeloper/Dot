@@ -138,6 +138,10 @@ public extension NoticeButton {
             title = "Confirm"
         case .deny:
             title = "Deny"
+        case .open:
+            title = "Open"
+        case .close:
+            title = "Close"
         }
         self.init(title: title, style: style) { _ in
             action?()
