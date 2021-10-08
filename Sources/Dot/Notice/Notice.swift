@@ -173,5 +173,5 @@ public enum NoticeStyle {
 }
 
 public enum NoticeButtonType {
-    case ok, cancel, agree, later, remindMeLater, skip, dontAskAgain, dismiss, forward, back, previous, next, yes, no, confirm, deny
+    case ok, cancel, agree, later, remindMeLater, skip, dontAskAgain, dismiss, forward, back, previous, next, yes, no, confirm, deny, open, close
 }
