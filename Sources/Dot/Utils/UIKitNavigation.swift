@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 
 public struct UIKitNavigation {
+    /// Pops to root view. Use: ``UIKitNavigation.popToRootView(UIApplication.shared.windows)``
     public static func popToRootView(_ windows: [UIWindow]) {
         findNavigationController(viewController: windows.filter { $0.isKeyWindow }.first?.rootViewController)?
             .popToRootViewController(animated: true)
