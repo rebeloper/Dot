@@ -196,4 +196,13 @@ public extension View {
             self
         }
     }
+    
+    /// Layers the given views behind this ``TextEditor``.
+    func textEditorBackground<V>(@ViewBuilder _ content: () -> V) -> some View where V : View {
+        self
+            .onAppear {
+                UITextView.appearance().backgroundColor = .clear
+            }
+            .background(content())
+    }
 }
