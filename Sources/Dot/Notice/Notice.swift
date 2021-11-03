@@ -156,7 +156,7 @@ public extension NoticeController {
     ///   - flag: animation flag; default is `true`
     ///   - completion: completion callback
     func presentNotice(animated flag: Bool = true, completion: (() -> Void)? = nil) {
-        UIApplication.rootViewController()?.present(self, animated: flag, completion: completion)
+        UIViewController.top()?.present(self, animated: flag, completion: completion)
     }
     
     /// Dismisses a Notice on the root view controller with optional animation flag and completion
@@ -164,7 +164,7 @@ public extension NoticeController {
     ///   - flag: animation flag; default is `true`
     ///   - completion: completion callback
     func dismissNotice(animated flag: Bool = true, completion: (() -> Void)? = nil) {
-        UIApplication.rootViewController()?.dismiss(animated: flag, completion: completion)
+        UIViewController.top()?.dismiss(animated: flag, completion: completion)
     }
 }
 

@@ -18,4 +18,21 @@ public extension UIViewController {
             return self
         }
     }
+    
+    /// Gets the top most view controller
+    static func top() -> UIViewController? {
+        var from = UIApplication.rootViewController()
+        while (from != nil) {
+            if let to = (from as? UITabBarController)?.selectedViewController {
+                from = to
+            } else if let to = (from as? UINavigationController)?.visibleViewController {
+                from = to
+            } else if let to = from?.presentedViewController {
+                from = to
+            } else {
+                break
+            }
+        }
+        return from
+    }
 }
