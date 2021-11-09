@@ -25,11 +25,12 @@ public class Toast: ObservableObject {
     /// - Parameters:
     ///   - title: title of the Toast
     ///   - message: message of the Toast
-    @MainActor
     public func present(_ title: String? = nil, message: String? = nil) {
-        shouldPresent = true
-        mayDismiss = false
-        isThrottled = true
+        DispatchQueue.main.async {
+            self.shouldPresent = true
+            self.mayDismiss = false
+            self.isThrottled = true
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
             self.isThrottled = false
             if self.shouldPresent {
@@ -46,10 +47,11 @@ public class Toast: ObservableObject {
     }
     
     /// Dismisses the Toast
-    @MainActor
     public func dismiss() {
         if isThrottled {
-            shouldPresent = false
+            DispatchQueue.main.async {
+                self.shouldPresent = false
+            }
         } else {
             let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
             DispatchQueue.main.asyncAfter(deadline: .now() + minPresentedTime) {
