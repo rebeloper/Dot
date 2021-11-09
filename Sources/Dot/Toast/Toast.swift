@@ -25,6 +25,7 @@ public class Toast: ObservableObject {
     /// - Parameters:
     ///   - title: title of the Toast
     ///   - message: message of the Toast
+    @MainActor
     public func present(_ title: String? = nil, message: String? = nil) {
         shouldPresent = true
         mayDismiss = false
@@ -45,6 +46,7 @@ public class Toast: ObservableObject {
     }
     
     /// Dismisses the Toast
+    @MainActor
     public func dismiss() {
         if isThrottled {
             shouldPresent = false
