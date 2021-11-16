@@ -27,17 +27,20 @@ public struct NavigationStack<Screen, ScreenView: View>: View {
     }
     
     public var body: some View {
-        stack
-            .enumerated()
-            .reversed()
-            .reduce(NavigationNode<Screen, ScreenView>.end) { presentedNode, new in
-                return NavigationNode<Screen, ScreenView>.view(
-                    buildView(new.element.screen),
-                    presenting: presentedNode,
-                    stack: $stack,
-                    index: new.offset,
-                    options: new.element.options)
-            }
+        NavigationView {
+            stack
+                .enumerated()
+                .reversed()
+                .reduce(NavigationNode<Screen, ScreenView>.end) { presentedNode, new in
+                    return NavigationNode<Screen, ScreenView>.view(
+                        buildView(new.element.screen),
+                        presenting: presentedNode,
+                        stack: $stack,
+                        index: new.offset,
+                        options: new.element.options)
+                }
+        }
+        .navigationViewStyle(.stack)
     }
 }
 
