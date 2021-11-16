@@ -11,4 +11,9 @@ import Foundation
 public struct ScreenElement<Screen> {
     public let screen: Screen
     public let options: NavigationPresentationOptions
+    
+    public init(screen: Screen, options: NavigationPresentationOptions) {
+        self.screen = screen
+        self.options = options
+    }
 }
