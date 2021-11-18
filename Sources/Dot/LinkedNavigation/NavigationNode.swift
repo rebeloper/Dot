@@ -12,7 +12,7 @@ import SwiftUI
 /// a navigation stack.
 indirect enum NavigationNode<Screen, V: View>: View {
     
-    case view(V, presenting: NavigationNode<Screen, V>, stack: Binding<[ScreenElement<Screen>]>, index: Int, options: NavigationPresentationOptions)
+    case view(V, presenting: NavigationNode<Screen, V>, stack: Binding<[ScreenElement<Screen>]>, index: Int, options: NavigationOptions)
     case end
     
     private var isActiveBinding: Binding<Bool> {
@@ -53,7 +53,7 @@ indirect enum NavigationNode<Screen, V: View>: View {
         }
     }
     
-    private var presentedOptions: NavigationPresentationOptions? {
+    private var navigationOptions: NavigationOptions? {
         switch self {
         case .end, .view(_, .end, _, _, _):
             return nil
@@ -65,15 +65,22 @@ indirect enum NavigationNode<Screen, V: View>: View {
     var body: some View {
         presentingView
             .background(
-                NavigationLink(destination: presentedView, isActive: presentedOptions?.style == ._pushNotAvailable ? isActiveBinding : .constant(false), label: EmptyView.init)
+                NavigationLink(destination: presentedView
+                                .onDisappear(perform: {
+                                    if navigationOptions?.style == .page, !isActiveBinding.wrappedValue {
+                                        navigationOptions?.onDismiss?()
+                                    }
+                                }),
+                               isActive: navigationOptions?.style == .page ? isActiveBinding : .constant(false),
+                               label: EmptyView.init)
                     .isDetailLink(false)
                     .hidden()
             )
             .fullScreenCover(
-                isPresented: presentedOptions?.style == .fullScreenCover || presentedOptions?.style == .navigationFullScreenCover ? isActiveBinding : .constant(false),
-                onDismiss: presentedOptions?.onDismiss,
+                isPresented: navigationOptions?.style == .fullScreenCover || navigationOptions?.style == .navigationFullScreenCover ? isActiveBinding : .constant(false),
+                onDismiss: navigationOptions?.onDismiss,
                 content: {
-                    if presentedOptions?.style == .navigationFullScreenCover {
+                    if navigationOptions?.style == .navigationFullScreenCover {
                         NavigationView {
                             presentedView
                         }
@@ -84,10 +91,10 @@ indirect enum NavigationNode<Screen, V: View>: View {
                 }
             )
             .sheet(
-                isPresented: presentedOptions?.style == .sheet || presentedOptions?.style == .navigationSheet ? isActiveBinding : .constant(false),
-                onDismiss: presentedOptions?.onDismiss,
+                isPresented: navigationOptions?.style == .sheet || navigationOptions?.style == .navigationSheet ? isActiveBinding : .constant(false),
+                onDismiss: navigationOptions?.onDismiss,
                 content: {
-                    if presentedOptions?.style == .navigationSheet {
+                    if navigationOptions?.style == .navigationSheet {
                         NavigationView {
                             presentedView
                         }

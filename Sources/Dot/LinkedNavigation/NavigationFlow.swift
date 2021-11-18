@@ -27,7 +27,7 @@ public struct NavigationFlow<Screen> {
     /// Initializes the stack with a single root screen.
     /// - Parameter root: The root screen.
     public init(root: Screen) {
-        self.screenElements = [ScreenElement(screen: root, options: .init(style: ._pushNotAvailable))]
+        self.screenElements = [ScreenElement(screen: root, options: .init(style: .default))]
     }
     
 }

@@ -10,10 +10,15 @@ import Foundation
 /// Convenience struct for containing a Screen and its options
 public struct ScreenElement<Screen> {
     public let screen: Screen
-    public let options: NavigationPresentationOptions
+    public let options: NavigationOptions
     
-    public init(screen: Screen, options: NavigationPresentationOptions) {
+    public init(screen: Screen, options: NavigationOptions) {
         self.screen = screen
         self.options = options
+    }
+    
+    public init(screen: Screen) {
+        self.screen = screen
+        self.options = .init(style: .default)
     }
 }
