@@ -44,5 +44,13 @@ public struct PrintInteractionController {
             }
         }
     }
+    
+    public static func present(url: URL, printInfo: UIPrintInfo? = nil) async -> PrintingResult {
+        await withCheckedContinuation({ continuation in
+            present(url: url, printInfo: printInfo) { result in
+                continuation.resume(returning: result)
+            }
+        })
+    }
 }
 
