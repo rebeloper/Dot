@@ -94,9 +94,7 @@ public extension NoticeButton {
     ///   - action: action of the notice button
     convenience init(title: String, style: Style = .default, action: (() -> ())?) {
         self.init(title: title, style: style) { _ in
-            Task {
-                action?()
-            }
+            action?()
         }
     }
     
@@ -105,7 +103,7 @@ public extension NoticeButton {
     ///   - type: type of the notice button
     ///   - style: style of the notice button, default is `cancel`
     ///   - action: action of the notice button
-    convenience init(_ type: NoticeButtonType, style: Style = .cancel, action: (() -> ())? = nil) {
+    convenience init(_ type: NoticeButtonType, style: Style = .cancel, action: (() async throws -> ())? = nil) async {
         var title = ""
         switch type {
         case .ok:
@@ -145,10 +143,9 @@ public extension NoticeButton {
         case .close:
             title = "Close"
         }
+        let action: ()? = try? await action?()
         self.init(title: title, style: style) { _ in
-            Task {
-                action?()
-            }
+            action
         }
     }
 }
