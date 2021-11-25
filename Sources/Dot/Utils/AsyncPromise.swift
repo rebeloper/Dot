@@ -7,7 +7,7 @@
 
 import Combine
 
-public struct AsyncPromise<T: Codable> {
+public struct AsyncPromise<T> {
     @MainActor
     public static func fulfill(_ promise: Future<T, Error>, storedIn cancellables: inout Set<AnyCancellable>) async throws -> T {
         try await withCheckedThrowingContinuation({ continuation in
