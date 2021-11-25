@@ -8,20 +8,21 @@
 import Foundation
 import CoreLocation
 import Combine
+
 #if !os(macOS)
 import UIKit
 #endif
 
 #if os(iOS)
-public let defaultAuthorizationRequestType = CLAuthorizationStatus.authorizedWhenInUse
+public let defaultCLAuthorizationStatus = CLAuthorizationStatus.authorizedWhenInUse
 #else
-public let defaultAuthorizationRequestType = CLAuthorizationStatus.authorizedAlways
+public let defaultCLAuthorizationStatus = CLAuthorizationStatus.authorizedAlways
 #endif
 
 #if os(iOS)
-public let allowedAuthorizationTypes : Set<CLAuthorizationStatus> = Set([.authorizedWhenInUse, .authorizedAlways])
+public let allowedCLAuthorizationStatuses : Set<CLAuthorizationStatus> = Set([.authorizedWhenInUse, .authorizedAlways])
 #elseif os(macOS)
-public let allowedAuthorizationTypes : Set<CLAuthorizationStatus> = Set([.authorized, .authorizedAlways])
+public let allowedCLAuthorizationStatuses : Set<CLAuthorizationStatus> = Set([.authorized, .authorizedAlways])
 #endif
 
 /**
@@ -90,12 +91,12 @@ public class LocationProvider: NSObject, ObservableObject {
      In case, the access has already been denied, execute the `onAuthorizationDenied` closure.
      The default behavior is to present an alert that suggests going to the settings page.
      */
-    public func requestAuthorization(authorizationRequestType: CLAuthorizationStatus = defaultAuthorizationRequestType) -> Void {
+    public func requestAuthorization(status: CLAuthorizationStatus = defaultCLAuthorizationStatus) -> Void {
         if self.authorizationStatus == CLAuthorizationStatus.denied {
             onAuthorizationStatusDenied()
         }
         else {
-            switch authorizationRequestType {
+            switch status {
             case .authorizedWhenInUse:
                 self.lm.requestWhenInUseAuthorization()
             case .authorizedAlways:
@@ -111,7 +112,7 @@ public class LocationProvider: NSObject, ObservableObject {
         self.requestAuthorization()
         
         if let status = self.authorizationStatus {
-            guard allowedAuthorizationTypes.contains(status) else {
+            guard allowedCLAuthorizationStatuses.contains(status) else {
                 throw LocationProviderError.noAuthorization
             }
         }
