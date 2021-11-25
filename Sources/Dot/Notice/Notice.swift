@@ -94,7 +94,9 @@ public extension NoticeButton {
     ///   - action: action of the notice button
     convenience init(title: String, style: Style = .default, action: (() -> ())?) {
         self.init(title: title, style: style) { _ in
-            action?()
+            Task {
+                action?()
+            }
         }
     }
     
@@ -144,7 +146,9 @@ public extension NoticeButton {
             title = "Close"
         }
         self.init(title: title, style: style) { _ in
-            action?()
+            Task {
+                action?()
+            }
         }
     }
 }
