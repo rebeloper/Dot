@@ -103,7 +103,7 @@ public extension NoticeButton {
     ///   - type: type of the notice button
     ///   - style: style of the notice button, default is `cancel`
     ///   - action: action of the notice button
-    convenience init(_ type: NoticeButtonType, style: Style = .cancel, action: (() -> ())? = nil) {
+    convenience init(_ type: NoticeButtonType, style: Style = .default, action: (() -> ())? = nil) {
         var title = ""
         switch type {
         case .ok:
