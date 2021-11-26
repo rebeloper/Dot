@@ -156,7 +156,16 @@ public extension NoticeController {
     ///   - flag: animation flag; default is `true`
     ///   - completion: completion callback
     func presentNotice(animated flag: Bool = true, completion: (() -> Void)? = nil) {
-        UIViewController.top()?.present(self, animated: flag, completion: completion)
+        guard let topViewController = UIViewController.top() else {
+            print("Notice Error: Failed to get top view controller")
+            return
+        }
+        if let popoverController = self.popoverPresentationController {
+            popoverController.sourceView = topViewController.view
+            popoverController.sourceRect = CGRect(x: topViewController.view.bounds.midX, y: topViewController.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        topViewController.present(self, animated: flag, completion: completion)
     }
     
     /// Dismisses a Notice on the root view controller with optional animation flag and completion
