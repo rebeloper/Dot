@@ -39,6 +39,10 @@ public extension Color {
     static let systemPurple = Color(UIColor.systemPurple)
     static let systemTeal = Color(UIColor.systemTeal)
     static let systemIndigo = Color(UIColor.systemIndigo)
+    static let systemBrown = Color(UIColor.systemBrown)
+    static let systemMint = Color(UIColor.systemMint)
+    static let systemCyan = Color(UIColor.systemCyan)
+    
     // Adaptable grayscales
     static let systemGray = Color(UIColor.systemGray)
     static let systemGray2 = Color(UIColor.systemGray2)
@@ -74,6 +78,9 @@ public extension Color {
     static let secondarySystemFill = Color(UIColor.secondarySystemFill)
     static let tertiarySystemFill = Color(UIColor.tertiarySystemFill)
     static let quaternarySystemFill = Color(UIColor.quaternarySystemFill)
+    
+    static let lightText = Color(UIColor.lightText)
+    static let darkText = Color(UIColor.darkText)
     
     // "Fixed" colors
     static let fixedBlack = Color(UIColor.black)
