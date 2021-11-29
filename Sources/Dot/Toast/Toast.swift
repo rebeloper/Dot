@@ -51,6 +51,9 @@ public class Toast: ObservableObject {
         if isThrottled {
             DispatchQueue.main.async {
                 self.shouldPresent = false
+                withAnimation {
+                    self.isPresented = false
+                }
             }
         } else {
             let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
