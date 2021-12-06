@@ -9,6 +9,7 @@ import Combine
 
 public struct AsyncPromise<T> {
     @MainActor
+    @discardableResult
     public static func fulfill(_ promise: Future<T, Error>, storedIn cancellables: inout Set<AnyCancellable>) async throws -> T {
         try await withCheckedThrowingContinuation({ continuation in
             promise.sink { result in
