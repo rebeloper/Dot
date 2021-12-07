@@ -73,25 +73,29 @@ indirect enum NavigationNode<Page, V: View>: View {
                                 }),
                                isActive: navigationOptions?.style == NavigationStyle.regular(isDetailLink: true) || navigationOptions?.style == NavigationStyle.regular(isDetailLink: false) ? isActiveBinding : .constant(false),
                                label: EmptyView.init)
-                #if os(iOS)
                     .isDetailLink(navigationOptions?.style == NavigationStyle.regular(isDetailLink: true) ? true : false)
-                #endif
                     .hidden()
             )
-#if os(iOS)
             .fullScreenCover(
-                isPresented: navigationOptions?.style == .fullScreenCover ? isActiveBinding : .constant(false),
+                isPresented: navigationOptions?.style == .fullScreenCover || navigationOptions?.style == .navigatableFullScreenCover ? isActiveBinding : .constant(false),
                 onDismiss: navigationOptions?.onDismiss,
                 content: {
-                    presentedView
+                    if navigationOptions?.style == .navigatableFullScreenCover {
+                        presentedView.navigatable()
+                    } else {
+                        presentedView
+                    }
                 }
             )
-#endif
             .sheet(
-                isPresented: navigationOptions?.style == .sheet ? isActiveBinding : .constant(false),
+                isPresented: navigationOptions?.style == .sheet || navigationOptions?.style == .navigatableSheet ? isActiveBinding : .constant(false),
                 onDismiss: navigationOptions?.onDismiss,
                 content: {
-                    presentedView
+                    if navigationOptions?.style == .navigatableSheet {
+                        presentedView.navigatable()
+                    } else {
+                        presentedView
+                    }
                 }
             )
     }

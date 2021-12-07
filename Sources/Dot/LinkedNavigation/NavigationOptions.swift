@@ -34,6 +34,8 @@ public enum NavigationStyle: Equatable {
     case regular(isDetailLink: Bool = false)
     case sheet
     case fullScreenCover
+    case navigatableSheet
+    case navigatableFullScreenCover
 
     public static let `default`: NavigationStyle = .regular(isDetailLink: false)
 }
