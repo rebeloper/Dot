@@ -9,52 +9,63 @@ import SwiftUI
 
 extension Binding {
     
-    /// Appends a ``Screen`` onto the ``NavigationStack``.
+    /// Appends a ``Page`` onto the ``NavigationStack``.
     /// - Parameter options: Navigation options for ``style`` and optional ``onDismiss``
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func present<Screen>(_ screen: Screen,
-                                options: NavigationOptions = .init(style: .default),
-                                completion: (() -> Void)?) where Value == NavigationFlow<Screen> {
-        self.wrappedValue.screenElements.append(ScreenElement<Screen>(screen: screen, options: options))
+    public func present<Page>(
+        _ page: Page,
+        options: NavigationOptions = .init(style: .default),
+        completion: (() -> Void)?
+    ) where Value == NavigationFlow<Page> {
+        self.wrappedValue.pageElements.append(NavigationPageElement<Page>(page: page, options: options))
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.pushPresentMilliseconds)) {
             completion?()
         }
     }
     
-    /// Appends a ``Screen`` onto the ``NavigationStack``.
+    /// Appends a ``Page`` onto the ``NavigationStack``.
     /// - Parameter options: Navigation options for ``style`` and optional ``onDismiss``
-    public func present<Screen>(_ screen: Screen,
-                                options: NavigationOptions = .init(style: .default)) where Value == NavigationFlow<Screen> {
-        present(screen, options: options, completion: nil)
+    public func present<Page>(
+        _ page: Page,
+        options: NavigationOptions = .init(style: .default)
+    ) where Value == NavigationFlow<Page> {
+        present(page, options: options, completion: nil)
     }
     
-    /// Pops the last ``Screen`` from the ``NavigationStack``.
+    /// Pops the last ``Page`` from the ``NavigationStack``.
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func pop<Screen>(completion: @escaping () -> () = {}) where Value == NavigationFlow<Screen> {
-        self.wrappedValue.screenElements = self.wrappedValue.screenElements.dropLast()
+    public func pop<Page>(
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
+        self.wrappedValue.pageElements = self.wrappedValue.pageElements.dropLast()
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds)) {
             completion()
         }
     }
     
-    /// Pops all the ``Screen``s from the ``NavigationStack``.
+    /// Pops all the ``Page``s from the ``NavigationStack``.
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func popToRoot<Screen>(completion: @escaping () -> () = {}) where Value == NavigationFlow<Screen> {
-        for index in 0..<wrappedValue.screenElements.count - 1 {
+    public func popToRoot<Page>(
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
+        for index in 0..<wrappedValue.pageElements.count - 1 {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
                 pop()
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (wrappedValue.screenElements.count - 1))) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (wrappedValue.pageElements.count - 1))) {
             completion()
         }
     }
     
-    /// Pops the specified last ``Screen``s from the ``NavigationStack``.
+    /// Pops the specified last ``Page``s from the ``NavigationStack``.
     /// - Parameter last: The number of screens to be popped; default is 1
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func pop<Screen>(last: Int = 1, completion: @escaping () -> () = {}) where Value == NavigationFlow<Screen> {
-        let last = last >= wrappedValue.screenElements.count ? wrappedValue.screenElements.count - 1 : last
+    public func pop<Page>(
+        last: Int = 1,
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
+        let last = last >= wrappedValue.pageElements.count ? wrappedValue.pageElements.count - 1 : last
         for index in 0..<last {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
                 self.pop()
@@ -65,14 +76,17 @@ extension Binding {
         }
     }
     
-    /// Pops to the ``Screen`` at the specified ``index`` in the ``NavigationStack``.
-    /// - Parameter index: The index of the screen to be popped to
+    /// Pops to the ``Page`` at the specified ``index`` in the ``NavigationStack``.
+    /// - Parameter index: The index of the page to be popped to
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func popTo<Screen>(index: Int, completion: @escaping () -> () = {}) where Value == NavigationFlow<Screen> {
-        guard index < wrappedValue.screenElements.count else { return }
+    public func popTo<Page>(
+        index: Int,
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
+        guard index < wrappedValue.pageElements.count else { return }
         let index = index >= 0 ? index : 0
-        let difference = wrappedValue.screenElements.count - index - 1
-        let last = difference >= wrappedValue.screenElements.count ? wrappedValue.screenElements.count - 1 : difference
+        let difference = wrappedValue.pageElements.count - index - 1
+        let last = difference >= wrappedValue.pageElements.count ? wrappedValue.pageElements.count - 1 : difference
         for index in 0..<last {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
                 self.pop()
@@ -83,14 +97,17 @@ extension Binding {
         }
     }
     
-    /// Pops to the specified ``Screen`` in the ``NavigationStack``.
-    /// - Parameter screen: the screen to be popped to
+    /// Pops to the specified ``Page`` in the ``NavigationStack``.
+    /// - Parameter page: the page to be popped to
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func popTo<Screen: Equatable>(screen: Screen, completion: @escaping () -> () = {}) where Value == NavigationFlow<Screen> {
+    public func popTo<Page: Equatable>(
+        page: Page,
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
         var last = 0
-        for screenElemet in wrappedValue.screenElements.reversed() {
-            let theScreen = screenElemet.screen
-            if screen != theScreen {
+        for screenElemet in wrappedValue.pageElements.reversed() {
+            let thePage = screenElemet.page
+            if page != thePage {
                 last += 1
             }
         }
@@ -105,22 +122,24 @@ extension Binding {
         }
     }
     
-    /// Replaces the ``NavigationStack`` flow's current ``Screen``s with a new set of ``Screen``s
-    /// - Parameter newScreenElements: The new screen elements set
+    /// Replaces the ``NavigationStack`` flow's current ``Page``s with a new set of ``Page``s
+    /// - Parameter newPageElements: The new page elements set
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func replaceNavigationFlow<Screen>(newScreenElements: [ScreenElement<Screen>], completion: @escaping () -> () = {}) where Value == NavigationFlow<Screen> {
+    public func replaceNavigationFlow<Page>(
+        newPageElements: [NavigationPageElement<Page>],
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
         popToRoot {
-            self.wrappedValue.screenElements = []
-            for (index, screenElement) in newScreenElements.enumerated() {
+            self.wrappedValue.pageElements = []
+            for (index, screenElement) in newPageElements.enumerated() {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
-                    self.wrappedValue.screenElements.append(screenElement)
+                    self.wrappedValue.pageElements.append(screenElement)
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * newScreenElements.count)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * newPageElements.count)) {
                 completion()
             }
         }
     }
 }
-
 

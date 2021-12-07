@@ -7,11 +7,11 @@
 
 import Foundation
 
-/// A thin wrapper around a `ScreenElements` array.
-public struct NavigationFlow<Screen> {
+/// A thin wrapper around a `PageElements` array.
+public struct NavigationFlow<Page> {
     
-    /// The underlying array of screen elements.
-    public internal(set) var screenElements: [ScreenElement<Screen>]
+    /// The underlying array of page elements.
+    public internal(set) var pageElements: [NavigationPageElement<Page>]
     
     /// The duration of a push/present of a view in milliseconds
     public internal(set) var pushPresentMilliseconds: Int = 650
@@ -21,13 +21,13 @@ public struct NavigationFlow<Screen> {
     
     /// Initializes the stack with an empty array of screens.
     public init() {
-        self.screenElements = []
+        self.pageElements = []
     }
     
-    /// Initializes the stack with a single root screen.
-    /// - Parameter root: The root screen.
-    public init(root: Screen) {
-        self.screenElements = [ScreenElement(screen: root, options: .init(style: .default))]
+    /// Initializes the stack with a single root page.
+    /// - Parameter root: The root page.
+    public init(root: Page) {
+        self.pageElements = [NavigationPageElement(page: root, options: .init(style: .default))]
     }
     
 }
