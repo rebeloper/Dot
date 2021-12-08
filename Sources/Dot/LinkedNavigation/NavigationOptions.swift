@@ -12,31 +12,18 @@ import SwiftUI
 public struct NavigationOptions {
     
     public let style: NavigationStyle
+    public let navigatable: Bool
     public var onDismiss: (() -> Void)?
     
     public init(
         style: NavigationStyle,
-        onDismiss: (() -> Void)?
+        navigatable: Bool = true,
+        onDismiss: (() -> Void)? = nil
     ) {
         self.style = style
+        self.navigatable = navigatable
         self.onDismiss = onDismiss
     }
     
-    public init(style: NavigationStyle) {
-        self.style = style
-        self.onDismiss = nil
-    }
-}
-
-/// Represents a style for how a view should be presented.
-public enum NavigationStyle: Equatable {
-
-    case regular(isDetailLink: Bool = false)
-    case sheet
-    case fullScreenCover
-    case navigatableSheet
-    case navigatableFullScreenCover
-
-    public static let `default`: NavigationStyle = .regular(isDetailLink: false)
 }
 

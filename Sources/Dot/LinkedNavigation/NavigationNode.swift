@@ -77,10 +77,11 @@ indirect enum NavigationNode<Page, V: View>: View {
                     .hidden()
             )
             .fullScreenCover(
-                isPresented: navigationOptions?.style == .fullScreenCover || navigationOptions?.style == .navigatableFullScreenCover ? isActiveBinding : .constant(false),
+                isPresented: navigationOptions?.style == .fullScreenCover ? isActiveBinding : .constant(false),
                 onDismiss: navigationOptions?.onDismiss,
                 content: {
-                    if navigationOptions?.style == .navigatableFullScreenCover {
+                    if let navigationOptions = navigationOptions,
+                       navigationOptions.navigatable {
                         presentedView.navigatable()
                     } else {
                         presentedView
@@ -88,10 +89,11 @@ indirect enum NavigationNode<Page, V: View>: View {
                 }
             )
             .sheet(
-                isPresented: navigationOptions?.style == .sheet || navigationOptions?.style == .navigatableSheet ? isActiveBinding : .constant(false),
+                isPresented: navigationOptions?.style == .sheet ? isActiveBinding : .constant(false),
                 onDismiss: navigationOptions?.onDismiss,
                 content: {
-                    if navigationOptions?.style == .navigatableSheet {
+                    if let navigationOptions = navigationOptions,
+                       navigationOptions.navigatable {
                         presentedView.navigatable()
                     } else {
                         presentedView
