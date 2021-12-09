@@ -120,7 +120,10 @@ public extension Tabs {
     ///   - flag: animation flag; default is `true`
     func insertTab(withTag tag: Int, at index: Int, animated flag: Bool = true) {
         guard !stack.tags.contains(tag) else { return }
-        guard index < stack.tags.count else { return }
+        var index = index
+        if index >= stack.tags.count {
+            index = stack.tags.count
+        }
         execute(with: flag) {
             stack.tags.insert(tag, at: index)
         }
