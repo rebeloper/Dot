@@ -1,5 +1,5 @@
 //
-//  Navigation+Binding.swift
+//  NavigationStack+Binding.swift
 //  
 //
 //  Created by Alex Nagy on 16.11.2021.
