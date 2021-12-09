@@ -8,6 +8,11 @@
 import Foundation
 
 public extension Array {
+    
+    /// Moves an element from an index to a destination index
+    /// - Parameters:
+    ///   - fromIndex: starting index
+    ///   - toIndex: destination index
     mutating func move(fromIndex: Int, toIndex: Int) {
         let element = self.remove(at: fromIndex)
         self.insert(element, at: toIndex)

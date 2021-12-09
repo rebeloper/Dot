@@ -17,6 +17,12 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
     @ViewBuilder var items: (Int) -> ItemView
     @ViewBuilder var background: () -> BackgroundView
     
+    /// Creates a stack of tabs with pages, items and background.
+    /// - Parameters:
+    ///   - tabs: Holds the tab tags and options
+    ///   - pages: Holds the pages of the tabs
+    ///   - items: Holds the tab items of the tabs
+    ///   - background: The background of the TabsStack
     public init(
         _ tabs: Tabs,
         @ViewBuilder pages: @escaping (Int) -> PageView,

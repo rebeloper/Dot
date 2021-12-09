@@ -10,15 +10,15 @@ import Foundation
 /// A thin wrapper around an `Int` array.
 public struct TabStack {
     
-    /// The underlying array of tabs.
+    /// The underlying array of tab tags.
     public internal(set) var tags: [Int]
     
-    /// Initializes the stack with an empty array of tabs.
+    /// Initializes the stack with an empty array of tags.
     public init() {
         self.tags = []
     }
     
-    /// Initializes the stack with an array of tabs from a count.
+    /// Initializes the stack with an array of tags from a count.
     public init(count: Int) {
         var tags = [Int]()
         for i in 0..<count {
@@ -27,7 +27,7 @@ public struct TabStack {
         self.tags = tags
     }
     
-    /// Initializes the stack with an array of tabs.
+    /// Initializes the stack with an array of tags.
     public init(tags: [Int]) {
         self.tags = tags
     }
