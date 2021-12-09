@@ -1,12 +1,5 @@
 //
 //  NavigationStack.swift
-//  
-//
-//  Created by Alex Nagy on 16.11.2021.
-//
-
-//
-//  NavigationStack.swift
 //
 //
 //  Created by Alex Nagy on 07.12.2021.
