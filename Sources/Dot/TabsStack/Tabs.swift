@@ -177,7 +177,7 @@ public extension Tabs {
     /// - Parameters:
     ///   - indices: tabs indices
     ///   - flag: animation flag; default is `true`
-    func removeTabs(withIndices indices: [Int], animated flag: Bool = true) {
+    func removeTabs(atIndices indices: [Int], animated flag: Bool = true) {
         indices.forEach { index in
             removeTab(at: index, animated: flag)
         }
@@ -222,7 +222,7 @@ public extension Tabs {
         }
     }
     
-    /// Swaos two tabs with indices
+    /// Swaps two tabs with indices
     /// - Parameters:
     ///   - index: tab index
     ///   - otherIndex: other tab index
@@ -313,7 +313,7 @@ public extension Tabs {
     /// - Parameters:
     ///   - edgeInsets: edge instes
     ///   - flag: animation flag; default is `true`
-    func setEgdeInsets(_ edgeInsets: EdgeInsets, animated flag: Bool = true) {
+    func setEdgeInsets(_ edgeInsets: EdgeInsets, animated flag: Bool = true) {
         execute(with: flag) {
             options.edgeInsets = edgeInsets
         }
