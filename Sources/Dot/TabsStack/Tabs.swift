@@ -91,7 +91,7 @@ public extension Tabs {
         }
     }
     
-    func insertTabs(withTags tags: [Int] at indices: [Int], animated: Bool = true) {
+    func insertTabs(withTags tags: [Int], at indices: [Int], animated: Bool = true) {
         guard tags.count == indices.count else { return }
         for i in 0..<tags.count {
             insertTab(withTag: tags[i], at: indices[i], animated: animated)
