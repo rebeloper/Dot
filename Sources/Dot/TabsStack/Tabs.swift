@@ -73,7 +73,7 @@ public extension Tabs {
     ///   - flag: animation flag; default is `false`
     func presentTab(atIndex index: Int, animated flag: Bool = false) {
         guard index < stack.tags.count else { return }
-        execute(flag) {
+        execute(with: flag) {
             selection = index
         }
     }
@@ -84,7 +84,7 @@ public extension Tabs {
     ///   - flag: animation flag; default is `false`
     func presentTab(withTag tag: Int, animated flag: Bool = false) {
         guard let index = stack.tags.firstIndex(of: tag) else { return }
-        execute(flag) {
+        execute(with: flag) {
             selection = index
         }
     }
@@ -92,7 +92,7 @@ public extension Tabs {
     /// Shows the TabsStack
     /// - Parameter flag: animation flag; default is `true`
     func show(animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             visible = true
         }
     }
@@ -100,7 +100,7 @@ public extension Tabs {
     /// Hides the TabsStack
     /// - Parameter flag: animation flag; default is `true`
     func hide(animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             visible = false
         }
     }
@@ -108,7 +108,7 @@ public extension Tabs {
     /// Toggles (shows/hides) the TabStack's visibility
     /// - Parameter flag: animation flag; default is `true`
     func toggleVisibility(animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             visible.toggle()
         }
     }
@@ -121,7 +121,7 @@ public extension Tabs {
     func insertTab(withTag tag: Int, at index: Int, animated flag: Bool = true) {
         guard !stack.tags.contains(tag) else { return }
         guard index < stack.tags.count else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.insert(tag, at: index)
         }
     }
@@ -144,7 +144,7 @@ public extension Tabs {
     ///   - flag: animation flag; default is `true`
     func removeTab(withTag tag: Int, animated flag: Bool = true) {
         guard let index = stack.tags.firstIndex(of: tag) else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.remove(at: index)
         }
     }
@@ -155,7 +155,7 @@ public extension Tabs {
     ///   - flag: animation flag; default is `true`
     func removeTab(at index: Int, animated flag: Bool = true) {
         guard index < stack.tags.count else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.remove(at: index)
         }
     }
@@ -188,7 +188,7 @@ public extension Tabs {
     func moveTab(withTag tag: Int, to index: Int, animated flag: Bool = true) {
         guard index < stack.tags.count else { return }
         guard let currentIndex = stack.tags.firstIndex(of: tag) else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.move(fromIndex: currentIndex, toIndex: index)
         }
     }
@@ -201,7 +201,7 @@ public extension Tabs {
     func moveTab(fromIndex currentIndex: Int, to index: Int, animated flag: Bool = true) {
         guard currentIndex < stack.tags.count else { return }
         guard index < stack.tags.count else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.move(fromIndex: currentIndex, toIndex: index)
         }
     }
@@ -214,7 +214,7 @@ public extension Tabs {
     func swapTab(withTag tag: Int, withOtherTabWithTag otherTag: Int, animated flag: Bool = true) {
         guard let tabIndex = stack.tags.firstIndex(of: tag) else { return }
         guard let otherTabIndex = stack.tags.firstIndex(of: otherTag) else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.swapAt(tabIndex, otherTabIndex)
         }
     }
@@ -227,7 +227,7 @@ public extension Tabs {
     func swapTab(at index: Int, with otherIndex: Int, animated flag: Bool = true) {
         guard index < stack.tags.count else { return }
         guard otherIndex < stack.tags.count else { return }
-        execute(flag) {
+        execute(with: flag) {
             stack.tags.swapAt(index, otherIndex)
         }
     }
@@ -237,7 +237,7 @@ public extension Tabs {
     ///   - selectedColor: color
     ///   - flag: animation flag; default is `true`
     func setSelectedColor(_ selectedColor: Color, animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.selectedColor = selectedColor
         }
     }
@@ -247,7 +247,7 @@ public extension Tabs {
     ///   - unselectedColor: color
     ///   - flag: animation flag; default is `true`
     func setUnselectedColor(_ unselectedColor: Color, animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.unselectedColor = unselectedColor
         }
     }
@@ -257,7 +257,7 @@ public extension Tabs {
     ///   - height: height
     ///   - flag: animation flag; default is `true`
     func setHeight(_ height: CGFloat, animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.height = height
         }
     }
@@ -267,7 +267,7 @@ public extension Tabs {
     ///   - amount: amount
     ///   - flag: animation flag; default is `true`
     func raiseHeight(by amount: CGFloat, animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.height += amount
         }
     }
@@ -277,7 +277,7 @@ public extension Tabs {
     ///   - amount: amount
     ///   - flag: animation flag; default is `true`
     func lowerHeight(by amount: CGFloat, animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.height -= amount
         }
     }
@@ -285,7 +285,7 @@ public extension Tabs {
     /// Shows the TabsStack's divider
     /// - Parameter flag: animation flag; default is `true`
     func showDivider(animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.showsDivider = true
         }
     }
@@ -293,7 +293,7 @@ public extension Tabs {
     /// Hides the TabsStack's divider
     /// - Parameter flag: animation flag; default is `true`
     func hideDivider(animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.showsDivider = false
         }
     }
@@ -301,7 +301,7 @@ public extension Tabs {
     /// Toggles the TabsStack's divider visibility
     /// - Parameter flag: animation flag; default is `true`
     func toggleDividerVisibility(animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.showsDivider.toggle()
         }
     }
@@ -311,7 +311,7 @@ public extension Tabs {
     ///   - edgeInsets: edge instes
     ///   - flag: animation flag; default is `true`
     func setEgdeInsets(_ edgeInsets: EdgeInsets, animated flag: Bool = true) {
-        execute(flag) {
+        execute(with: flag) {
             options.edgeInsets = edgeInsets
         }
     }
