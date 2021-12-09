@@ -41,9 +41,9 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
 public extension TabsStack {
     func pagesView() -> some View {
         ZStack {
-            ForEach(tabs.stack.tabs.indices, id:\.self) { index in
+            ForEach(tabs.stack.tags.indices, id:\.self) { index in
                 TabPageNode<PageView>.view(
-                    pages(tabs.stack.tabs[index]),
+                    pages(tabs.stack.tags[index]),
                     stack: $tabs.stack,
                     index: index,
                     selection: $tabs.selection)
@@ -82,9 +82,9 @@ public extension TabsStack {
     }
     
     func itemsView(proxy: GeometryProxy) -> some View {
-        ForEach(tabs.stack.tabs.indices, id:\.self) { index in
+        ForEach(tabs.stack.tags.indices, id:\.self) { index in
             TabItemNode<ItemView>.view(
-                items(tabs.stack.tabs[index]),
+                items(tabs.stack.tags[index]),
                 stack: $tabs.stack,
                 index: index,
                 selection: $tabs.selection)
@@ -98,7 +98,7 @@ public extension TabsStack {
                         tabs.selection = index
                     }
                 }
-                .frame(width: (proxy.size.width - 24 - tabs.options.edgeInsets.leading - tabs.options.edgeInsets.trailing - proxy.safeAreaInsets.leading - proxy.safeAreaInsets.trailing) / CGFloat(tabs.stack.tabs.count))
+                .frame(width: (proxy.size.width - 24 - tabs.options.edgeInsets.leading - tabs.options.edgeInsets.trailing - proxy.safeAreaInsets.leading - proxy.safeAreaInsets.trailing) / CGFloat(tabs.stack.tags.count))
         }
     }
     

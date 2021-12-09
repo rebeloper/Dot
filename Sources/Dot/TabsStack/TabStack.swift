@@ -11,25 +11,25 @@ import Foundation
 public struct TabStack {
     
     /// The underlying array of tabs.
-    public internal(set) var tabs: [Int]
+    public internal(set) var tags: [Int]
     
     /// Initializes the stack with an empty array of tabs.
     public init() {
-        self.tabs = []
+        self.tags = []
     }
     
     /// Initializes the stack with an array of tabs from a count.
     public init(count: Int) {
-        var tabs = [Int]()
+        var tags = [Int]()
         for i in 0..<count {
-            tabs.append(i)
+            tags.append(i)
         }
-        self.tabs = tabs
+        self.tags = tags
     }
     
     /// Initializes the stack with an array of tabs.
-    public init(tabs: [Int]) {
-        self.tabs = tabs
+    public init(tags: [Int]) {
+        self.tags = tags
     }
     
 }
