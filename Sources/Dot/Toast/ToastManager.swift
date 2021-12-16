@@ -79,6 +79,7 @@ public class ToastManager: ObservableObject {
     
     @Published var isPresented: Bool = false
     @Published var shouldPresent: Bool = false
+    @Published var shouldDismiss: Bool = true
     @Published var config: ToastConfig
     @Published var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
@@ -131,13 +132,15 @@ public class ToastManager: ObservableObject {
                         }
                     }
                 } else {
-                    if self.isPresented {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + (seconds <= (self.config.throttle + 0.7) ? self.config.minPresentedTime : 0)) {
+                    if self.isPresented, self.shouldDismiss {
+                        self.shouldDismiss = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + (seconds <= (self.config.throttle + 1.0) ? self.config.minPresentedTime : 0)) {
                             withAnimation {
                                 if self.config.enableDebug {
                                     print("Dismsissing Toast: \(seconds)")
                                 }
                                 self.isPresented = false
+                                self.shouldDismiss = true
                             }
                         }
                     }
