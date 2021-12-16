@@ -108,6 +108,7 @@ public class ToastManager: ObservableObject {
                 return Double(timeInterval)
             })
             .sink { (seconds) in
+                print(seconds)
                 if self.shouldPresent {
                     if !self.isPresented, seconds >= 0.5 {
                         DispatchQueue.main.async {
