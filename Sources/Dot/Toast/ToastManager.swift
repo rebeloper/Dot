@@ -123,7 +123,7 @@ public class ToastManager: ObservableObject {
                             self.config.title = title
                             self.config.message = message
                             withAnimation {
-                                if config.enableDebug {
+                                if self.config.enableDebug {
                                     print("Presenting Toast: \(seconds)")
                                 }
                                 self.isPresented = true
@@ -134,7 +134,7 @@ public class ToastManager: ObservableObject {
                     if self.isPresented {
                         DispatchQueue.main.asyncAfter(deadline: .now() + (seconds <= (self.config.throttle + 0.5) ? self.config.minPresentedTime : 0)) {
                             withAnimation {
-                                if config.enableDebug {
+                                if self.config.enableDebug {
                                     print("Dismsissing Toast: \(seconds)")
                                 }
                                 self.isPresented = false
@@ -149,7 +149,7 @@ public class ToastManager: ObservableObject {
     /// Dismisses the Toast
     func dismiss() {
         DispatchQueue.main.async {
-            if config.enableDebug {
+            if self.config.enableDebug {
                 print("Should Dismsiss Toast")
             }
             self.shouldPresent = false
