@@ -99,10 +99,10 @@ public class ToastManager: ObservableObject {
         DispatchQueue.main.async {
             self.shouldPresent = true
         }
-        
+        let date = Date()
         timer
             .map({ (output) in
-                return output.timeIntervalSince(Date())
+                return output.timeIntervalSince(date)
             })
             .map({ (timeInterval) in
                 return Double(timeInterval)
