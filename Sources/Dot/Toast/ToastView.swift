@@ -55,7 +55,7 @@ public struct ToastConfig {
     ///   - enableDebug: enables debug in console
     public init(
         type: ToastType = .top,
-        throttle: Double = 0.5,
+        throttle: Double = 0.6,
         minPresentedTime: Double = 1.0,
         minSize: CGSize = CGSize(width: 100.0, height: 100.0),
         cornerRadius: CGFloat = 18.0,
