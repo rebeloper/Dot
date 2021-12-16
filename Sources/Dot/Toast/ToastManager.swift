@@ -116,7 +116,7 @@ public class ToastManager: ObservableObject {
             .sink { (seconds) in
                 print(seconds)
                 if self.shouldPresent {
-                    if !self.isPresented, seconds >= 0.5 {
+                    if !self.isPresented, seconds >= config.throttle {
                         DispatchQueue.main.async {
                             self.config.title = title
                             self.config.message = message
@@ -127,7 +127,7 @@ public class ToastManager: ObservableObject {
                     }
                 } else {
                     if self.isPresented {
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + seconds <= config.throttle + 0.5 ? config.minPresentedTime : 0) {
                             withAnimation {
                                 self.isPresented = false
                             }
