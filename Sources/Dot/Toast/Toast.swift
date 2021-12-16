@@ -1,65 +1,49 @@
 //
 //  Toast.swift
-//  Dot
+//  
 //
-//  Created by Alex Nagy on 10.08.2021.
+//  Created by Alex Nagy on 16.12.2021.
 //
 
 import SwiftUI
 
-public class Toast: ObservableObject {
+public struct Toast {
     
-    @Published public var isPresented: Bool = false
-    @Published public var shouldPresent: Bool = false
-    @Published private var mayDismiss: Bool = false
-    @Published private var isThrottled: Bool = false
-    @Published public var config: ToastConfig
+    public typealias CompletionToastAction = (Result<Bool, Error>) -> ()
     
-    /// Creates a Toast
-    /// - Parameter config: Toast Configuration
-    public init(config: ToastConfig = ToastConfig()) {
-        self.config = config
-    }
-    
-    /// Presents a Toast
-    /// - Parameters:
-    ///   - title: title of the Toast
-    ///   - message: message of the Toast
-    public func present(_ title: String? = nil, message: String? = nil) {
-        DispatchQueue.main.async {
-            self.shouldPresent = true
-            self.mayDismiss = false
-            self.isThrottled = true
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle) {
-            self.isThrottled = false
-            if self.shouldPresent {
-                self.config.title = title
-                self.config.message = message
-                withAnimation {
-                    self.isPresented = true
+    public static func present(_ manager: ToastManager, title: String? = nil, message: String? = nil, showsErrorNotice: Bool = true, action: @escaping (@escaping CompletionToastAction) -> ()) {
+        manager.present(title, message: message)
+        action { result in
+            switch result {
+            case .success(_):
+                manager.dismiss()
+            case .failure(let error):
+                manager.dismiss()
+                if showsErrorNotice {
+                    Notice.present(.error, message: error.localizedDescription)
                 }
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + config.throttle + config.minPresentedTime) {
-            self.mayDismiss = true
+    }
+    
+    public static func presentThrowing(_ manager: ToastManager, title: String? = nil, message: String? = nil, showsErrorNotice: Bool = true, action: @escaping () async throws -> ())  async throws {
+        do {
+            manager.present(title, message: message)
+            try await action()
+            manager.dismiss()
+        } catch {
+            manager.dismiss()
+            if showsErrorNotice {
+                Notice.present(.error, message: error.localizedDescription)
+            }
+            throw error
         }
     }
     
-    /// Dismisses the Toast
-    public func dismiss() {
-        if isThrottled {
-            DispatchQueue.main.async {
-                self.shouldPresent = false
-            }
-        } else {
-            let minPresentedTime: Double = mayDismiss ? 0 : config.minPresentedTime
-            DispatchQueue.main.asyncAfter(deadline: .now() + minPresentedTime) {
-                withAnimation {
-                    self.isPresented = false
-                }
-            }
-        }
+    public static func present(_ manager: ToastManager, title: String? = nil, message: String? = nil, action: @escaping () async -> ()) async {
+        manager.present(title, message: message)
+        await action()
+        manager.dismiss()
     }
     
 }

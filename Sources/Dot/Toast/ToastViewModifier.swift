@@ -9,29 +9,29 @@ import SwiftUI
 
 public struct ToastViewModifier: ViewModifier {
     
-    @ObservedObject public var toast: Toast
+    @ObservedObject public var manager: ToastManager
     
     public func body(content: Content) -> some View {
         ZStack {
             content
-            ToastView($toast.isPresented, config: $toast.config)
+            ToastView($manager.isPresented, config: $manager.config)
         }
     }
 }
 
 public extension View {
-    /// Adds a Toast to the view
-    /// - Parameter toast: Toast
+    /// Adds a ToastManager to the view
+    /// - Parameter manager: ToastManager
     /// - Returns: a view with a Toast
-    func uses(_ toast: Toast) -> some View {
-        modifier(ToastViewModifier(toast: toast))
+    func uses(_ manager: ToastManager) -> some View {
+        modifier(ToastViewModifier(manager: manager))
     }
     
-    /// Adds a Toast to the view and sets it as an ``@EnvironmentObject``
-    /// - Parameter toast: Toast
+    /// Adds a ToastManager to the view and sets it as an ``@EnvironmentObject``
+    /// - Parameter manager: ToastManager
     /// - Returns: a view with a Toast
-    func usesEnvironmentObject(_ toast: Toast) -> some View {
-        self.uses(toast)
-            .environmentObject(toast)
+    func usesEnvironmentObject(_ manager: ToastManager) -> some View {
+        self.uses(manager)
+            .environmentObject(manager)
     }
 }
