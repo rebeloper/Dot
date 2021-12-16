@@ -97,31 +97,6 @@ extension Binding {
         }
     }
     
-    /// Pops to the specified ``Page`` in the ``NavigationStack``.
-    /// - Parameter page: the page to be popped to
-    /// - Parameter completion: The closure to execute when finishing the navigation
-    public func popTo<Page: Equatable>(
-        page: Page,
-        completion: @escaping () -> () = {}
-    ) where Value == NavigationFlow<Page> {
-        var last = 0
-        for screenElemet in wrappedValue.pageElements.reversed() {
-            let thePage = screenElemet.page
-            if page != thePage {
-                last += 1
-            }
-        }
-        last -= 1
-        for index in 0..<last {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
-                self.pop()
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * last)) {
-            completion()
-        }
-    }
-    
     /// Replaces the ``NavigationStack`` flow's current ``Page``s with a new set of ``Page``s
     /// - Parameter newPageElements: The new page elements set
     /// - Parameter completion: The closure to execute when finishing the navigation
