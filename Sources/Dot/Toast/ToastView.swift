@@ -70,6 +70,14 @@ public struct ToastConfig {
         autoHideInterval: TimeInterval = 10.0,
         enableDebug: Bool = false
     ) {
+        guard throttle >= 0.6 else {
+            fatalError("Throttle must be greater or equal to 0.6")
+        }
+        
+        guard minPresentedTime >= 1.0 else {
+            fatalError("Minimum Presented Time must be greater or equal to 1.0")
+        }
+        
         self.type = type
         
         self.throttle = throttle
