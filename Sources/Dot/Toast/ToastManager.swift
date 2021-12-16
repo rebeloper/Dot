@@ -99,7 +99,13 @@ public class ToastManager: ObservableObject {
         DispatchQueue.main.async {
             self.shouldPresent = true
         }
+        
         let date = Date()
+        
+        cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+        
         timer
             .map({ (output) in
                 return output.timeIntervalSince(date)
