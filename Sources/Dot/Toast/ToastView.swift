@@ -55,7 +55,7 @@ public struct ToastConfig {
     ///   - enableDebug: enables debug in console
     public init(
         type: ToastType = .top,
-        throttle: Double = 0.6,
+        throttle: Double = 0.4,
         minPresentedTime: Double = 1.0,
         minSize: CGSize = CGSize(width: 100.0, height: 100.0),
         cornerRadius: CGFloat = 18.0,
@@ -70,8 +70,8 @@ public struct ToastConfig {
         autoHideInterval: TimeInterval = 10.0,
         enableDebug: Bool = false
     ) {
-        guard throttle >= 0.6 else {
-            fatalError("Throttle must be greater or equal to 0.6")
+        guard throttle >= 0.4 else {
+            fatalError("Throttle must be greater or equal to 0.4")
         }
         
         guard minPresentedTime >= 1.0 else {
