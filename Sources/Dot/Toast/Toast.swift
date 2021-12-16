@@ -9,9 +9,14 @@ import SwiftUI
 
 public struct Toast {
     
-    public typealias CompletionToastAction = (Result<Bool, Error>) -> ()
-    
-    public static func present(_ manager: ToastManager, title: String? = nil, message: String? = nil, showsErrorNotice: Bool = true, action: @escaping (@escaping CompletionToastAction) -> ()) {
+    /// Presents a Toast
+    /// - Parameters:
+    ///   - title: title of the Toast
+    ///   - message: message of the Toast
+    ///   - showsErrorNotice: should a ``Notice`` be shown when an ``Error`` is thrown
+    ///   - manager: toast manager set up as ``@EnvironmentObject private var toastManager: ToastManager``
+    ///   - action: action being taken while the Toast is presented; please complete with a ``Result<Bool, Error>``
+    public static func present(_ title: String? = nil, message: String? = nil, showsErrorNotice: Bool = true, with manager: ToastManager, action: @escaping (@escaping (Result<Bool, Error>) -> ()) -> ()) {
         manager.present(title, message: message)
         action { result in
             switch result {
@@ -26,7 +31,14 @@ public struct Toast {
         }
     }
     
-    public static func presentThrowing(_ manager: ToastManager, title: String? = nil, message: String? = nil, showsErrorNotice: Bool = true, action: @escaping () async throws -> ())  async throws {
+    /// Presents a Toast in an async throws context
+    /// - Parameters:
+    ///   - title: title of the Toast
+    ///   - message: message of the Toast
+    ///   - showsErrorNotice: should a ``Notice`` be shown when an ``Error`` is thrown
+    ///   - manager: toast manager set up as ``@EnvironmentObject private var toastManager: ToastManager``
+    ///   - action: action being taken while the Toast is presented
+    public static func presentThrowing(_ title: String? = nil, message: String? = nil, showsErrorNotice: Bool = true, with manager: ToastManager, action: @escaping () async throws -> ())  async throws {
         do {
             manager.present(title, message: message)
             try await action()
@@ -40,7 +52,13 @@ public struct Toast {
         }
     }
     
-    public static func present(_ manager: ToastManager, title: String? = nil, message: String? = nil, action: @escaping () async -> ()) async {
+    /// Presents a Toast in an async context
+    /// - Parameters:
+    ///   - title: title of the Toast
+    ///   - message: message of the Toast
+    ///   - manager: toast manager set up as ``@EnvironmentObject private var toastManager: ToastManager``
+    ///   - action: action being taken while the Toast is presented
+    public static func present(_ title: String? = nil, message: String? = nil, with manager: ToastManager, action: @escaping () async -> ()) async {
         manager.present(title, message: message)
         await action()
         manager.dismiss()
