@@ -132,7 +132,7 @@ public class ToastManager: ObservableObject {
                     }
                 } else {
                     if self.isPresented {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + (seconds <= (self.config.throttle + 0.5) ? self.config.minPresentedTime : 0)) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + (seconds <= (self.config.throttle + 1.0) ? self.config.minPresentedTime : 0)) {
                             withAnimation {
                                 if self.config.enableDebug {
                                     print("Dismsissing Toast: \(seconds)")
