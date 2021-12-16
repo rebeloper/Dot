@@ -96,6 +96,9 @@ public class ToastManager: ObservableObject {
     ///   - message: message of the Toast
     func present(_ title: String? = nil, message: String? = nil) {
         
+        if config.enableDebug {
+            print("Should Present Toast")
+        }
         DispatchQueue.main.async {
             self.shouldPresent = true
         }
@@ -114,21 +117,26 @@ public class ToastManager: ObservableObject {
                 return Double(timeInterval)
             })
             .sink { (seconds) in
-                print(seconds)
                 if self.shouldPresent {
-                    if !self.isPresented, seconds >= config.throttle {
+                    if !self.isPresented, seconds >= self.config.throttle {
                         DispatchQueue.main.async {
                             self.config.title = title
                             self.config.message = message
                             withAnimation {
+                                if config.enableDebug {
+                                    print("Presenting Toast: \(seconds)")
+                                }
                                 self.isPresented = true
                             }
                         }
                     }
                 } else {
                     if self.isPresented {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + seconds <= config.throttle + 0.5 ? config.minPresentedTime : 0) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + (seconds <= (self.config.throttle + 0.5) ? self.config.minPresentedTime : 0)) {
                             withAnimation {
+                                if config.enableDebug {
+                                    print("Dismsissing Toast: \(seconds)")
+                                }
                                 self.isPresented = false
                             }
                         }
@@ -141,6 +149,9 @@ public class ToastManager: ObservableObject {
     /// Dismisses the Toast
     func dismiss() {
         DispatchQueue.main.async {
+            if config.enableDebug {
+                print("Should Dismsiss Toast")
+            }
             self.shouldPresent = false
         }
     }

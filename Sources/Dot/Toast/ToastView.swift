@@ -34,6 +34,8 @@ public struct ToastConfig {
     var allowsTapToHide: Bool
     var autoHideInterval: TimeInterval
     
+    var enableDebug: Bool
+    
     /// Creates a configuration for ToastView
     /// - Parameters:
     ///   - type: Toast type
@@ -50,6 +52,7 @@ public struct ToastConfig {
     ///   - shouldAutoHide: should the Toast auto hide
     ///   - allowsTapToHide: should the Toast allow tap to hide
     ///   - autoHideInterval: autohide time
+    ///   - enableDebug: enables debug in console
     public init(
         type: ToastType = .top,
         throttle: Double = 0.5,
@@ -64,7 +67,8 @@ public struct ToastConfig {
         backgroundColor: Color = .black.opacity(0.2),
         shouldAutoHide: Bool = false,
         allowsTapToHide: Bool = false,
-        autoHideInterval: TimeInterval = 10.0
+        autoHideInterval: TimeInterval = 10.0,
+        enableDebug: Bool = false
     ) {
         self.type = type
         
@@ -87,6 +91,8 @@ public struct ToastConfig {
         self.shouldAutoHide = shouldAutoHide
         self.allowsTapToHide = allowsTapToHide
         self.autoHideInterval = autoHideInterval
+        
+        self.enableDebug = enableDebug
     }
 }
 
