@@ -14,6 +14,12 @@ public class Tabs: ObservableObject {
     @Published public var visible = true
     @Published public var options = TabsStackOptions()
     
+    // Sets up 0 tabs tags; and options. Use this as a default value only
+    public init() {
+        stack = TabStack(count: 0)
+        self.options = TabsStackOptions()
+    }
+    
     // Sets up tabs tags from a variadic array; and options
     /// - Parameters:
     ///   - tags: tab tags

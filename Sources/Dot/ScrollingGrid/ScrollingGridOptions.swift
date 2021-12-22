@@ -39,7 +39,7 @@ public struct ScrollingGridOptions {
                 startPadding: CGFloat = 0,
                 endPadding: CGFloat = 0,
                 onRefreshTreshold: CGFloat = 60,
-                tabs: Tabs = Tabs(count: 0)
+                tabs: Tabs = Tabs()
     ) {
         self.showsIndicators = showsIndicators
         self.verticalAlignment = verticalAlignment
