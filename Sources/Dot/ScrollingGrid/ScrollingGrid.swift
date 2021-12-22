@@ -137,8 +137,8 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
                         })
                         Spacer().frame(width: 0, height: options.endPadding)
                         
-                        if options.tabs != nil {
-                        Spacer().frame(height: options.tabs!.visible ? options.tabs!.options.height + options.tabs!.options.edgeInsets.bottom : 0)
+                        if options.tabs.stack.tags.count != 0 {
+                        Spacer().frame(height: options.tabs.visible ? options.tabs.options.height + options.tabs.options.edgeInsets.bottom : 0)
                     }
             }
             .offset(y: (state == .loading) ? refreshViewLenght : 0)

@@ -15,7 +15,7 @@ public struct ScrollingGridOptions {
     public var startPadding: CGFloat
     public var endPadding: CGFloat
     public var onRefreshTreshold: CGFloat
-    @Binding public var tabs: Tabs?
+    @Binding public var tabs: Tabs
     
     /// ScrollableGrid options
     /// - Parameters:
@@ -31,7 +31,7 @@ public struct ScrollingGridOptions {
     ///   - startPadding: The top / leading padding of the scrollable grid.
     ///   - endPadding: The bottom / trailing padding of the scrollabel grid.
     ///   - onRefreshTreshold: the offset treshhold for ``onRefresh``
-    ///   - tabs: tabs; default is ``nil``
+    ///   - tabs: tabs; default is ``Tabs(count: 0)``
     public init(showsIndicators: Bool = true,
                 verticalAlignment: VerticalAlignment = .center,
                 horizontalAlignment: HorizontalAlignment = .center,
@@ -39,7 +39,7 @@ public struct ScrollingGridOptions {
                 startPadding: CGFloat = 0,
                 endPadding: CGFloat = 0,
                 onRefreshTreshold: CGFloat = 60,
-                tabs: Binding<Tabs?> = .constant(nil)
+                tabs: Binding<Tabs> = .constant(Tabs(count: 0))
     ) {
         self.showsIndicators = showsIndicators
         self.verticalAlignment = verticalAlignment
