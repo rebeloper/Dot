@@ -108,7 +108,9 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                 }
             })
             .onReceive(keyboardPublisher) { isKeyboardVisible in
-                self.isKeyboardVisible = isKeyboardVisible
+                withAnimation {
+                    self.isKeyboardVisible = isKeyboardVisible
+                }
             }
         }
     }
@@ -144,6 +146,7 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                         
                         if options.tabs.stack.tags.count != 0, !isKeyboardVisible {
                         Spacer().frame(height: options.tabs.visible ? options.tabs.options.height + options.tabs.options.edgeInsets.bottom : 0)
+                            .transition(.scale)
                     }
             }
             .offset(y: (state == .loading) ? refreshViewLenght : 0)
