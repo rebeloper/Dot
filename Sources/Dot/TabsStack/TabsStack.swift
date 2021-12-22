@@ -84,6 +84,7 @@ public extension TabsStack {
             .padding(tabs.options.edgeInsets)
             .transition(.slide)
             .offset(y: tabs.visible ? 0 : proxy.size.height)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
     
