@@ -57,8 +57,10 @@ public struct SearchableView: View {
                         onSubmit()
                     })
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            focusedField = .focus
+                        if options.isFocused {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                focusedField = .focus
+                            }
                         }
                     }
                 if text != "", options.showsClearSearchButton {
