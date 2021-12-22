@@ -67,63 +67,7 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
                 // to keep it below the loading view, hence the alignmentGuide.
                 
                 ScrollView(axis, showsIndicators: options.showsIndicators) {
-                    if axis == .vertical {
-                        VStack(spacing: 0) {
-                            scrollViewOffsetReader(axes: .vertical)
-                            Spacer().frame(width: 0, height: options.startPadding)
-                            content()
-                                .if(header != nil && footer != nil, transform: { content in
-                                    content.verticalGridWithHeaderAndFooter(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews) {
-                                        header!()
-                                    } footer: {
-                                        footer!()
-                                    }
-                                })
-                                    .if(header == nil && footer == nil, transform: { content in
-                                        content.verticalGrid(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews)
-                                    })
-                                    .if(header != nil && footer == nil, transform: { content in
-                                        content.verticalGridWithHeader(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, header: {
-                                            header!()
-                                        })
-                                    })
-                                    .if(header == nil && footer != nil, transform: { content in
-                                        content.verticalGridWithFooter(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, footer: {
-                                            footer!()
-                                        })
-                                    })
-                                    Spacer().frame(width: 0, height: options.endPadding)
-                        }
-                        .offset(y: (state == .loading) ? refreshViewLenght : 0)
-                    } else {
-                        HStack(spacing: 0) {
-                            scrollViewOffsetReader(axes: .horizontal)
-                            Spacer().frame(width: options.startPadding, height: 0)
-                            content()
-                                .if(header != nil && footer != nil, transform: { content in
-                                    content.horizontalGridWithHeaderAndFooter(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews) {
-                                        header!()
-                                    } footer: {
-                                        footer!()
-                                    }
-                                })
-                                    .if(header == nil && footer == nil, transform: { content in
-                                        content.horizontalGrid(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews)
-                                    })
-                                    .if(header != nil && footer == nil, transform: { content in
-                                        content.horizontalGridWithHeader(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, header: {
-                                            header!()
-                                        })
-                                    })
-                                    .if(header == nil && footer != nil, transform: { content in
-                                        content.horizontalGridWithFooter(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, footer: {
-                                            footer!()
-                                        })
-                                    })
-                                    Spacer().frame(width: options.endPadding, height: 0)
-                        }
-                        .offset(x: (state == .loading) ? refreshViewLenght : 0)
-                    }
+                    scrollViewContent()
                 }
                 
                 // The loading view. It's offset to the top of the content unless we're loading.
@@ -161,6 +105,71 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
                     }
                 }
             })
+        }
+    }
+    
+    @ViewBuilder
+    public func scrollViewContent() -> some View {
+        if axis == .vertical {
+            VStack(spacing: 0) {
+                scrollViewOffsetReader(axes: .vertical)
+                Spacer().frame(width: 0, height: options.startPadding)
+                content()
+                    .if(header != nil && footer != nil, transform: { content in
+                        content.verticalGridWithHeaderAndFooter(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews) {
+                            header!()
+                        } footer: {
+                            footer!()
+                        }
+                    })
+                        .if(header == nil && footer == nil, transform: { content in
+                            content.verticalGrid(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews)
+                        })
+                        .if(header != nil && footer == nil, transform: { content in
+                            content.verticalGridWithHeader(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, header: {
+                                header!()
+                            })
+                        })
+                        .if(header == nil && footer != nil, transform: { content in
+                            content.verticalGridWithFooter(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, footer: {
+                                footer!()
+                            })
+                        })
+                        Spacer().frame(width: 0, height: options.endPadding)
+                        
+                        if options.tabs != nil {
+                        Spacer().frame(height: options.tabs!.visible ? options.tabs!.options.height + options.tabs!.options.edgeInsets.bottom : 0)
+                    }
+            }
+            .offset(y: (state == .loading) ? refreshViewLenght : 0)
+        } else {
+            HStack(spacing: 0) {
+                scrollViewOffsetReader(axes: .horizontal)
+                Spacer().frame(width: options.startPadding, height: 0)
+                content()
+                    .if(header != nil && footer != nil, transform: { content in
+                        content.horizontalGridWithHeaderAndFooter(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews) {
+                            header!()
+                        } footer: {
+                            footer!()
+                        }
+                    })
+                        .if(header == nil && footer == nil, transform: { content in
+                            content.horizontalGrid(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews)
+                        })
+                        .if(header != nil && footer == nil, transform: { content in
+                            content.horizontalGridWithHeader(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, header: {
+                                header!()
+                            })
+                        })
+                        .if(header == nil && footer != nil, transform: { content in
+                            content.horizontalGridWithFooter(gridItems, alignment: options.verticalAlignment, spacing: options.spacing, pinnedViews: pinnedViews, footer: {
+                                footer!()
+                            })
+                        })
+                        Spacer().frame(width: options.endPadding, height: 0)
+            }
+            .offset(x: (state == .loading) ? refreshViewLenght : 0)
         }
     }
     
