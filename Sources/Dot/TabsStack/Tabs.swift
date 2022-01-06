@@ -17,7 +17,8 @@ public class Tabs: ObservableObject {
     // Sets up 0 tabs tags; and options. Use this as a default value only
     public init() {
         stack = TabStack(count: 0)
-        self.options = TabsStackOptions()
+        options = TabsStackOptions()
+        presentTab(atIndex: options.initialSelectedTabIndex)
     }
     
     // Sets up tabs tags from a variadic array; and options
@@ -46,6 +47,7 @@ public class Tabs: ObservableObject {
         }
         stack = TabStack(count: count)
         self.options = options
+        presentTab(atIndex: options.initialSelectedTabIndex)
     }
     
     private func setupTabs(tags: [Int], options: TabsStackOptions) {
@@ -54,6 +56,7 @@ public class Tabs: ObservableObject {
         }
         stack = TabStack(tags: tags)
         self.options = options
+        presentTab(atIndex: options.initialSelectedTabIndex)
     }
 }
 
