@@ -12,7 +12,7 @@ import PhotosUI
 public struct ImagePickerView: UIViewControllerRepresentable {
     @Environment(\.dismiss) private var dismiss
     
-    @Binding private var images: [UIImage]?
+    @Binding private var images: [ImagePickerViewSuccessResult.SelectedImage]?
     @Binding private var results: [PHPickerResult]?
     private let filter: PHPickerFilter
     private let selectionLimit: Int
@@ -27,7 +27,7 @@ public struct ImagePickerView: UIViewControllerRepresentable {
     ///   - selectionLimit: selection limit
     ///   - onCancel: callback representing when the PHPickerViewController was canceled
     ///   - onFail: callback representing when the PHPickerViewController failed
-    public init(images: Binding<[UIImage]?>,
+    public init(images: Binding<[ImagePickerViewSuccessResult.SelectedImage]?>,
                 filter: PHPickerFilter = .images,
                 selectionLimit: Int = 1,
                 onCancel: ((PHPickerViewController) -> ())? = nil,
@@ -119,7 +119,7 @@ public struct ImagePickerView: UIViewControllerRepresentable {
                 parent.dismiss()
                 return
             }
-            var images = [UIImage]()
+            var images = [ImagePickerViewSuccessResult.SelectedImage]()
             for i in 0..<results.count {
                 let result = results[i]
                 if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
@@ -128,7 +128,7 @@ public struct ImagePickerView: UIViewControllerRepresentable {
                             self.onFail?(ImagePickerError(picker: picker, error: error))
                             self.parent.dismiss()
                         } else if let image = newImage as? UIImage {
-                            images.append(image)
+                            images.append(.init(index: i, image: image))
                         }
                         if images.count == results.count {
                             if images.count != 0 {
@@ -162,7 +162,13 @@ public enum ImagePickerViewError: Error {
 }
 
 public struct ImagePickerViewSuccessResult {
-    public let images: [UIImage]
+    
+    public let images: [SelectedImage]
     public let results: [PHPickerResult]
+    
+    public struct SelectedImage {
+        public let index: Int
+        public let image: UIImage
+    }
 }
 
