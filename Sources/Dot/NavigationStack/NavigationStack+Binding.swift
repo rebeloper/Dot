@@ -85,10 +85,10 @@ extension Binding {
             guard let pageElement = wrappedValue.pageElements.last else { return }
             let style = pageElement.options.style
             if style == .sheet || style == .fullScreenCover {
-                animatedNavigationSteps += 1
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * animatedNavigationSteps)) {
                     pop2()
                 }
+                animatedNavigationSteps += 1
             } else {
                 if isStepped {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * animatedNavigationSteps)) {
