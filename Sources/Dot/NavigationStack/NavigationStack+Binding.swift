@@ -92,8 +92,12 @@ extension Binding {
             } else {
                 if isStepped {
                     animatedNavigationSteps += 1
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * animatedNavigationSteps)) {
+                        pop2(completesInstantly: isStepped ? false : true)
+                    }
+                } else {
+                    pop2(completesInstantly: isStepped ? false : true)
                 }
-                pop2(completesInstantly: isStepped ? false : true)
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
