@@ -81,8 +81,9 @@ extension Binding {
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         var animatedNavigationSteps = 0
-        for i in 0..<wrappedValue.pageElements.count - 1 {
-            let pageElement = wrappedValue.pageElements.reversed()[i + 1]
+        let pageElements = wrappedValue.pageElements
+        for i in 0..<pageElements.count - 1 {
+            let pageElement = pageElements.reversed()[i + 1]
             let style = pageElement.options.style
             if style == .sheet || style == .fullScreenCover {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * animatedNavigationSteps)) {
