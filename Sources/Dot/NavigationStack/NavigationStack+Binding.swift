@@ -93,7 +93,7 @@ extension Binding {
                 if isStepped {
                     animatedNavigationSteps += 1
                 }
-                pop2(completesInstantly: isStepped ? true : false)
+                pop2(completesInstantly: isStepped ? false : true)
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
