@@ -83,7 +83,7 @@ extension Binding {
         var animatedNavigationSteps = 0
         let pageElements = wrappedValue.pageElements
         for i in 0..<pageElements.count {
-            let pageElement = pageElements.reversed()[i + 1]
+            let pageElement = pageElements.reversed()[i]
             let style = pageElement.options.style
             if style == .sheet || style == .fullScreenCover {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * animatedNavigationSteps)) {
