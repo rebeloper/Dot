@@ -81,7 +81,8 @@ extension Binding {
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         var animatedNavigationSteps = 0
-        wrappedValue.pageElements.reversed().forEach { pageElement in
+        wrappedValue.pageElements.reversed().indexed().forEach { index, pageElement in
+            if index >= wrappedValue.pageElements.count { return }
             let style = pageElement.options.style
             if style == .sheet || style == .fullScreenCover {
                 animatedNavigationSteps += 1
