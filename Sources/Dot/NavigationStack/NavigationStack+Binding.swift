@@ -82,7 +82,7 @@ extension Binding {
     ) where Value == NavigationFlow<Page> {
         var animatedNavigationSteps = 0
         for _ in 0..<wrappedValue.pageElements.count - 1 {
-            guard let pageElement = wrappedValue.pageElements.reversed().last else { return }
+            guard let pageElement = wrappedValue.pageElements.last else { return }
             let style = pageElement.options.style
             if style == .sheet || style == .fullScreenCover {
                 animatedNavigationSteps += 1
