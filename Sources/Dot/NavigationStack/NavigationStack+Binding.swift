@@ -44,7 +44,8 @@ extension Binding {
     }
     
     /// Pops the specified last ``Page``s from the ``NavigationStack``.
-    /// - Parameter last: The number of screens to be popped; default is 1
+    /// - Parameter last: The number of screens to be popped
+    /// - Parameter popStyle: The style of the pop navigation, default is ``automatic``
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func pop<Page>(
         last: Int,
@@ -76,6 +77,7 @@ extension Binding {
     
     /// Pops to the ``Page`` at the specified ``index`` in the ``NavigationStack``.
     /// - Parameter index: The index of the page to be popped to
+    /// - Parameter popStyle: The style of the pop navigation, default is ``automatic``
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func popTo<Page>(
         index: Int,
@@ -90,6 +92,7 @@ extension Binding {
     }
     
     /// Pops all the ``Page``s from the ``NavigationStack``.
+    /// - Parameter popStyle: The style of the pop navigation, default is ``automatic``
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func popToRoot<Page>(
         popStyle: NavigationPopStyle = .automatic,
@@ -100,6 +103,7 @@ extension Binding {
     
     /// Replaces the ``NavigationStack`` flow's current ``Page``s with a new set of ``Page``s
     /// - Parameter newPageElements: The new page elements set
+    /// - Parameter popStyle: The style of the pop navigation, default is ``automatic``
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func replaceNavigationFlow<Page>(
         newPageElements: [NavigationPageElement<Page>],
