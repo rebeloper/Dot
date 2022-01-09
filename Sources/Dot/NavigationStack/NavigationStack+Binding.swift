@@ -101,29 +101,5 @@ extension Binding {
         popTo(index: 0, popStyle: popStyle, completion: completion)
     }
     
-    /// Replaces the ``NavigationStack`` flow's current ``Page``s with a new set of ``Page``s
-    /// - Parameter newPageElements: The new page elements set
-    /// - Parameter popStyle: The style of the pop navigation, default is ``automatic``
-    /// - Parameter completion: The closure to execute when finishing the navigation
-    public func replaceNavigationFlow<Page>(
-        newPageElements: [NavigationPageElement<Page>],
-        popStyle: NavigationPopStyle = .automatic,
-        discardsRoot: Bool = false,
-        completion: @escaping () -> () = {}
-    ) where Value == NavigationFlow<Page> {
-        popToRoot(popStyle: popStyle) {
-            if discardsRoot {
-                self.wrappedValue.pageElements = []
-            }
-            for (index, pageElement) in newPageElements.enumerated() {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
-                    self.wrappedValue.pageElements.append(pageElement)
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * newPageElements.count)) {
-                completion()
-            }
-        }
-    }
 }
 
