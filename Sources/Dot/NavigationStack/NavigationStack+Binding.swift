@@ -86,9 +86,11 @@ extension Binding {
             let style = pageElement.options.style
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
                 if style == .sheet || style == .fullScreenCover {
-                    pop2(completesInstantly: false)
+//                    pop2(completesInstantly: false)
+                    pop()
                 } else {
-                    pop2(completesInstantly: isStepped ? false : true)
+//                    pop2(completesInstantly: isStepped ? false : true)
+                    pop()
                 }
             }
             if style == .sheet || style == .fullScreenCover {
