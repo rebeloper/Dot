@@ -45,26 +45,26 @@ extension Binding {
     
     /// Pops all the ``Page``s from the ``NavigationStack``.
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func popToRoot<Page>(
-        completion: @escaping () -> () = {}
-    ) where Value == NavigationFlow<Page> {
-        for index in 0..<wrappedValue.pageElements.count - 1 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
-                pop()
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (wrappedValue.pageElements.count - 1))) {
-            completion()
-        }
-    }
+//    public func popToRoot<Page>(
+//        completion: @escaping () -> () = {}
+//    ) where Value == NavigationFlow<Page> {
+//        for index in 0..<wrappedValue.pageElements.count - 1 {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
+//                pop()
+//            }
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (wrappedValue.pageElements.count - 1))) {
+//            completion()
+//        }
+//    }
     
     /// Pops all the ``Page``s from the ``NavigationStack``.
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func popToRoot2<Page>(
-        isStepped: Bool = true,
+    public func popToRoot<Page>(
+        isStepped: Bool = false,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
-        pop2(last: wrappedValue.pageElements.count - 1, isStepped: isStepped, completion: completion)
+        pop(last: wrappedValue.pageElements.count - 1, isStepped: isStepped, completion: completion)
 //        var animatedNavigationSteps = 0
 //        let pageElements = wrappedValue.pageElements.dropFirst().reversed()
 //        pageElements.forEach { pageElement in
@@ -88,8 +88,8 @@ extension Binding {
     /// Pops the specified last ``Page``s from the ``NavigationStack``.
     /// - Parameter last: The number of screens to be popped; default is 1
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func pop2<Page>(
-        last: Int = 1,
+    public func pop<Page>(
+        last: Int,
         isStepped: Bool = true,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
