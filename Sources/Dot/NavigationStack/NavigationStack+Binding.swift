@@ -88,10 +88,14 @@ extension Binding {
             if
                 previousStyle == .sheet || previousStyle  == .fullScreenCover,
                 style != .sheet || style != .fullScreenCover {
-                pop()
+                pop {
+                    previousStyle = style
+                }
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
-                    pop()
+                    pop {
+                        previousStyle = style
+                    }
                 }
             }
             if style == .sheet || style == .fullScreenCover {
@@ -101,7 +105,6 @@ extension Binding {
                     animatedNavigationSteps += 1
                 }
             }
-            previousStyle = style
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
             completion()
