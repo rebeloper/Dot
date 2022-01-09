@@ -85,7 +85,9 @@ extension Binding {
         let pageElements = wrappedValue.pageElements.dropFirst().reversed()
         pageElements.forEach { pageElement in
             let style = pageElement.options.style
-            if previousStyle == .sheet || previousStyle  == .fullScreenCover {
+            if
+                previousStyle == .sheet || previousStyle  == .fullScreenCover,
+                style != .sheet || style != .fullScreenCover {
                 pop()
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
