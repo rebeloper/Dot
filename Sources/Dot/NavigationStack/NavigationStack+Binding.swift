@@ -81,15 +81,14 @@ extension Binding {
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         var animatedNavigationSteps = 0
+        var previousStyle: NavigationStyle = .default
         let pageElements = wrappedValue.pageElements.dropFirst().reversed()
         pageElements.forEach { pageElement in
             let style = pageElement.options.style
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
-                if style == .sheet || style == .fullScreenCover {
-//                    pop2(completesInstantly: false)
-                    pop()
-                } else {
-//                    pop2(completesInstantly: isStepped ? false : true)
+            if previousStyle == .sheet || previousStyle  == .fullScreenCover {
+                pop()
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
                     pop()
                 }
             }
@@ -100,6 +99,7 @@ extension Binding {
                     animatedNavigationSteps += 1
                 }
             }
+            previousStyle = style
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
             completion()
