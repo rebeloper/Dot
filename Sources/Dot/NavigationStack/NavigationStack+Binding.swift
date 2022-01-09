@@ -83,6 +83,7 @@ extension Binding {
         var animatedNavigationSteps = 0
         let pageElements = wrappedValue.pageElements.dropFirst().reversed()
         pageElements.forEach { pageElement in
+            let style = pageElement.options.style
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
                 if style == .sheet || style == .fullScreenCover {
                     pop2(completesInstantly: false)
@@ -90,7 +91,6 @@ extension Binding {
                     pop2(completesInstantly: isStepped ? false : true)
                 }
             }
-            let style = pageElement.options.style
             if style == .sheet || style == .fullScreenCover {
                 animatedNavigationSteps += 1
             } else {
