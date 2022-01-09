@@ -58,30 +58,45 @@ extension Binding {
         }
     }
     
-    /// Pops the last ``Page`` from the ``NavigationStack``.
-    /// - Parameter completion: The closure to execute when finishing the navigation
-    public func pop2<Page>(
-        completesInstantly: Bool = false,
-        completion: @escaping () -> () = {}
-    ) where Value == NavigationFlow<Page> {
-        self.wrappedValue.pageElements = self.wrappedValue.pageElements.dropLast()
-        if completesInstantly {
-            completion()
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds)) {
-                completion()
-            }
-        }
-    }
-    
     /// Pops all the ``Page``s from the ``NavigationStack``.
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func popToRoot2<Page>(
         isStepped: Bool = true,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
+        pop2(last: wrappedValue.pageElements.count - 1, completion: completion)
+//        var animatedNavigationSteps = 0
+//        let pageElements = wrappedValue.pageElements.dropFirst().reversed()
+//        pageElements.forEach { pageElement in
+//            let style = pageElement.options.style
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
+//                pop()
+//            }
+//            if style == .sheet || style == .fullScreenCover {
+//                animatedNavigationSteps += 1
+//            } else {
+//                if isStepped {
+//                    animatedNavigationSteps += 1
+//                }
+//            }
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
+//            completion()
+//        }
+    }
+    
+    /// Pops the specified last ``Page``s from the ``NavigationStack``.
+    /// - Parameter last: The number of screens to be popped; default is 1
+    /// - Parameter completion: The closure to execute when finishing the navigation
+    public func pop2<Page>(
+        last: Int = 1,
+        completion: @escaping () -> () = {}
+    ) where Value == NavigationFlow<Page> {
+        let pageElementsCount = wrappedValue.pageElements.count
+        let last = last >= pageElementscount ? pageElementscount - 1 : last
+        let toDrop = pageElementsCount - last
         var animatedNavigationSteps = 0
-        let pageElements = wrappedValue.pageElements.dropFirst().reversed()
+        let pageElements = wrappedValue.pageElements.dropFirst(toDrop).reversed()
         pageElements.forEach { pageElement in
             let style = pageElement.options.style
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * (animatedNavigationSteps))) {
