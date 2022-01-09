@@ -108,10 +108,13 @@ extension Binding {
     public func replaceNavigationFlow<Page>(
         newPageElements: [NavigationPageElement<Page>],
         popStyle: NavigationPopStyle = .automatic,
+        discardsRoot: Bool = false,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         popToRoot(popStyle: popStyle) {
-            self.wrappedValue.pageElements = []
+            if discardsRoot {
+                self.wrappedValue.pageElements = []
+            }
             for (index, pageElement) in newPageElements.enumerated() {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
                     self.wrappedValue.pageElements.append(pageElement)
