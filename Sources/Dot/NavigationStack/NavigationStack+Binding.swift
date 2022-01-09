@@ -90,7 +90,7 @@ extension Binding {
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func pop<Page>(
         last: Int,
-        isStepped: Bool = true,
+        isStepped: Bool = false,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         let pageElementsCount = wrappedValue.pageElements.count
@@ -119,40 +119,34 @@ extension Binding {
     /// Pops the specified last ``Page``s from the ``NavigationStack``.
     /// - Parameter last: The number of screens to be popped; default is 1
     /// - Parameter completion: The closure to execute when finishing the navigation
-    public func pop<Page>(
-        last: Int = 1,
-        completion: @escaping () -> () = {}
-    ) where Value == NavigationFlow<Page> {
-        let last = last >= wrappedValue.pageElements.count ? wrappedValue.pageElements.count - 1 : last
-        for index in 0..<last {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
-                self.pop()
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * last)) {
-            completion()
-        }
-    }
+//    public func pop<Page>(
+//        last: Int = 1,
+//        completion: @escaping () -> () = {}
+//    ) where Value == NavigationFlow<Page> {
+//        let last = last >= wrappedValue.pageElements.count ? wrappedValue.pageElements.count - 1 : last
+//        for index in 0..<last {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
+//                self.pop()
+//            }
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * last)) {
+//            completion()
+//        }
+//    }
     
     /// Pops to the ``Page`` at the specified ``index`` in the ``NavigationStack``.
     /// - Parameter index: The index of the page to be popped to
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func popTo<Page>(
         index: Int,
+        isStepped: Bool = false,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         guard index < wrappedValue.pageElements.count else { return }
         let index = index >= 0 ? index : 0
         let difference = wrappedValue.pageElements.count - index - 1
         let last = difference >= wrappedValue.pageElements.count ? wrappedValue.pageElements.count - 1 : difference
-        for index in 0..<last {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * index)) {
-                self.pop()
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds * last)) {
-            completion()
-        }
+        pop(last: last, isStepped: isStepped, completion: completion)
     }
     
     /// Replaces the ``NavigationStack`` flow's current ``Page``s with a new set of ``Page``s
