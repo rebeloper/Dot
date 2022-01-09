@@ -64,7 +64,7 @@ extension Binding {
         isStepped: Bool = true,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
-        pop2(last: wrappedValue.pageElements.count - 1, completion: completion)
+        pop2(last: wrappedValue.pageElements.count - 1, isStepped: isStepped, completion: completion)
 //        var animatedNavigationSteps = 0
 //        let pageElements = wrappedValue.pageElements.dropFirst().reversed()
 //        pageElements.forEach { pageElement in
@@ -90,10 +90,11 @@ extension Binding {
     /// - Parameter completion: The closure to execute when finishing the navigation
     public func pop2<Page>(
         last: Int = 1,
+        isStepped: Bool = true,
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
         let pageElementsCount = wrappedValue.pageElements.count
-        let last = last >= pageElementscount ? pageElementscount - 1 : last
+        let last = last >= pageElementsCount ? pageElementsCount - 1 : last
         let toDrop = pageElementsCount - last
         var animatedNavigationSteps = 0
         let pageElements = wrappedValue.pageElements.dropFirst(toDrop).reversed()
