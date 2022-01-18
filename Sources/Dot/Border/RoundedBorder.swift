@@ -14,8 +14,8 @@ public extension View {
     ///   - width: border width
     ///   - cornerRadius: bodred corner radius
     /// - Returns: a view with a border and corner radius
-    func border<S: ShapeStyle>(_ content: S, width: CGFloat = 1, cornerRadius: CGFloat = 15) -> some View {
-         let roundedRect = RoundedRectangle(cornerRadius: cornerRadius)
+    func border<S: ShapeStyle>(_ content: S, width: CGFloat = 1, cornerRadius: CGFloat = 15, style: RoundedCornerStyle = .circular) -> some View {
+         let roundedRect = RoundedRectangle(cornerRadius: cornerRadius, style: style)
          return clipShape(roundedRect)
               .overlay(roundedRect.strokeBorder(content, lineWidth: width))
      }
