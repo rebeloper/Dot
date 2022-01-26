@@ -28,3 +28,68 @@ extension Array: RawRepresentable where Element: Codable {
     }
 }
 
+public extension Array {
+    
+    /// The second element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var second: Element? {
+        self[1]
+    }
+    
+    /// The third element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var third: Element? {
+        self[2]
+    }
+    
+    /// The fourth element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var fourth: Element? {
+        self[3]
+    }
+    
+    /// The fifth element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var fifth: Element? {
+        self[4]
+    }
+    
+    /// The sixth element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var sixth: Element? {
+        self[5]
+    }
+    
+    /// The seventh element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var seventh: Element? {
+        self[6]
+    }
+    
+    /// The eight element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var eight: Element? {
+        self[7]
+    }
+    
+    /// The nineth element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var nineth: Element? {
+        self[8]
+    }
+    
+    /// The tenth element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    @inlinable var tenth: Element? {
+        self[9]
+    }
+}

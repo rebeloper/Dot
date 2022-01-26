@@ -141,8 +141,8 @@ public struct Notice {
     /// var textFields: [NoticeTextField] = []
     /// textFields.append(NoticeTextField(title: "Name", autoCapitalizationType: .words))
     /// textFields.append(NoticeTextField(title: "Email", autoCapitalizationType: .none, keyboardType: .emailAddress))
-    /// textFields.append(NoticeTextField(title: "Password", isSecure: true))
-    /// textFields.append(NoticeTextField(title: "Re-enter Password", isSecure: true))
+    /// textFields.append(NoticeTextField(title: "Password", isSecure: true, keyboardType: .none))
+    /// textFields.append(NoticeTextField(title: "Re-enter Password", isSecure: true, keyboardType: .none))
     ///
     /// var buttons: [NoticeButton] = []
     /// buttons.append(NoticeButton(title: "Submit", action: {
