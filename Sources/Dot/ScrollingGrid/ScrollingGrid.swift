@@ -24,8 +24,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
     
     @State private var isKeyboardVisible = false
     
-    @State private var bottomSpacerId = 0
-    
     /// Creates a new instance that's scrollable.
     ///
     /// - Parameters:
@@ -151,14 +149,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                         if options.tabs.stack.tags.count != 0, !isKeyboardVisible {
                         Spacer().frame(height: options.tabs.visible ? options.tabs.options.height + options.tabs.options.edgeInsets.bottom : 0)
                             .transition(.scale)
-                            .id(bottomSpacerId)
-                            .onAppear {
-                                bottomSpacerId = 1
-                            }
-                            .onDisappear {
-                                bottomSpacerId = 0
-                            }
-                        ScrollTo(id: 1, proxy: proxy)
                     }
             }
             .offset(y: (state == .loading) ? refreshViewLenght : 0)

@@ -12,9 +12,13 @@ import SwiftUI
 ///   - id: the id of the View to be scrlled to
 ///   - proxy: ScrollViewReader proxy
 /// - Returns: EmtpyView()
-public func ScrollTo(id: Int, proxy: ScrollViewProxy) -> some View {
+public func ScrollTo(id: Int, proxy: ScrollViewProxy, animated: Bool = true) -> some View {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-        withAnimation {
+        if animated {
+            withAnimation {
+                proxy.scrollTo(id)
+            }
+        } else {
             proxy.scrollTo(id)
         }
     }
