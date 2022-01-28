@@ -16,7 +16,7 @@ public struct TabsStackOptions {
     public var showsDivider: Bool
     public var edgeInsets: EdgeInsets
     public var isTabChangeAnimated: Bool
-    public var clipsContentToTop: Bool
+    @Binding public var clipsContentToTop: Bool
     
     public init(initialSelectedTabIndex: Int = 0,
                 selectedColor: Color = .accentColor,
@@ -25,7 +25,7 @@ public struct TabsStackOptions {
                 showsDivider: Bool = true,
                 edgeInsets: EdgeInsets = .init(.zero),
                 isTabChangeAnimated: Bool = false,
-                clipsContentToTop: Bool = true) {
+                clipsContentToTop: Binding<Bool> = .constant(true)) {
         self.initialSelectedTabIndex = initialSelectedTabIndex
         self.selectedColor = selectedColor
         self.unselectedColor = unselectedColor
@@ -33,7 +33,7 @@ public struct TabsStackOptions {
         self.showsDivider = showsDivider
         self.edgeInsets = edgeInsets
         self.isTabChangeAnimated = isTabChangeAnimated
-        self.clipsContentToTop = clipsContentToTop
+        self._clipsContentToTop = clipsContentToTop
     }
 }
 
