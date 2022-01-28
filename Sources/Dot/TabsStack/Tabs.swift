@@ -101,6 +101,7 @@ public extension Tabs {
     /// Shows the TabsStack
     /// - Parameter flag: animation flag; default is `true`
     func show(animated flag: Bool = true) {
+        guard !visible else { return }
         execute(with: flag) {
             visible = true
         }
@@ -109,6 +110,7 @@ public extension Tabs {
     /// Hides the TabsStack
     /// - Parameter flag: animation flag; default is `true`
     func hide(animated flag: Bool = true) {
+        guard visible else { return }
         execute(with: flag) {
             visible = false
         }
@@ -249,6 +251,7 @@ public extension Tabs {
     ///   - selectedColor: color
     ///   - flag: animation flag; default is `true`
     func setSelectedColor(_ selectedColor: Color, animated flag: Bool = true) {
+        guard options.selectedColor != selectedColor else { return }
         execute(with: flag) {
             options.selectedColor = selectedColor
         }
@@ -259,6 +262,7 @@ public extension Tabs {
     ///   - unselectedColor: color
     ///   - flag: animation flag; default is `true`
     func setUnselectedColor(_ unselectedColor: Color, animated flag: Bool = true) {
+        guard options.unselectedColor != unselectedColor else { return }
         execute(with: flag) {
             options.unselectedColor = unselectedColor
         }
@@ -269,6 +273,7 @@ public extension Tabs {
     ///   - height: height
     ///   - flag: animation flag; default is `true`
     func setHeight(_ height: CGFloat, animated flag: Bool = true) {
+        guard options.height != height else { return }
         execute(with: flag) {
             options.height = height
         }
@@ -297,6 +302,7 @@ public extension Tabs {
     /// Shows the TabsStack's divider
     /// - Parameter flag: animation flag; default is `true`
     func showDivider(animated flag: Bool = true) {
+        guard !options.showsDivider else { return }
         execute(with: flag) {
             options.showsDivider = true
         }
@@ -305,6 +311,7 @@ public extension Tabs {
     /// Hides the TabsStack's divider
     /// - Parameter flag: animation flag; default is `true`
     func hideDivider(animated flag: Bool = true) {
+        guard options.showsDivider else { return }
         execute(with: flag) {
             options.showsDivider = false
         }
@@ -323,6 +330,7 @@ public extension Tabs {
     ///   - edgeInsets: edge instes
     ///   - flag: animation flag; default is `true`
     func setEdgeInsets(_ edgeInsets: EdgeInsets, animated flag: Bool = true) {
+        guard options.edgeInsets != edgeInsets else { return }
         execute(with: flag) {
             options.edgeInsets = edgeInsets
         }
@@ -331,6 +339,7 @@ public extension Tabs {
     /// Set the flag for the tab change animation
     /// - Parameter isTabChangeAnimated: animation flag
     func setIsTabChangeAnimated(_ isTabChangeAnimated: Bool) {
+        guard options.isTabChangeAnimated != isTabChangeAnimated else { return }
         options.isTabChangeAnimated = isTabChangeAnimated
     }
     
