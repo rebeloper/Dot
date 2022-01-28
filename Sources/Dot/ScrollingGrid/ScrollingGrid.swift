@@ -68,8 +68,10 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                 // Your ScrollView content. If we're loading, we want
                 // to keep it below the loading view, hence the alignmentGuide.
                 
-                ScrollView(axis, showsIndicators: options.showsIndicators) {
-                    scrollViewContent()
+                ScrollViewReader { proxy in
+                    ScrollView(axis, showsIndicators: options.showsIndicators) {
+                        scrollViewContent(proxy: proxy)
+                    }
                 }
                 
                 // The loading view. It's offset to the top of the content unless we're loading.
@@ -116,7 +118,7 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
     }
     
     @ViewBuilder
-    public func scrollViewContent() -> some View {
+    public func scrollViewContent(proxy: ScrollViewProxy) -> some View {
         if axis == .vertical {
             VStack(spacing: 0) {
                 scrollViewOffsetReader(axes: .vertical)
@@ -147,6 +149,8 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                         if options.tabs.stack.tags.count != 0, !isKeyboardVisible {
                         Spacer().frame(height: options.tabs.visible ? options.tabs.options.height + options.tabs.options.edgeInsets.bottom : 0)
                             .transition(.scale)
+                            .id(0)
+                        ScrollTo(id: 0, proxy: proxy)
                     }
             }
             .offset(y: (state == .loading) ? refreshViewLenght : 0)
