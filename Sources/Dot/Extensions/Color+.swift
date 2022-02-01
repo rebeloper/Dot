@@ -105,3 +105,36 @@ public extension Color {
         UIColor(self)
     }
 }
+
+public extension Color {
+    static var random: Color {
+        return Color(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1)
+        )
+    }
+    
+    static var systemRandom: Color {
+        return [
+            .systemRed,
+            .systemGreen,
+            .systemBlue,
+            .systemOrange,
+            .systemYellow,
+            .systemPink,
+            .systemPurple,
+            .systemTeal,
+            .systemIndigo,
+            .systemBrown,
+            .systemMint,
+            .systemCyan,
+            .systemGray,
+            .systemGray2,
+            .systemGray3,
+            .systemGray4,
+            .systemGray5,
+            .systemGray6
+        ].randomElement() ?? Color.black
+    }
+}
