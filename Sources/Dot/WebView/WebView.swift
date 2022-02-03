@@ -62,7 +62,7 @@ public class WebViewStore: ObservableObject {
 ///
 /// ```swift
 /// import SwiftUI
-/// import SwiftUIPlus
+/// import Dot
 ///
 /// struct ContentView: View {
 ///     @StateObject var webViewStore = WebViewStore()
@@ -104,7 +104,7 @@ public class WebViewStore: ObservableObject {
 ///
 /// ```swift
 /// import SwiftUI
-/// import SwiftUIPlus
+/// import Dot
 ///
 /// struct ContentView: View {
 ///     @StateObject var webViewStore = WebViewStore()
@@ -120,7 +120,7 @@ public class WebViewStore: ObservableObject {
 ///
 /// ```swift
 /// import SwiftUI
-/// import SwiftUIPlus
+/// import Dot
 ///
 /// struct ContentView: View {
 ///     @StateObject var webViewStore = WebViewStore()
@@ -144,7 +144,7 @@ public class WebViewStore: ObservableObject {
 ///
 /// ```swift
 /// import SwiftUI
-/// import SwiftUIPlus
+/// import Dot
 ///
 /// struct ContentView: View {
 ///     @StateObject var webViewStore = WebViewStore()
