@@ -23,7 +23,7 @@ public extension View {
     /// Adds a ToastManager to the view
     /// - Parameter manager: ToastManager
     /// - Returns: a view with a Toast
-    func uses(_ manager: ToastManager) -> some View {
+    private func uses(_ manager: ToastManager) -> some View {
         modifier(ToastViewModifier(manager: manager))
     }
     
