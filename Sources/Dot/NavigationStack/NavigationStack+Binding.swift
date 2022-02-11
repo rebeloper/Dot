@@ -37,6 +37,10 @@ extension Binding {
     public func pop<Page>(
         completion: @escaping () -> () = {}
     ) where Value == NavigationFlow<Page> {
+        guard self.wrappedValue.pageElements.count > 1 else {
+            completion()
+            return
+        }
         self.wrappedValue.pageElements = self.wrappedValue.pageElements.dropLast()
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(wrappedValue.popMilliseconds)) {
             completion()
