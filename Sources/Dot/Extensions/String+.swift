@@ -15,4 +15,9 @@ public extension String {
     func withFallbackUrl(_ fallbackUrl: String = "https://google.com") -> URL {
         URL(string: self) ?? URL(string: fallbackUrl)!
     }
+    
+    /// Is the String an Empty String AKA ""
+    var isBlank: Bool {
+        self == ""
+    }
 }
