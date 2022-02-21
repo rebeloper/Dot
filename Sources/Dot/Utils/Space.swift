@@ -8,6 +8,9 @@
 import SwiftUI
 
 public struct Space: View {
+    
+    public init() {}
+    
     public var body: some View {
         Spacer(minLength: 0)
     }
