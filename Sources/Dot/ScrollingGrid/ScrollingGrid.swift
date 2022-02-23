@@ -147,8 +147,8 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                         Spacer().frame(width: 0, height: options.endPadding)
                         
                         if options.tabs.stack.tags.count != 0, !isKeyboardVisible {
-                        Spacer().frame(height: options.tabs.visible ? (options.tabs.options.isClippedToTabs ? 0 : options.tabs.options.height) + options.tabs.options.edgeInsets.bottom : 0)
-                            .transition(.scale)
+//                        Spacer().frame(height: options.tabs.visible ? options.tabs.options.height + options.tabs.options.edgeInsets.bottom : 0)
+//                            .transition(.scale)
                     }
             }
             .offset(y: (state == .loading) ? refreshViewLenght : 0)
