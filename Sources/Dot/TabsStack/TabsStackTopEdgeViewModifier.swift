@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TabsStackTopEdgeViewModifier: ViewModifier {
+public struct TabsStackTopEdgeViewModifier: ViewModifier, KeyboardReadable {
     
     // MARK: - ObservedObjects
     @ObservedObject public var tabs: Tabs
@@ -15,12 +15,21 @@ public struct TabsStackTopEdgeViewModifier: ViewModifier {
     // MARK: - Bindings
     @Binding var ignoresTabsTopEdge: Bool
     
+    @State private var isKeyboardVisible = false
+    
     // MARK: - Body
     public func body(content: Content) -> some View {
         TightVStack {
             content
-            Space(height: tabs.visible ? (ignoresTabsTopEdge ? 0 : tabs.options.height) + tabs.options.edgeInsets.bottom : 0)
-                .transition(.scale)
+            if !isKeyboardVisible {
+                Space(height: tabs.visible ? (ignoresTabsTopEdge ? 0 : tabs.options.height) + tabs.options.edgeInsets.bottom : 0)
+                    .transition(.scale)
+            }
+        }
+        .onReceive(keyboardPublisher) { isKeyboardVisible in
+            withAnimation {
+                self.isKeyboardVisible = isKeyboardVisible
+            }
         }
     }
 }
