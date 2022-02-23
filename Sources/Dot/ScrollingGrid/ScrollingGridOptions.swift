@@ -15,6 +15,7 @@ public struct ScrollingGridOptions {
     public var startPadding: CGFloat
     public var endPadding: CGFloat
     public var onRefreshTreshold: CGFloat
+    public var tabs: Tabs
     
     /// ScrollableGrid options
     /// - Parameters:
@@ -37,7 +38,8 @@ public struct ScrollingGridOptions {
                 spacing: CGFloat? = 0,
                 startPadding: CGFloat = 0,
                 endPadding: CGFloat = 0,
-                onRefreshTreshold: CGFloat = 60
+                onRefreshTreshold: CGFloat = 60,
+                tabs: Tabs = Tabs()
     ) {
         self.showsIndicators = showsIndicators
         self.verticalAlignment = verticalAlignment
@@ -46,5 +48,6 @@ public struct ScrollingGridOptions {
         self.startPadding = startPadding
         self.endPadding = endPadding
         self.onRefreshTreshold = onRefreshTreshold
+        self.tabs = tabs
     }
 }

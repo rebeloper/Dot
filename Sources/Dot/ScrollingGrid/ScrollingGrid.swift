@@ -117,6 +117,7 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
                 scrollViewOffsetReader(axes: .vertical)
                 Spacer().frame(width: 0, height: options.startPadding)
                 content()
+                    .sticksToTopEdge(of: options.tabs)
                     .if(header != nil && footer != nil, transform: { content in
                         content.verticalGridWithHeaderAndFooter(gridItems, alignment: options.horizontalAlignment, spacing: options.spacing, pinnedViews: pinnedViews) {
                             header!()
