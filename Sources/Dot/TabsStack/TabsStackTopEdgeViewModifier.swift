@@ -42,4 +42,8 @@ public extension View {
     func ignoresTabsTopEdge(_ value: Bool, tabs: Tabs) -> some View {
         modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: .constant(value)))
     }
+    
+    func sticksToTopEdge(of tabs: Tabs) -> some View {
+        modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: .constant(false)))
+    }
 }
