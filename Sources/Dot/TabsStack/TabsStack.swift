@@ -54,7 +54,7 @@ public extension TabsStack {
                     index: index,
                     selection: $tabs.selection)
             }
-        }
+        }.clippedTo(tabs)
     }
     
     func tabBarView() -> some View {
