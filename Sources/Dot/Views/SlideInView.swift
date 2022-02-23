@@ -60,6 +60,9 @@ public struct SlideInView<Content: View, Container: View>: View {
                 container: @escaping () -> Container) {
         self._isActive = isActive
         self.edge = edge
+        guard 0.0...1.0 ~= paddingPercentage else {
+            fatalError("paddingPercentage must be between 0 and 1")
+        }
         self.paddingPercentage = paddingPercentage
         self.options = options
         self.content = content
