@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct TabsStackClippedViewModifier: ViewModifier {
+public struct TabsStackClippedViewModifier: ViewModifier {
     
     // MARK: - ObservedObjects
-    @ObservedObject var tabs: Tabs
+    @ObservedObject public var tabs: Tabs
     
     // MARK: - Bindings
     
     // MARK: - Body
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         TightVStack {
             content
             if tabs.options.isClippedToTabs {
@@ -25,7 +25,7 @@ struct TabsStackClippedViewModifier: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func clippedTo(_ tabs: Tabs) -> some View {
         modifier(TabsStackClippedViewModifier(tabs: tabs))
     }
