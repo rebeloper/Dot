@@ -35,14 +35,28 @@ public struct TabsStackTopEdgeViewModifier: ViewModifier, KeyboardReadable {
 }
 
 public extension View {
+    
+    /// Should the view ignore the top edge of the ``Tabs``
+    /// - Parameters:
+    ///   - value: binded boolean
+    ///   - tabs: tabs
+    /// - Returns: some view
     func ignoresTabsTopEdge(_ value: Binding<Bool>, tabs: Tabs) -> some View {
         modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: value))
     }
     
+    /// Should the view ignore the top edge of the ``Tabs``
+    /// - Parameters:
+    ///   - value: boolean
+    ///   - tabs: tabs
+    /// - Returns: some view
     func ignoresTabsTopEdge(_ value: Bool, tabs: Tabs) -> some View {
         modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: .constant(value)))
     }
     
+    /// Sticks the view to the top edge of the ``Tabs``
+    /// - Parameter tabs: tabs
+    /// - Returns: some view
     func sticksToTopEdge(of tabs: Tabs) -> some View {
         modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: .constant(false)))
     }
