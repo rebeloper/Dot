@@ -15,6 +15,8 @@ public struct TabsStackTopEdgeViewModifier: ViewModifier, KeyboardReadable {
     // MARK: - Bindings
     @Binding var ignoresTabsTopEdge: Bool
     
+    var keyboardTopPadding: CGFloat
+    
     @State private var isKeyboardVisible = false
     
     // MARK: - Body
@@ -24,6 +26,8 @@ public struct TabsStackTopEdgeViewModifier: ViewModifier, KeyboardReadable {
             if !isKeyboardVisible {
                 Space(height: tabs.visible ? (ignoresTabsTopEdge ? 0 : tabs.options.height) + tabs.options.edgeInsets.bottom : 0)
                     .transition(.scale)
+            } else {
+                Space(height: keyboardTopPadding)
             }
         }
         .onReceive(keyboardPublisher) { isKeyboardVisible in
@@ -35,11 +39,11 @@ public struct TabsStackTopEdgeViewModifier: ViewModifier, KeyboardReadable {
 }
 
 public extension View {
-    func ignoresTabsTopEdge(_ value: Binding<Bool>, tabs: Tabs) -> some View {
-        modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: value))
+    func ignoresTabsTopEdge(_ value: Binding<Bool>, tabs: Tabs, keyboardTopPadding: CGFloat = 6) -> some View {
+        modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: value, keyboardTopPadding: keyboardTopPadding))
     }
     
-    func ignoresTabsTopEdge(_ value: Bool, tabs: Tabs) -> some View {
-        modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: .constant(value)))
+    func ignoresTabsTopEdge(_ value: Bool, tabs: Tabs, keyboardTopPadding: CGFloat = 6) -> some View {
+        modifier(TabsStackTopEdgeViewModifier(tabs: tabs, ignoresTabsTopEdge: .constant(value), keyboardTopPadding: keyboardTopPadding))
     }
 }
