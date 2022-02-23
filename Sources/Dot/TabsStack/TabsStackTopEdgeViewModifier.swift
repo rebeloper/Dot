@@ -21,7 +21,7 @@ public struct TabsStackTopEdgeViewModifier: ViewModifier, KeyboardReadable {
     public func body(content: Content) -> some View {
         TightVStack {
             content
-            if !isKeyboardVisible {
+            if tabs.stack.tags.count != 0, !isKeyboardVisible {
                 Space(height: tabs.visible ? (ignoresTabsTopEdge ? 0 : tabs.options.height) + tabs.options.edgeInsets.bottom : 0)
                     .transition(.scale)
             }
