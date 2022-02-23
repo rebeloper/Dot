@@ -58,6 +58,8 @@ public class LocationProvider: NSObject, ObservableObject {
     /// A function that is executed when the `CLAuthorizationStatus` changes to `Denied`.
     public var onAuthorizationStatusDenied: () -> Void
     
+    public var monitorsSignificantLocationChanges: Bool
+    
     /// The LocationProvider intializer.
     ///
     /// Creates a CLLocationManager delegate and sets the CLLocationManager properties.
@@ -67,7 +69,9 @@ public class LocationProvider: NSObject, ObservableObject {
                 allowsBackgroundLocationUpdates: Bool = false,
                 pausesLocationUpdatesAutomatically: Bool = true,
                 showsBackgroundLocationIndicator: Bool = false,
+                monitorsSignificantLocationChanges: Bool = false,
                 onAuthorizationStatusDenied: @escaping () -> Void) {
+        self.monitorsSignificantLocationChanges = monitorsSignificantLocationChanges
         self.onAuthorizationStatusDenied = onAuthorizationStatusDenied
         
         super.init()
@@ -82,6 +86,15 @@ public class LocationProvider: NSObject, ObservableObject {
         #if os(iOS)
         self.lm.showsBackgroundLocationIndicator = showsBackgroundLocationIndicator
         #endif
+        if self.monitorsSignificantLocationChanges {
+            self.lm.startMonitoringSignificantLocationChanges()
+        }
+    }
+    
+    deinit {
+        if self.monitorsSignificantLocationChanges {
+            self.lm.stopMonitoringSignificantLocationChanges()
+        }
     }
     
     /**
