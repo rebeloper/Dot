@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, KeyboardReadable {
+public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View {
     private var axis: Axis.Set
     private var gridItems: [GridItem]
     private var options: ScrollingGridOptions
@@ -21,8 +21,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
     @State private var state = RefreshState.waiting // the current state
     
     private var refreshViewLenght: CGFloat = 30
-    
-    @State private var isKeyboardVisible = false
     
     /// Creates a new instance that's scrollable.
     ///
@@ -109,11 +107,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                     }
                 }
             })
-            .onReceive(keyboardPublisher) { isKeyboardVisible in
-                withAnimation {
-                    self.isKeyboardVisible = isKeyboardVisible
-                }
-            }
         }
     }
     
@@ -145,11 +138,6 @@ public struct ScrollingGrid<Content: View, Header: View, Footer: View>: View, Ke
                             })
                         })
                         Spacer().frame(width: 0, height: options.endPadding)
-                        
-                        if options.tabs.stack.tags.count != 0, !isKeyboardVisible {
-//                        Spacer().frame(height: options.tabs.visible ? options.tabs.options.height + options.tabs.options.edgeInsets.bottom : 0)
-//                            .transition(.scale)
-                    }
             }
             .offset(y: (state == .loading) ? refreshViewLenght : 0)
         } else {
