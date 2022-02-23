@@ -216,7 +216,6 @@ public struct LoremIpsum {
         "Yu Tube",
         "Ellis Dee",
         "Anna Lytics",
-        "Sara Bellum",
         "Penny Trate",
         "Phil Erup",
         "Jenna Side",
