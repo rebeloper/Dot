@@ -36,7 +36,7 @@ public struct TabsStackScrollView<Content: View>: View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             VStack(spacing: 0) {
                 content()
-                Spacer().frame(height: tabs.visible ? tabs.options.height + tabs.options.edgeInsets.bottom : 0)
+                Spacer().frame(height: tabs.visible ? (tabs.options.isClippedToTabs ? 0 : tabs.options.height) + tabs.options.edgeInsets.bottom : 0)
             }
         }
     }
