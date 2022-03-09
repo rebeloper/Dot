@@ -74,6 +74,7 @@ public class LocationProvider: NSObject, ObservableObject {
                 monitorsSignificantLocationChanges: Bool = false,
                 shouldLogLocationUpdates: Bool = false,
                 onAuthorizationStatusDenied: @escaping () -> Void = { }) {
+        self.shouldLogLocationUpdates = shouldLogLocationUpdates
         self.monitorsSignificantLocationChanges = monitorsSignificantLocationChanges
         self.onAuthorizationStatusDenied = onAuthorizationStatusDenied
         
