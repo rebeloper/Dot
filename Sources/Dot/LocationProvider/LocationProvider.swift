@@ -62,6 +62,8 @@ public class LocationProvider: NSObject, ObservableObject {
     
     public var shouldLogLocationUpdates: Bool
     
+    public var status: CLAuthorizationStatus = defaultCLAuthorizationStatus
+    
     /// The LocationProvider intializer.
     ///
     /// Creates a CLLocationManager delegate and sets the CLLocationManager properties.
@@ -109,7 +111,7 @@ public class LocationProvider: NSObject, ObservableObject {
      In case, the access has already been denied, execute the `onAuthorizationDenied` closure.
      The default behavior is to present an alert that suggests going to the settings page.
      */
-    public func requestAuthorization(status: CLAuthorizationStatus = defaultCLAuthorizationStatus) -> Void {
+    public func requestAuthorization(status: CLAuthorizationStatus) -> Void {
         if self.authorizationStatus == CLAuthorizationStatus.denied {
             onAuthorizationStatusDenied()
         }
@@ -126,8 +128,9 @@ public class LocationProvider: NSObject, ObservableObject {
     }
     
     /// Start the Location Provider.
-    public func start() throws -> Void {
-        self.requestAuthorization()
+    public func start(status: CLAuthorizationStatus = defaultCLAuthorizationStatus) throws -> Void {
+        self.status = status
+        self.requestAuthorization(status: status)
         
         if let status = self.authorizationStatus {
             guard allowedCLAuthorizationStatuses.contains(status) else {
@@ -182,7 +185,7 @@ extension LocationProvider: CLLocationManagerDelegate {
             case CLError.denied : do {
                 print(#function, "Location access denied by user.")
                 self.stop()
-                self.requestAuthorization()
+                self.requestAuthorization(status: self.status)
             }
             case CLError.locationUnknown : print(#function, "Location manager is unable to retrieve a location.")
             default: print(#function, "Location manager failed with unknown CoreLocation error.")
