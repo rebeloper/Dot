@@ -166,6 +166,9 @@ public enum LocationProviderError: Error {
 extension LocationProvider: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.authorizationStatus = status
+        if status == .authorizedWhenInUse, monitorsSignificantLocationChanges {
+            requestAuthorization(status: .authorizedAlways)
+        }
         #if DEBUG
         print(#function, status.name)
         #endif
