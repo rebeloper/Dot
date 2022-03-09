@@ -91,6 +91,7 @@ public class LocationProvider: NSObject, ObservableObject {
         self.lm.showsBackgroundLocationIndicator = showsBackgroundLocationIndicator
         #endif
         if self.monitorsSignificantLocationChanges {
+            self.lm.pausesLocationUpdatesAutomatically = true
             self.lm.startMonitoringSignificantLocationChanges()
         }
     }
