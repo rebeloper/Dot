@@ -60,6 +60,8 @@ public class LocationProvider: NSObject, ObservableObject {
     
     public var monitorsSignificantLocationChanges: Bool
     
+    public var shouldLogLocationUpdates: Bool
+    
     /// The LocationProvider intializer.
     ///
     /// Creates a CLLocationManager delegate and sets the CLLocationManager properties.
@@ -70,7 +72,8 @@ public class LocationProvider: NSObject, ObservableObject {
                 pausesLocationUpdatesAutomatically: Bool = true,
                 showsBackgroundLocationIndicator: Bool = false,
                 monitorsSignificantLocationChanges: Bool = false,
-                onAuthorizationStatusDenied: @escaping () -> Void) {
+                shouldLogLocationUpdates: Bool = false,
+                onAuthorizationStatusDenied: @escaping () -> Void = { }) {
         self.monitorsSignificantLocationChanges = monitorsSignificantLocationChanges
         self.onAuthorizationStatusDenied = onAuthorizationStatusDenied
         
@@ -161,12 +164,14 @@ extension LocationProvider: CLLocationManagerDelegate {
         #if DEBUG
         print(#function, status.name)
         #endif
-        //print()
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         self.location = location
+        if shouldLogLocationUpdates {
+            print(location)
+        }
     }
     
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
