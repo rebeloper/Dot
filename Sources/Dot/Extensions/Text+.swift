@@ -10,12 +10,12 @@ import SwiftUI
 public extension Text {
     
     /// A view that displays one or more, attributed or not string lines of read-only text.
-    init(_ anyString: String) {
-        do {
-            let attributedString = try AttributedString(markdown: anyString)
-            self.init(attributedString)
-        } catch {
-            self.init(anyString)
-        }
-    }
+//    init(_ anyString: String) {
+//        do {
+//            let attributedString = try AttributedString(markdown: anyString)
+//            self.init(attributedString)
+//        } catch {
+//            self.init(anyString)
+//        }
+//    }
 }
