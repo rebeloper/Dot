@@ -16,4 +16,18 @@ public extension UIApplication {
             .first { $0.isKeyWindow }?
             .rootViewController
     }
+    
+    static var keyWindow: UIWindow? {
+        self.shared
+            .connectedScenes
+            .compactMap {
+                $0 as? UIWindowScene
+            }
+            .flatMap {
+                $0.windows
+            }
+            .first {
+                $0.isKeyWindow
+            }
+    }
 }
