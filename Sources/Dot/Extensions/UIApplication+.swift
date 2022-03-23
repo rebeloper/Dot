@@ -17,7 +17,7 @@ public extension UIApplication {
             .rootViewController
     }
     
-    static var rootWindow: UIWindow? {
+    static var firstKeyWindow: UIWindow? {
         self.shared
             .connectedScenes
             .compactMap {
