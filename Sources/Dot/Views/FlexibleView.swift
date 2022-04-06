@@ -17,9 +17,9 @@ public struct FlexibleView<Data: Collection, Content: View>: View where Data.Ele
     let content: (Data.Element) -> Content
     @State private var availableWidth: CGFloat = 0
     
-    public init(data: Data,
-                vSpacing: CGFloat = 12,
-                hSpacing: CGFloat = 12,
+    public init(_ data: Data,
+                vSpacing: CGFloat = 0,
+                hSpacing: CGFloat = 6,
                 alignment: HorizontalAlignment = .leading,
                 content: @escaping (Data.Element) -> Content) {
         self.data = data
