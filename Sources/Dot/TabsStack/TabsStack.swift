@@ -16,7 +16,7 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
     @ViewBuilder var pages: (Int) -> PageView
     @ViewBuilder var items: (Int) -> ItemView
     @ViewBuilder var background: () -> BackgroundView
-    var sameItemTapAction: (() -> ())?
+    var onSameItemTap: (() -> ())?
     
     /// Creates a stack of tabs with pages, items and background.
     /// - Parameters:
@@ -24,18 +24,19 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
     ///   - pages: Holds the pages of the tabs
     ///   - items: Holds the tab items of the tabs
     ///   - background: The background of the TabsStack
+    ///   - onSameItemTap: An action trigerred when we tap on an already selected item
     public init(
         _ tabs: Tabs,
         @ViewBuilder pages: @escaping (Int) -> PageView,
         @ViewBuilder items: @escaping (Int) -> ItemView,
         @ViewBuilder background: @escaping () -> BackgroundView,
-        sameItemTapAction: (() -> ())? = nil
+        onSameItemTap: (() -> ())? = nil
     ) {
         self.tabs = tabs
         self.pages = pages
         self.items = items
         self.background = background
-        self.sameItemTapAction = sameItemTapAction
+        self.onSameItemTap = onSameItemTap
     }
     
     public var body: some View {
@@ -100,8 +101,8 @@ public extension TabsStack {
                 selection: $tabs.selection)
                 .foregroundColor(index == tabs.selection ? tabs.options.selectedColor : tabs.options.unselectedColor)
                 .onTapGesture {
-                    if let sameItemTapAction = sameItemTapAction, tabs.selection == index {
-                        sameItemTapAction()
+                    if let onSameItemTap = onSameItemTap, tabs.selection == index {
+                        onSameItemTap()
                     } else {
                         if tabs.options.isTabChangeAnimated {
                             withAnimation {
