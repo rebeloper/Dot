@@ -16,7 +16,7 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
     @ViewBuilder var pages: (Int) -> PageView
     @ViewBuilder var items: (Int) -> ItemView
     @ViewBuilder var background: () -> BackgroundView
-    var sameTabItemTapAction: (() -> ())?
+    var sameItemTapAction: (() -> ())?
     
     /// Creates a stack of tabs with pages, items and background.
     /// - Parameters:
@@ -29,13 +29,13 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
         @ViewBuilder pages: @escaping (Int) -> PageView,
         @ViewBuilder items: @escaping (Int) -> ItemView,
         @ViewBuilder background: @escaping () -> BackgroundView,
-        sameTabItemTapAction: (() -> ())? = nil
+        sameItemTapAction: (() -> ())? = nil
     ) {
         self.tabs = tabs
         self.pages = pages
         self.items = items
         self.background = background
-        self.sameTabItemTapAction = sameTabItemTapAction
+        self.sameItemTapAction = sameItemTapAction
     }
     
     public var body: some View {
@@ -100,8 +100,8 @@ public extension TabsStack {
                 selection: $tabs.selection)
                 .foregroundColor(index == tabs.selection ? tabs.options.selectedColor : tabs.options.unselectedColor)
                 .onTapGesture {
-                    if let sameTabItemTapAction = sameTabItemTapAction, tabs.selection == index {
-                        sameTabItemTapAction()
+                    if let sameItemTapAction = sameItemTapAction, tabs.selection == index {
+                        sameItemTapAction()
                     } else {
                         if tabs.options.isTabChangeAnimated {
                             withAnimation {
