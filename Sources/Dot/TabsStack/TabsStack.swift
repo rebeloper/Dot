@@ -100,7 +100,7 @@ public extension TabsStack {
                 selection: $tabs.selection)
                 .foregroundColor(index == tabs.selection ? tabs.options.selectedColor : tabs.options.unselectedColor)
                 .onTapGesture {
-                    if let sameTabItemTapAction = sameTabItemTapAction {
+                    if let sameTabItemTapAction = sameTabItemTapAction, tabs.selection == index {
                         sameTabItemTapAction()
                     } else {
                         if tabs.options.isTabChangeAnimated {
