@@ -27,8 +27,8 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
     ///   - onSameItemTap: An action trigerred when we tap on an already selected item
     public init(
         _ tabs: Tabs,
-        @ViewBuilder pages: @escaping (Int) -> PageView,
-        @ViewBuilder items: @escaping (Int) -> ItemView,
+        @ViewBuilder pages: @escaping (_ tag: Int) -> PageView,
+        @ViewBuilder items: @escaping (_ tag: Int) -> ItemView,
         @ViewBuilder background: @escaping () -> BackgroundView,
         onSameItemTap: ((_ selection: Int) -> ())? = nil
     ) {
