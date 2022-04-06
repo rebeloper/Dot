@@ -207,8 +207,26 @@ public extension View {
     }
     
     #if canImport(UIKit)
+    /// Hides the keyboard
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     #endif
+    
+    @ViewBuilder
+    /// Positions this view within an invisible frame having the specified alignment.
+    /// - Parameter alignment: The alignment of this view inside the resulting frame.
+    func align(_ alignment: ViewAlignment) -> some View {
+        switch alignment {
+        case .leading:
+            self.frame(maxWidth: .infinity, alignment: .leading)
+        case .trailing:
+            self.frame(maxWidth: .infinity, alignment: .trailing)
+        case .top:
+            self.frame(maxHeight: .infinity, alignment: .top)
+        case .bottom:
+            self.frame(maxHeight: .infinity, alignment: .bottomLeading)
+        }
+    }
 }
+

@@ -11,3 +11,8 @@ import Foundation
 public enum ScrollAxis {
     case vertically, horizontally
 }
+
+/// View Alignments
+public enum ViewAlignment {
+    case leading, trailing, top, bottom
+}
