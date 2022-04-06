@@ -16,6 +16,7 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
     @ViewBuilder var pages: (Int) -> PageView
     @ViewBuilder var items: (Int) -> ItemView
     @ViewBuilder var background: () -> BackgroundView
+    var sameTabItemTapAction: (() -> ())?
     
     /// Creates a stack of tabs with pages, items and background.
     /// - Parameters:
@@ -27,12 +28,14 @@ public struct TabsStack<PageView: View, ItemView: View, BackgroundView: View>: V
         _ tabs: Tabs,
         @ViewBuilder pages: @escaping (Int) -> PageView,
         @ViewBuilder items: @escaping (Int) -> ItemView,
-        @ViewBuilder background: @escaping () -> BackgroundView
+        @ViewBuilder background: @escaping () -> BackgroundView,
+        sameTabItemTapAction: (() -> ())? = nil
     ) {
         self.tabs = tabs
         self.pages = pages
         self.items = items
         self.background = background
+        self.sameTabItemTapAction = sameTabItemTapAction
     }
     
     public var body: some View {
@@ -97,12 +100,16 @@ public extension TabsStack {
                 selection: $tabs.selection)
                 .foregroundColor(index == tabs.selection ? tabs.options.selectedColor : tabs.options.unselectedColor)
                 .onTapGesture {
-                    if tabs.options.isTabChangeAnimated {
-                        withAnimation {
+                    if let sameTabItemTapAction = sameTabItemTapAction {
+                        sameTabItemTapAction()
+                    } else {
+                        if tabs.options.isTabChangeAnimated {
+                            withAnimation {
+                                tabs.selection = index
+                            }
+                        } else {
                             tabs.selection = index
                         }
-                    } else {
-                        tabs.selection = index
                     }
                 }
                 .frame(width: (proxy.size.width - 24 - tabs.options.edgeInsets.leading - tabs.options.edgeInsets.trailing - proxy.safeAreaInsets.leading - proxy.safeAreaInsets.trailing) / CGFloat(tabs.stack.tags.count))
