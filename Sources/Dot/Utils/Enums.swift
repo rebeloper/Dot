@@ -16,3 +16,8 @@ public enum ScrollAxis {
 public enum ViewAlignment {
     case leading, trailing, top, bottom
 }
+
+/// The axes of the scroll view.
+public enum SizeAxis {
+    case vertical, horizontal
+}

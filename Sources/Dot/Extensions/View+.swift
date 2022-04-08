@@ -228,5 +228,37 @@ public extension View {
             self.frame(maxHeight: .infinity, alignment: .bottomLeading)
         }
     }
+    
+    /// Fixes this view at its ideal size.
+    /// - Returns: A view that fixes this view at its ideal size in the
+    ///   dimensions specified by `horizontal` and `vertical`.
+    func idealSize() -> some View {
+        self.fixedSize()
+    }
+    
+    /// Fixes this view at its ideal size in the specified dimensions.
+    /// - Parameters:
+    ///   - horizontal: A Boolean value that indicates whether to fix the width
+    ///     of the view.
+    ///   - vertical: A Boolean value that indicates whether to fix the height
+    ///     of the view.
+    /// - Returns: A view that fixes this view at its ideal size in the
+    ///   dimensions specified by `horizontal` and `vertical`.
+    func idealSize(horizontal: Bool, vertical: Bool) -> some View {
+        self.fixedSize(horizontal: horizontal, vertical: vertical)
+    }
+    
+    /// Fixes this view at its ideal size in the specified axis.
+    /// - Parameter axis: The axis to fix the view size on.
+    /// - Returns: A view that fixes this view at its ideal size in the
+    ///   dimensions specified by the `axis`.
+    func idealSize(axis: SizeAxis) -> some View {
+        switch axis {
+        case .vertical:
+            self.fixedSize(horizontal: false, vertical: true)
+        case .horizontal:
+            self.fixedSize(horizontal: true, vertical: false)
+        }
+    }
 }
 
