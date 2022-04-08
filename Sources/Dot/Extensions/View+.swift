@@ -248,17 +248,16 @@ public extension View {
         self.fixedSize(horizontal: horizontal, vertical: vertical)
     }
     
-    /// Fixes this view at its ideal size in the specified axis. It takes all the space it needs and no more.
-    /// - Parameter axis: The axis to fix the view size on.
-    /// - Returns: A view that fixes this view at its ideal size in the
-    ///   dimensions specified by the `axis`.
-    func idealSize(axis: SizeAxis) -> some View {
-        switch axis {
-        case .vertical:
-            self.fixedSize(horizontal: false, vertical: true)
-        case .horizontal:
-            self.fixedSize(horizontal: true, vertical: false)
-        }
+    // Fixes this view at its ideal width. It takes all the space it needs and no more.
+    /// - Returns: A view that fixes this view at its ideal width.
+    func idealWidth() -> some View {
+        self.fixedSize(horizontal: true, vertical: false)
+    }
+    
+    // Fixes this view at its ideal height. It takes all the space it needs and no more.
+    /// - Returns: A view that fixes this view at its ideal height.
+    func idealHeight() -> some View {
+        self.fixedSize(horizontal: false, vertical: true)
     }
 }
 
