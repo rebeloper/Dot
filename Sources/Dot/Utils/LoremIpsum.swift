@@ -10,6 +10,10 @@ import Foundation
 /// Adds Lorem Ipsum text
 public struct LoremIpsum {
     
+    public static let atExtraExtraExtraShort = "@lorem"
+    
+    public static let atExtraExtraShort = "@lorem_ipsum"
+    
     public static let extraExtraExtraShort = "Lorem"
     
     public static let extraExtraShort = "Lorem ipsum"
@@ -266,5 +270,93 @@ public struct LoremIpsum {
     public static func randomText() -> String {
         texts.randomElement() ?? extraExtraExtraShort
     }
+    
+    public static func amount(_ value: Int = randomInt(), multiplier: LoremIpsumAmountMultiplier = .none, type: LoremIpsumAmountType = .none) -> String {
+        "\(value)\(multiplier.rawValue)\(type != .none ? " \(type.rawValue)" : "")"
+    }
+    
+    public static func secondsAgo(_ value: Int = randomInt(59), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)s ago"
+        } else {
+            return "\(value) second\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func minutesAgo(_ value: Int = randomInt(59), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)m ago"
+        } else {
+            return "\(value) minute\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func hoursAgo(_ value: Int = randomInt(24), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)h ago"
+        } else {
+            return "\(value) hour\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func daysAgo(_ value: Int = randomInt(30), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)d ago"
+        } else {
+            return "\(value) day\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func weeksAgo(_ value: Int = randomInt(3), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)w ago"
+        } else {
+            return "\(value) week\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func monthsAgo(_ value: Int = randomInt(11), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)mo ago"
+        } else {
+            return "\(value) month\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func yearsAgo(_ value: Int = randomInt(9), isShort: Bool = true) -> String {
+        if isShort {
+            return "\(value)yr ago"
+        } else {
+            return "\(value) year\(value == 1 ? "" : "s") ago"
+        }
+    }
+    
+    public static func now() -> String {
+        "now"
+    }
+    
+    public static func randomInt(_ max: Int = 99) -> Int {
+        (1...max).randomElement() ?? 0
+    }
+    
+    public static func randomNumber() -> String {
+        "\(randomInt())"
+    }
 }
 
+public enum LoremIpsumAmountMultiplier: String {
+    case none = ""
+    case K = "K"
+    case M = "M"
+}
+
+public enum LoremIpsumAmountType: String {
+    case none = ""
+    case likes = "likes"
+    case views = "views"
+    case comments = "comments"
+    case followers = "followers"
+    case following = "following"
+    case subscribers = "subscibers"
+    case replies = "replies"
+}

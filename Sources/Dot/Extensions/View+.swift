@@ -225,7 +225,7 @@ public extension View {
         case .top:
             self.frame(maxHeight: .infinity, alignment: .top)
         case .bottom:
-            self.frame(maxHeight: .infinity, alignment: .bottomLeading)
+            self.frame(maxHeight: .infinity, alignment: .bottom)
         }
     }
     
