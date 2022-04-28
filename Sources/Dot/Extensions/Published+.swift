@@ -19,7 +19,7 @@ public extension Published where Value: Codable {
     ///   - defaultValue: The default value if a `Codable` value is not specified for the given key.
     ///   - key: The key to read and write the value to in the user defaults store.
     ///   - store: The user defaults store to read and write to. A value of `nil` will use the user default store from the environment.
-    init(wrappedValue defaultValue: Value, _ key: String, store: UserDefaults? = nil) {
+    init(userDefaultsWrappedValue defaultValue: Value, _ key: String, store: UserDefaults? = nil) {
         let _store: UserDefaults = store ?? .standard
         
         if let data = _store.data(forKey: key),
